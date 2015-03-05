@@ -45,3 +45,5 @@ public:
 	static void printMessage(const string, const string, const string);
 };
 #endif 
+
+//Alvin
