@@ -86,3 +86,5 @@ void Timetable::printMessage(const string message1, const string message2) {
 void Timetable::printMessage(const string message, const string fileName, const string input) {
 	cout << endl << message << " " << fileName << ": \"" << input << "\"" << endl;
 }
+
+//wangyalan
