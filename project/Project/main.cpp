@@ -154,3 +154,5 @@ int convertStringToIntegerIndex(const string description) {
 	}
 	return output-1;
 }
+
+//added name:zhaotianhao
