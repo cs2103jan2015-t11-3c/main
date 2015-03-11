@@ -9,16 +9,16 @@ using namespace std;
 
 void getTextFileName(const int , char *[]);
 void printWelcomeMessage();
-void readToDoListFromTextFile(Timetable *);
-void updateToDoList(Timetable *);
-void executeCommand(const string, const string, Timetable *);
+void readToDoListFromTextFile(Calendar *);
+void updateToDoList(Calendar *);
+void executeCommand(const string, const string, Calendar *);
 void getCommandAndDescription(string &, string &);
 bool isValidCommand(const string, const string);
 void trimString(string &);
 int convertStringToIntegerIndex(const string);
 
 int main(int argc, char *argv[]) {
-	Timetable *toDoList = new Timetable;
+	Calendar *toDoList = new Calendar;
 
 	getTextFileName(argc, argv);
 	printWelcomeMessage();
@@ -29,17 +29,23 @@ int main(int argc, char *argv[]) {
 }
 
 void getTextFileName(const int argc, char *argv[]) {
-	argc<2? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
+	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
 }
 
 void printWelcomeMessage() {
-	cout << endl << "Welcome to TextBuddy. " << fileName << " is ready for use" << endl;
+	cout << endl << "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 }
 
 //Loads existing data from text file into program
-void readToDoListFromTextFile(Timetable *toDoList) {
+void readToDoListFromTextFile(Calendar *toDoList) {
 	fstream textFile;
-	string input="";
+	string input;
+	input=toDoList->toString();
+	Data datainput;
+	string task;
+	int date, month, year;
+	double t_start, t_end;
+	char t;
 
 	textFile.open(fileName.c_str());
 
@@ -48,12 +54,29 @@ void readToDoListFromTextFile(Timetable *toDoList) {
 	while(textFile >> input) {
 		getline(textFile,input);
 		trimString(input);
-		toDoList->readItem(input);
+		istringstream in(input);
+		in>>task;
+		in>>t_start;
+		in>>t_end;
+		in>>date;
+		in>>t;
+		in>>month;
+		in>>t;
+		in>>year;
+		
+		datainput.task=task;
+		datainput.date=date;
+		datainput.month=month;
+		datainput.year=year;
+		datainput.t_start=t_start;
+		datainput.t_end=t_end;
+
+		toDoList->readItem(datainput);
 	}
 	textFile.close();
 }
 
-void updateToDoList(Timetable *toDoList) {
+void updateToDoList(Calendar *toDoList) {
 	string command, description;
 	
 	while(command!="exit") {
@@ -63,7 +86,7 @@ void updateToDoList(Timetable *toDoList) {
 	}
 }
 
-void executeCommand(const string command, const string description, Timetable *toDoList) {
+void executeCommand(const string command, const string description, Calendar *toDoList) {
 	if(command=="add") {
 		toDoList->addItem(description, fileName);
 		toDoList->saveToSaveFile(fileName);
@@ -77,6 +100,13 @@ void executeCommand(const string command, const string description, Timetable *t
 	}
 	else if(command=="clear") {
 		toDoList->clearAll(fileName);
+		toDoList->saveToSaveFile(fileName);
+	}
+	else if(command == "edit") {
+		istringstream in(description);
+		int index;
+		in>>index;
+		toDoList->editTask(index,fileName,description);
 		toDoList->saveToSaveFile(fileName);
 	}
 	else if(command=="exit") {
@@ -97,14 +127,14 @@ void getCommandAndDescription(string &command, string &description) {
 bool isValidCommand(const string command, const string description){
 	if(command=="add") {
 		if(description.size()==0) {
-			Timetable::printMessage(ERROR_MISSING_DESCRIPTION);
+			Calendar::printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 		return true;
 	}
-	else if(command=="delete") {
+	else if(command=="delete" ) {
 		if(description.size()==0) {
-			Timetable::printMessage(ERROR_MISSING_DESCRIPTION);
+			Calendar::printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 
@@ -112,7 +142,7 @@ bool isValidCommand(const string command, const string description){
 
 		while(index<description.size()) {
 			if(!isdigit(description[index])) {
-				Timetable::printMessage(ERROR_INVALID_INDEX);
+				Calendar::printMessage(ERROR_INVALID_INDEX);
 				return false;
 			}
 			index++;
@@ -122,7 +152,13 @@ bool isValidCommand(const string command, const string description){
 	else if(command=="display"||command=="clear"||command=="exit")
 		return true;
 
-	Timetable::printMessage(ERROR_INVALID_COMMAND);
+	else if (command=="edit"){
+		if(description.size()==0) {
+			Calendar::printMessage(ERROR_MISSING_INDEX);
+			return false;
+	}   else return true;
+	}
+	Calendar::printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
 }
@@ -152,9 +188,6 @@ int convertStringToIntegerIndex(const string description) {
 		output+=description[t_start]-'0';
 		t_start++;
 	}
+	
 	return output-1;
 }
-
-//added name:zhaotianhao
-//added 2 change
-//yeah!
