@@ -1,5 +1,5 @@
-#ifndef TIMETABLE_H
-#define TIMETABLE_H
+#ifndef CALENDAR_H
+#define CALENDAR_H
 
 #include <iostream>
 #include <vector>
@@ -18,6 +18,7 @@ const string ERROR_LIST_IS_EMPTY = "is empty";
 const string ERROR_INVALID_INDEX = "invalid index";
 const string ERROR_MISSING_DESCRIPTION = "no description entered";
 const string ERROR_INVALID_COMMAND = "invalid command";
+const string ERROR_MISSING_INDEX="missing index";
 
 //Global Variables
 static string fileName = "";
@@ -25,25 +26,33 @@ static string fileName = "";
 //Class has a vector containing all the entries in the to-do list
 //Contains all functions facilitating add, delete, display, clear and save operations
 //COntains functions that print the messages when user operations are executed, or fail to execute
-class Timetable {
+
+class Data {
+public:
+	string task;
+	int date, month, year, t_start, t_end;
+};
+
+class Calendar {
 private:
-	vector<string> _items;
+	vector<Data> _items;
 	int _size;
 
 public:
-	Timetable(void);
-	~Timetable(void);
-	void readItem(const string);
-	void addItem(const string, const string);
+	Calendar(void);
+	~Calendar(void);
+	void readItem(const Data);
+	void addItem(const string , const string );
 	void deleteItem(const int, const string);
 	void displayAll(const string);
 	void clearAll(const string);
+	void editTask(const int, const string , const string );
 	void saveToSaveFile(const string);
 	string toString();
 	static void printMessage(const string);
 	static void printMessage(const string, const string);
-	static void printMessage(const string, const string, const string);
+	static void printMessage(const string, const string, const Data);
+	int convertStringToInteger(const string );
+	void getsize();
 };
 #endif 
-
-//Alvin
