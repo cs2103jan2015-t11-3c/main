@@ -27,9 +27,9 @@ void task::addItemtypeone(string _text){
 	complete = false;
 }
 
-void task::addItemtypetwo(string text, int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time){ 
 
-	text = text;
+	text = task;
 	s_date=0;
 	s_month=0;
 	s_year=0;
@@ -42,9 +42,9 @@ void task::addItemtypetwo(string text, int _e_date, int _e_month, int _e_year, i
 	complete = false;
 }
 
-void task::addItemtypethree(string text, int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
 	
-	text = text;
+	text = task;
 	s_date= _s_date;
 	s_month= _s_month;
 	s_year= _s_year;
@@ -59,6 +59,42 @@ void task::addItemtypethree(string text, int _s_date, int _s_month, int _s_year,
 
 void task::completed(int index, vector<task> &toDoList){
 	complete = true;
+};
+
+void task::edittext(int index, string PartTochange, vector<task> &toDoList){
+	toDoList[index].text = PartTochange;
+};
+
+void task::edits_time(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].s_time = PartTochange;
+};
+
+void task::edits_date(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].s_date = PartTochange;
+};
+
+void task::edits_month(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].s_month = PartTochange;
+};
+
+void task::edits_year(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].s_year = PartTochange;
+};
+
+void task::edite_time(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].e_time = PartTochange;
+};
+
+void task::edite_date(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].e_date = PartTochange;
+};
+
+void task::edite_month(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].e_month = PartTochange;
+};
+
+void task::edite_year(int index, int PartTochange, vector<task> &toDoList){
+	toDoList[index].e_year = PartTochange;
 };
 
 string task::displaytypeone(int index, vector<task> &toDoList){

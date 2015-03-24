@@ -51,14 +51,14 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
-	/*else if(command == "edit") {
+	else if(command == "edit") {
 		istringstream in(description);
 		int index;
 		in>>index;
 		function.editTask(index,fileName,description, toDoList);
-		storage::saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
+		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
-	}*/
+	}
 	else if(command=="exit") {
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
@@ -91,13 +91,14 @@ string logic::displayAll(const string fileName, vector<task> &toDoList) {
 
 
 void logic::deleteItem(const int index, const string fileName, vector<task> &toDoList) {
-	if(toDoList.size()==0) {
+	int size = toDoList.size();
+	if(size==0) {
 		printMessage(fileName, ERROR_LIST_IS_EMPTY);
 	}
-	/*else if(index>=toDoList.size()||index<0) {
+	else if(index>=size||index<0) {
 		printMessage(ERROR_INVALID_INDEX);
 		
-	}*/
+	}
 	else {
 		toDoList.erase(toDoList.begin()+index);
 		cout << "deleted";
@@ -111,37 +112,44 @@ void logic::clearAll(const string fileName, vector<task> &toDoList) {
 
 void logic::editTask(int &index, string fileName, string description, vector<task> &toDoList) {
 	string TextAfterIndex, VariableToChange, PartTochange, temp;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	task taskclass;
 
+	int size = toDoList.size();
 	index = index - 1;
-	if(toDoList.size() == 0) {
+	if(size == 0) {
 		printMessage(fileName, ERROR_LIST_IS_EMPTY);
 		return;
 	}
-	else if(index > toDoList.size()||index < 0) {
+	else if(index > size||index < 0) {
 		printMessage(ERROR_INVALID_INDEX);
 		return;
 	}
 	else if(taskclass.returntype(index, toDoList) == 1){
 		size_t pos = description.find("-name");
 		PartTochange = description.substr(pos+6);
-		_items[index].task = PartTochange;
+		taskclass.edittext(index, PartTochange, toDoList);
 	}
 	else if(taskclass.returntype(index, toDoList) == 2){
 		size_t foundname = description.find("-name");
 		size_t founddue = description.find("-due");
 		if(foundname!=std::string::npos){
 			PartTochange = description.substr(foundname+6);
-		   _items[index].task = PartTochange;
+		   taskclass.edittext(index, PartTochange, toDoList);
 		}
 		else if(founddue!=std::string::npos){
 			PartTochange = description.substr(founddue+5);
 			istringstream in(PartTochange);
-			in>>_items[index].e_time;
-			in >> temp;
-			in>>_items[index].e_date;
-		    in>>_items[index].e_month;
-		    in>>_items[index].e_year;
+			in>>e_time;
+			in>>temp;
+			in>>e_date;
+		    in>>e_month;
+		    in>>e_year;
+
+			taskclass.edite_time(index, e_time, toDoList);
+			taskclass.edite_date(index, e_date, toDoList);
+			taskclass.edite_month(index, e_month, toDoList);
+			taskclass.edite_year(index, e_year, toDoList);
 		}
 	}
 	else if(taskclass.returntype(index, toDoList) == 3){
@@ -150,25 +158,35 @@ void logic::editTask(int &index, string fileName, string description, vector<tas
 		size_t foundend = description.find("-end");
 		if(foundname!=std::string::npos){
 			PartTochange = description.substr(foundname+6);
-		   _items[index].task = PartTochange;
+		   taskclass.edittext(index, PartTochange, toDoList);
 		}
 		else if(foundstart!=std::string::npos){
 			PartTochange = description.substr(foundstart+7);
 			istringstream in(PartTochange);
-			in>>_items[index].s_time;
-			in >> temp;
-			in>>_items[index].s_date;
-		    in>>_items[index].s_month;
-			in>>_items[index].s_year;
+			in>>s_time;
+			in>>temp;
+			in>>s_date;
+		    in>>s_month;
+		    in>>s_year;
+
+			taskclass.edits_time(index, e_time, toDoList);
+			taskclass.edits_date(index, e_date, toDoList);
+			taskclass.edits_month(index, e_month, toDoList);
+			taskclass.edits_year(index, e_year, toDoList);
 		}
 		else if(foundend!=std::string::npos){
 			PartTochange = description.substr(foundend+5);
 			istringstream in(PartTochange);
-			in>>_items[index].e_time;
-			in >> temp;
-			in>>_items[index].e_date;
-		    in>>_items[index].e_month;
-			in>>_items[index].e_year;
+			in>>e_time;
+			in>>temp;
+			in>>e_date;
+		    in>>e_month;
+		    in>>e_year;
+
+			taskclass.edite_time(index, e_time, toDoList);
+			taskclass.edite_date(index, e_date, toDoList);
+			taskclass.edite_month(index, e_month, toDoList);
+			taskclass.edite_year(index, e_year, toDoList);
 		}
 	}
 }

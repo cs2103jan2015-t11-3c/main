@@ -22,14 +22,16 @@ public:
 	void addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time);
 	void addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time);
 	void completed(int index, vector<task> &toDoList);
-	void edittext;
-	void edits_time;
-	void edits_date;
-	void edits_month;
-	void edits_year;
-	void
-	void edite_date;
-	void edite_month
+	void edittext(int index, string PartTochange, vector<task> &toDoList);
+	void edits_time(int index, int PartTochange, vector<task> &toDoList);
+	void edits_date(int index, int PartTochange, vector<task> &toDoList);
+	void edits_month(int index, int PartTochange, vector<task> &toDoList);
+	void edits_year(int index, int PartTochange, vector<task> &toDoList);
+	void edite_time(int index, int PartTochange, vector<task> &toDoList);
+	void edite_date(int index, int PartTochange, vector<task> &toDoList);
+	void edite_month(int index, int PartTochange, vector<task> &toDoList);
+	void edite_year(int index, int PartTochange, vector<task> &toDoList);
+
 
 	string displaytypeone(int index, vector<task> &toDoList);
 	string displaytypetwo(int index, vector<task> &toDoList);

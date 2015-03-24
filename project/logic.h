@@ -35,7 +35,7 @@ public:
 	string displayAll(const string, vector<task> &);
 	void deleteItem(const int, const string, vector<task> &);
 	void clearAll(const string, vector<task> &);
-	//void editTask(int &, string , string , vector<task> &);
+	void editTask(int &, string , string , vector<task> &);
 	void markcompleted(int, const string, vector<task> &);
 
 	void readToDoListFromTextFile(string fileName, vector<task> &toDoList);
