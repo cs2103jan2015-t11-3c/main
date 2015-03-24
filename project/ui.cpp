@@ -10,14 +10,15 @@ using namespace std;
 
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
-void readinput(logic *);
+void readinput(vector<task> &);
 
 
 int main(int argc, char *argv[]) {
-	logic *toDoList = new logic;
+	vector<task> toDoList;
+	logic function;
 
 	getTextFileName(argc, argv);
-	logic::readToDoListFromTextFile(getTextFileName(argc, argv), toDoList);
+	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList);
 	printWelcomeMessage();
 	readinput(toDoList);
 
@@ -33,14 +34,14 @@ void printWelcomeMessage() {
 	cout << endl << "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 }
 
-void readinput(logic *toDoList){
+void readinput(vector<task> &toDoList){
 	string command, description;
-	logic *undo = new logic;
-	undo = toDoList;
+	logic function;
+
 	while(command!="exit"){
 		cout << endl << "command: ";
 		cin >> command;
 		getline(cin,description);
-		logic::executeCommand(command, description, toDoList, undo);
+		function.executeCommand(command, description, toDoList);
 	};
 }

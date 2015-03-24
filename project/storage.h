@@ -9,7 +9,7 @@ using namespace std;
 
 class storage{
 public:
-	static void saveToSaveFile(const string fileName, const string savetext);
+	void saveToSaveFile(const string fileName, const string savetext);
 
 };
 #endif

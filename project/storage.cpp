@@ -12,3 +12,4 @@ void storage::saveToSaveFile(const string fileName, const string savetext) {
 	textFile << savetext;
 	textFile.close();
 }
+

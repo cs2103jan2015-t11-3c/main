@@ -8,16 +8,17 @@
 //Checks if the description entered is valid for the command entered
 //Prints error messages if either of the aforementioned conditions are not met
 bool parser::isValidCommand(const string command, const string description){
+	logic function;
 	if(command=="add") {
 		if(description.size()==0) {
-			logic::printMessage(ERROR_MISSING_DESCRIPTION);
+			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 		return true;
 	}
 	else if(command=="delete" ) {
 		if(description.size()==0) {
-			logic::printMessage(ERROR_MISSING_DESCRIPTION);
+			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 
@@ -25,7 +26,7 @@ bool parser::isValidCommand(const string command, const string description){
 
 		while(index<description.size()) {
 			if(!isdigit(description[index])) {
-				logic::printMessage(ERROR_INVALID_INDEX);
+				function.printMessage(ERROR_INVALID_INDEX);
 				return false;
 			}
 			index++;
@@ -37,11 +38,11 @@ bool parser::isValidCommand(const string command, const string description){
 
 	else if (command=="edit"){
 		if(description.size()==0) {
-			logic::printMessage(ERROR_MISSING_INDEX);
+			function.printMessage(ERROR_MISSING_INDEX);
 			return false;
 	}   else return true;
 	}
-	logic::printMessage(ERROR_INVALID_COMMAND);
+	function.printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
 }
@@ -87,15 +88,15 @@ int parser::checktype(string description){
 		return 1;
 }
 
-void parser::splitinputtypeone(string description, string &task){
-	task = description;
+void parser::splitinputtypeone(string description, string &text){
+	text = description;
 }
 		
-void parser::splitinputtypetwo(string description, string &task, int &e_date, int &e_month, int &e_year, int &e_time){
+void parser::splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 
 	size_t bypos = description.find("by");
-	task = description.substr(0 , bypos-1);
+	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos + 3);
 	istringstream in(description);
 		in>>e_time;
@@ -105,11 +106,11 @@ void parser::splitinputtypetwo(string description, string &task, int &e_date, in
 		in>>e_year;
 }
 
-void parser::splitinputtypethree(string description, string &task, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
+void parser::splitinputtypethree(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 	
 	size_t bypos = description.find("from");
-	task = description.substr(0 , bypos-1);
+	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos+5);
 	istringstream in(description);
 	in>>s_time;
