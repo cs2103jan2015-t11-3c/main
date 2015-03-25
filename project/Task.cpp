@@ -5,11 +5,9 @@
 #include <string>
 //work in progress
 
-task::task(void) {
-}
+task::task(void) {}
 
-task::~task(void) {
-}
+task::~task(void) {}
 
 
 void task::addItemtypeone(string _text){
@@ -105,18 +103,18 @@ string task::displaytypeone(int index, vector<task> &toDoList){
 
 string task::displaytypetwo(int index, vector<task> &toDoList){
 	ostringstream oss;
-	oss << endl<<  index+1 << "." << toDoList[index].text <<  " by " << toDoList[index].e_time << " on " << toDoList[index].e_date<<" "
-			<< toDoList[index].e_month << " " << toDoList[index].e_year;
+	oss << endl<<  index+1 << "." << toDoList[index].text <<  " by " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
+			<< toDoList[index].e_month << "/" << toDoList[index].e_year;
 	return oss.str();
-}
+}//changed "/"
 
 string task::displaytypethree(int index, vector<task> &toDoList){
 	ostringstream oss;
-	 oss << endl << index+1 << "." << toDoList[index].text << " from " <<toDoList[index].s_time << " on "<<toDoList[index].s_date<<" "
-			<< toDoList[index].s_month << " " << toDoList[index].s_year << " to " << toDoList[index].e_time << " on " << toDoList[index].e_date<<" "
-			<< toDoList[index].e_month << " " << toDoList[index].e_year ;
+	 oss << endl << index+1 << "." << toDoList[index].text << " from " <<toDoList[index].s_time << " on "<<toDoList[index].s_date<<"/"
+			<< toDoList[index].s_month << "/" << toDoList[index].s_year << " to " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
+			<< toDoList[index].e_month << "/" << toDoList[index].e_year ;
 	return oss.str();
-}
+}//changed "/"
 
 int task::returntype(int index, vector<task> &toDoList){
 	return toDoList[index].type;

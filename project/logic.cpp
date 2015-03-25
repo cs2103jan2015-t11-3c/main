@@ -6,6 +6,42 @@
 #include <fstream>
 
 
+void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
+	fstream textFile;
+	string input;//deleted string temp
+	textFile.open(fileName.c_str());
+
+	//Remove the index of each line, eg: remove "1)" from "1) Some List Entry"
+	//Adds the rest of the line to the to-do list after removing leading and following whitespaces
+	while(getline(textFile,input)) {
+		size_t pos = input.find('.');
+		input = input.substr(pos+1);
+
+		parser::trimString(input);
+		string text;
+		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+		task datainput;
+
+		if(parser::checktype(input) == 1){
+			parser::splitinputtypeone(input, text);
+			datainput.addItemtypeone(text);
+			toDoList.push_back(datainput);
+		}
+		else if(parser::checktype(input) == 2){
+			parser::splitinputtypetwo(input, text, e_date, e_month, e_year, e_time);
+			datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
+			toDoList.push_back(datainput);
+		}
+		else if(parser::checktype(input) == 3){
+			parser::splitinputtypethree(input, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+			toDoList.push_back(datainput);
+		}
+
+	}
+	textFile.close();
+}
+
 
 void logic::executeCommand(string command, string description, vector<task> &toDoList) {
 	string text;
@@ -19,10 +55,10 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 	if(!parser::isValidCommand(command, description))
 		return;
 	else if(command=="add") {
-		if(parser::checktype(description) == 1){
+		if(parser::checktype(description) == 1){  //floating task: add swimming 
 			parser::splitinputtypeone(description, text);
 			datainput.addItemtypeone(text);
-			toDoList.push_back(datainput);
+			toDoList.push_back(datainput); //push back the floating task "swimming" into the vector toDoList
 		}
 		else if(parser::checktype(description) == 2){
 			parser::splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
@@ -209,43 +245,6 @@ void logic::markcompleted(int index, const string filename, vector<task> &toDoLi
 		toDoList[index] = temp;
 		cout << "task marked completed";
 	}
-}
-
-void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
-	fstream textFile;
-	string input, temp;
-	textFile.open(fileName.c_str());
-	getline(textFile, temp);
-
-	//Remove the index of each line, eg: remove "1)" from "1) Some List Entry"
-	//Adds the rest of the line to the to-do list after removing leading and following whitespaces
-	while(getline(textFile,input)) {
-		size_t pos = input.find('.');
-		input = input.substr(pos+1);
-
-		parser::trimString(input);
-		string text;
-		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
-		task datainput;
-
-		if(parser::checktype(input) == 1){
-			parser::splitinputtypeone(input, text);
-			datainput.addItemtypeone(text);
-			toDoList.push_back(datainput);
-		}
-		else if(parser::checktype(input) == 2){
-			parser::splitinputtypetwo(input, text, e_date, e_month, e_year, e_time);
-			datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
-			toDoList.push_back(datainput);
-		}
-		else if(parser::checktype(input) == 3){
-			parser::splitinputtypethree(input, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-			toDoList.push_back(datainput);
-		}
-
-	}
-	textFile.close();
 }
 
 

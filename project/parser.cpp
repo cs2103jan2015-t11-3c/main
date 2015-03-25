@@ -94,34 +94,42 @@ void parser::splitinputtypeone(string description, string &text){
 		
 void parser::splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
+	char c;
 
 	size_t bypos = description.find("by");
-	text = description.substr(0 , bypos-1);
+	text = description.substr(0 , bypos-1);//"meeting"
 	description = description.substr(bypos + 3);
-	istringstream in(description);
-		in>>e_time;
-		in>>temp;
-		in>>e_date;
-		in>>e_month;
-		in>>e_year;
-}
+	istringstream in(description);// meeting by 1800 31 06 2016
+		in>>e_time;//1800
+		in>>temp;//on
+		in>>e_date;//31
+		in>>c;//"/"
+		in>>e_month;//5
+		in>>c;//"/"
+		in>>e_year;//15
+}//added char c;
 
 void parser::splitinputtypethree(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
+	char c;
 	
 	size_t bypos = description.find("from");
 	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos+5);
 	istringstream in(description);
-	in>>s_time;
-	in>>temp;
-	in>>s_date;
-	in>>s_month;
-	in>>s_year;
-	in>>temp;
-	in>>e_time;
-	in>>temp;
-	in>>e_date;
-	in>>e_month;
-	in>>e_year;
-}
+	in>>s_time;//1900
+	in>>temp;//on
+	in>>s_date;//28
+	in>>c;//"/"
+	in>>s_month;//6
+	in>>c;//"/"
+	in>>s_year;//15
+    in>>temp;//to
+	in>>e_time;//2000
+	in>>temp;//on
+	in>>e_date;//29
+	in>>c;//"/"
+	in>>e_month;//7
+	in>>c;//"/"
+	in>>e_year;//16
+}//added char c;

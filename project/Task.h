@@ -8,7 +8,7 @@
 using namespace std;
 
 class task{
-private:
+public://!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	int type;
