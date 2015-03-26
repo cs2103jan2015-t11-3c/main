@@ -3,12 +3,14 @@
 #include <sstream>
 #include <vector>
 #include <string>
-//work in progress
 
 task::task(void) {}
 
 task::~task(void) {}
 
+void task::inserttempnum(int index){
+	tempnum = index;
+};
 
 void task::addItemtypeone(string _text){
 
@@ -120,3 +122,42 @@ int task::returntype(int index, vector<task> &toDoList){
 	return toDoList[index].type;
 }
 
+string task::returntext(int index, vector<task>&toDoList){
+	return toDoList[index].text;
+}
+
+int task::returnenddate(int index, vector<task>&toDoList){
+	return toDoList[index].e_date;
+}
+
+int task::returnendmonth(int index, vector<task>&toDoList){
+	return toDoList[index].e_month;
+}
+
+int task::returnendyear(int index, vector<task>&toDoList){
+	return toDoList[index].e_year;
+}
+
+int task::returnendtime(int index, vector<task>&toDoList){
+	return toDoList[index].e_time;
+}
+
+int task::returnstartdate(int index, vector<task>&toDoList){
+	return toDoList[index].s_date;
+}
+
+int task::returnstartmonth(int index, vector<task>&toDoList){
+	return toDoList[index].s_month;
+}
+
+int task::returnstartyear(int index, vector<task>&toDoList){
+	return toDoList[index].s_year;
+}
+
+int task::returnstarttime(int index, vector<task>&toDoList){
+	return toDoList[index].e_time;
+}
+
+int task::returntempnum(){
+	return tempnum;
+}

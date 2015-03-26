@@ -8,15 +8,19 @@
 using namespace std;
 
 class task{
-public://!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	private:
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	int type;
+	int tempnum;
 	bool complete;
+
 
 public:
 	task(void);
 	~task(void);
+
+	void inserttempnum(int index);
 
 	void addItemtypeone(string text);
 	void addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time);
@@ -38,6 +42,17 @@ public:
 	string displaytypethree(int index, vector<task> &toDoList);
 
 	int returntype(int index, vector<task> &toDoList);
+	string returntext(int index, vector<task>&toDoList);
+	int returnenddate(int index, vector<task>&toDoList);
+	int returnendmonth(int index, vector<task>&toDoList);
+	int returnendyear(int index, vector<task>&toDoList);
+	int returnendtime(int index, vector<task>&toDoList);
+	int returnstartdate(int index, vector<task>&toDoList);
+	int returnstartmonth(int index, vector<task>&toDoList);
+	int returnstartyear(int index, vector<task>&toDoList);
+	int returnstarttime(int index, vector<task>&toDoList);
+	int returntempnum();
+
 };
 
 #endif

@@ -16,24 +16,25 @@ void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
 	while(getline(textFile,input)) {
 		size_t pos = input.find('.');
 		input = input.substr(pos+1);
+		parser parse;
 
-		parser::trimString(input);
+		parse.trimString(input);
 		string text;
 		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 		task datainput;
 
-		if(parser::checktype(input) == 1){
-			parser::splitinputtypeone(input, text);
+		if(parse.checktype(input) == 1){
+			parse.splitinputtypeone(input, text);
 			datainput.addItemtypeone(text);
 			toDoList.push_back(datainput);
 		}
-		else if(parser::checktype(input) == 2){
-			parser::splitinputtypetwo(input, text, e_date, e_month, e_year, e_time);
+		else if(parse.checktype(input) == 2){
+			parse.splitinputtypetwo(input, text, e_date, e_month, e_year, e_time);
 			datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
-		else if(parser::checktype(input) == 3){
-			parser::splitinputtypethree(input, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+		else if(parse.checktype(input) == 3){
+			parse.splitinputtypethree(input, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
@@ -43,30 +44,31 @@ void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
 }
 
 
-void logic::executeCommand(string command, string description, vector<task> &toDoList) {
+void logic::executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector <task>timedVec) {
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
     logic function;
 	task datainput;
 	storage store;
+	parser parse;
 
-	parser::trimString(description);
+	parse.trimString(description);
 
-	if(!parser::isValidCommand(command, description))
+	if(!parse.isValidCommand(command, description))
 		return;
 	else if(command=="add") {
-		if(parser::checktype(description) == 1){  //floating task: add swimming 
-			parser::splitinputtypeone(description, text);
+		if(parse.checktype(description) == 1){  //floating task: add swimming 
+			parse.splitinputtypeone(description, text);
 			datainput.addItemtypeone(text);
 			toDoList.push_back(datainput); //push back the floating task "swimming" into the vector toDoList
 		}
-		else if(parser::checktype(description) == 2){
-			parser::splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+		else if(parse.checktype(description) == 2){
+			parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 			datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
-		else if(parser::checktype(description) == 3){
-			parser::splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+		else if(parse.checktype(description) == 3){
+			parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
@@ -74,7 +76,8 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		return;
 	}
 	else if(command=="delete") {
-		function.deleteItem(parser::convertStringToIntegerIndex(description), fileName, toDoList);
+
+		function.deleteItem(checkfororiginalindex(description, floatVec, deadlineVec, timedVec), fileName, toDoList);
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
@@ -88,10 +91,7 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		return;
 	}
 	else if(command == "edit") {
-		istringstream in(description);
-		int index;
-		in>>index;
-		function.editTask(index,fileName,description, toDoList);
+		function.editTask(checkfororiginalindex(description, floatVec, deadlineVec, timedVec),fileName,description, toDoList);
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
@@ -100,12 +100,41 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		return;
 	}
 	else if(command == "done") {
-		function.markcompleted(parser::convertStringToIntegerIndex(description), fileName, toDoList);
+		function.markcompleted(checkfororiginalindex(description, floatVec, deadlineVec, timedVec), fileName, toDoList);
 		return;
 	}
 
 }
 	
+int logic::checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec){
+	string temp;
+	parser parse;
+	int index, originindex;
+
+	istringstream in(description);
+	in>> temp;
+	in>> index;
+	index = index -1;
+
+	if(temp == "float"){
+		originindex = floatVec[index].returntempnum();
+		return originindex;
+	}
+	else if(temp == "deadline"){
+	    originindex = deadlineVec[index].returntempnum();
+		return originindex;
+	}
+	else if(temp == "timed"){
+		originindex = timedVec[index].returntempnum();
+	    return originindex;
+	}
+	else{
+		originindex = parse.convertStringToIntegerIndex(description);
+		return originindex;
+	}
+}
+
+
 
 string logic::displayAll(const string fileName, vector<task> &toDoList) {
 	task temp;
@@ -146,7 +175,7 @@ void logic::clearAll(const string fileName, vector<task> &toDoList) {
 	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY,fileName);
 }
 
-void logic::editTask(int &index, string fileName, string description, vector<task> &toDoList) {
+void logic::editTask(int index, string fileName, string description, vector<task> &toDoList) {
 	string TextAfterIndex, VariableToChange, PartTochange, temp;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	task taskclass;
@@ -247,6 +276,86 @@ void logic::markcompleted(int index, const string filename, vector<task> &toDoLi
 	}
 }
 
+void logic::sorttext(vector<task> &toDoList){
+	int size = toDoList.size();
+
+	for(int i=1; i<size; ++i){
+		task next = toDoList[i];
+		int j;
+		for(j = i - 1; j >= 0 && next.returntext(j, toDoList).compare(next.returntext(i, toDoList)) > 0; --j)
+			toDoList[j + 1] = toDoList[j];
+
+		toDoList[j + 1] = next;
+	}
+}	
+
+
+void logic::sortdates(vector<task> &toDoList){
+	unsigned int i, j;
+	task temp;
+
+	for(i = 0; i < toDoList.size(); ++i) {
+		for(j = 1; j < toDoList.size() - i; ++j) {
+			if(temp.returnendyear(j-1, toDoList) > temp.returnendyear(j, toDoList)) {
+				vector<task> tempVec;
+				tempVec.push_back(toDoList[j-1]);
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = tempVec[0];
+				tempVec.pop_back();
+ 			}
+		}
+	
+	}//sort year
+
+	for(i = 0; i < toDoList.size()-1; ++i) {
+		if(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList)){
+		for(j = 1; j < toDoList.size()-i; ++j) {
+			if((temp.returnendmonth(j-1, toDoList) > temp.returnendmonth(j, toDoList))&&(temp.returnendyear(j-i, toDoList) == temp.returnendyear(j, toDoList))) {
+				vector<task> tempVec1;
+				tempVec1.push_back(toDoList[j-1]);
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = tempVec1[0];
+				tempVec1.pop_back();
+ 			}
+		}
+	}
+	}//sort month
+
+	for(i = 0; i < toDoList.size()-1; ++i) {
+		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))) {
+		for(j = 1; j < toDoList.size()-i; ++j) {
+			if((temp.returnenddate(j-1,toDoList) > temp.returnenddate(j,toDoList))&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))) {
+				vector<task> tempVec1;
+				tempVec1.push_back(toDoList[j-1]);
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = tempVec1[0];
+				tempVec1.pop_back();
+ 			}
+		}
+		}
+	}//sort date
+
+};
+
+void logic::sorttime(vector<task> &toDoList){
+	task temp;
+	unsigned int i , j;
+	for(i = 0; i < toDoList.size()-1; ++i) {
+		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))
+			&&(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))) {
+		for(j = 1; j < toDoList.size()-i; ++j) {
+			if((temp.returnendtime(j-1,toDoList) > temp.returnendtime(j,toDoList))&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))
+				&&(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))) {
+				vector<task> tempVec1;
+				tempVec1.push_back(toDoList[j-1]);
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = tempVec1[0];
+				tempVec1.pop_back();
+ 			}
+		}
+		}
+	}
+}
 
 void logic::printMessage(const string message) {
 	cout << endl << message << endl;

@@ -21,16 +21,7 @@ bool parser::isValidCommand(const string command, const string description){
 			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
-
-		unsigned int index=0;
-
-		while(index<description.size()) {
-			if(!isdigit(description[index])) {
-				function.printMessage(ERROR_INVALID_INDEX);
-				return false;
-			}
-			index++;
-		}
+		else
 		return true;
 	}
 	else if(command=="display"||command=="clear"||command=="exit"||command=="undo")

@@ -9,12 +9,12 @@ using namespace std;
 
 class parser{
 public:
-	static bool isValidCommand(const string command, const string description);
-	static void trimString(string &description);
-	static int convertStringToIntegerIndex(const string description);
-	static int checktype(string description);
-	static void splitinputtypeone(string description, string &text);
-	static void splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time);
-	static void splitinputtypethree(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time);
+	bool isValidCommand(const string command, const string description);
+	void trimString(string &description);
+	int convertStringToIntegerIndex(const string description);
+	int checktype(string description);
+	void splitinputtypeone(string description, string &text);
+	void splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time);
+	void splitinputtypethree(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time);
 };
 #endif

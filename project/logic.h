@@ -30,15 +30,19 @@ static string fileName = "";
 
 class logic{
 public:
-	void executeCommand(string, string, vector<task> &);
+	void readToDoListFromTextFile(string fileName, vector<task> &toDoList);
+
+	void executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector <task>timedVec);
+	int checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec);
 	
 	string displayAll(const string, vector<task> &);
 	void deleteItem(const int, const string, vector<task> &);
 	void clearAll(const string, vector<task> &);
-	void editTask(int &, string , string , vector<task> &);
+	void editTask(int , string , string , vector<task> &);
 	void markcompleted(int, const string, vector<task> &);
-
-	void readToDoListFromTextFile(string fileName, vector<task> &toDoList);
+	void sorttext(vector<task> &);
+	void sortdates(vector<task> &);
+	void sorttime(vector<task> &);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);
