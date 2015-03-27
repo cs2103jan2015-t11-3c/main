@@ -43,6 +43,7 @@ public:
 	void sorttext(vector<task> &);
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
+	//string searchKeyWord(vector<task> &);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);
