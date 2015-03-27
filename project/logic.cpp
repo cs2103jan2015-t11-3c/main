@@ -179,9 +179,9 @@ void logic::editTask(int index, string fileName, string description, vector<task
 	string TextAfterIndex, VariableToChange, PartTochange, temp;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	task taskclass;
+	char c;
 
 	int size = toDoList.size();
-	index = index - 1;
 	if(size == 0) {
 		printMessage(fileName, ERROR_LIST_IS_EMPTY);
 		return;
@@ -205,10 +205,12 @@ void logic::editTask(int index, string fileName, string description, vector<task
 		else if(founddue!=std::string::npos){
 			PartTochange = description.substr(founddue+5);
 			istringstream in(PartTochange);
-			in>>e_time;
+			in>>e_time;;
 			in>>temp;
 			in>>e_date;
+			in>>c;
 		    in>>e_month;
+			in>>c;
 		    in>>e_year;
 
 			taskclass.edite_time(index, e_time, toDoList);
@@ -231,7 +233,9 @@ void logic::editTask(int index, string fileName, string description, vector<task
 			in>>s_time;
 			in>>temp;
 			in>>s_date;
+			in>>c;
 		    in>>s_month;
+			in>>c;
 		    in>>s_year;
 
 			taskclass.edits_time(index, e_time, toDoList);
@@ -245,7 +249,9 @@ void logic::editTask(int index, string fileName, string description, vector<task
 			in>>e_time;
 			in>>temp;
 			in>>e_date;
+			in>>c;
 		    in>>e_month;
+			in>>c;
 		    in>>e_year;
 
 			taskclass.edite_time(index, e_time, toDoList);
@@ -278,16 +284,18 @@ void logic::markcompleted(int index, const string filename, vector<task> &toDoLi
 
 void logic::sorttext(vector<task> &toDoList){
 	int size = toDoList.size();
+	task next;
 
-	for(int i=1; i<size; ++i){
-		task next = toDoList[i];
-		int j;
-		for(j = i - 1; j >= 0 && next.returntext(j, toDoList).compare(next.returntext(i, toDoList)) > 0; --j)
-			toDoList[j + 1] = toDoList[j];
-
-		toDoList[j + 1] = next;
+	for(int i=0; i<size; ++i){
+		for(int j=1; j<size-i; ++j){
+			if(next.returntext(j - 1, toDoList).compare(next.returntext(j, toDoList))>0){
+				task temp = toDoList[j-1];
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = temp;
+			}
+		}
 	}
-}	
+}
 
 
 void logic::sortdates(vector<task> &toDoList){
