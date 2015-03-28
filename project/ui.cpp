@@ -5,24 +5,23 @@
 #include "parser.h"
 #include "Task.h"
 #include <fstream> 
-#include <ctime>
 #include <algorithm>
 #include <string>
+#include <ctime>
 
 using namespace std;
-//DON'T MESS WITH THE REPO
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
 void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);//ui
+void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
 
 
 int main(int argc, char *argv[]) {
-	vector<task> toDoList, floatVec, deadlineVec, timedVec;
+	vector<task> toDoList, floatVec, deadlineVec, timedVec;//global scope
 	logic function;
 
 	getTextFileName(argc, argv);
-	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList );//logic function 
+	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList );
 	printWelcomeMessage();
 	readinput(toDoList, floatVec, deadlineVec, timedVec);
 
@@ -30,7 +29,7 @@ int main(int argc, char *argv[]) {
 }
 
 string getTextFileName(const int argc, char *argv[]) {
-	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];//input.txt
+	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
 	return fileName;
 }
 
@@ -38,22 +37,17 @@ void printWelcomeMessage() {
 	cout << "**********************************************************************" << endl;
 	cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 	cout << "**********************************************************************" << endl;
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+	cout << "Current Singapore Local Time: ";
+    cout << (now->tm_year + 1900) << '-' 
+         << (now->tm_mon + 1) << '-'
+         <<  now->tm_mday
+         << endl;
+	cout << "**********************************************************************" << endl;
 }
 
-void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec){
-	string command, description;
-	logic function;
-
-	while(command!="exit"){
-		showDefaultTaskList(toDoList, floatVec, deadlineVec, timedVec);
-		cout << endl << "command: ";
-		cin >> command;
-		getline(cin,description);
-		function.executeCommand(command, description, toDoList, floatVec, deadlineVec, timedVec);
-	};
-}
-
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) { //ui
+void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) {
 	int index, i=0, j=0, k=0;
 	task temp;
 	logic function;
@@ -114,5 +108,17 @@ void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<
 	
 }
 
+void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec){
+	string command, description;
+	logic function;
+
+	while(command!="exit"){
+		//showDefaultTaskList(toDoList, floatVec, deadlineVec, timedVec);
+		cout << endl << "command: ";
+		cin >> command;
+		getline(cin,description);
+		function.executeCommand(command, description, toDoList, floatVec, deadlineVec, timedVec);
+	};
+}
 
 
