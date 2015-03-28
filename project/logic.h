@@ -43,7 +43,10 @@ public:
 	void sorttext(vector<task> &);
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
-	//string searchKeyWord(vector<task> &);
+
+	void searchTask(vector<task> &, string, string);
+	bool isCheckSearchStringDigit(string);
+	int convertNumStringToInt(string);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);
