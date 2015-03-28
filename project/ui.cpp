@@ -8,8 +8,10 @@
 #include <algorithm>
 #include <string>
 #include <ctime>
+#include <windows.h>
 
 using namespace std;
+
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
 void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
@@ -34,17 +36,31 @@ string getTextFileName(const int argc, char *argv[]) {
 }
 
 void printWelcomeMessage() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	cout << "**********************************************************************" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	cout << "**********************************************************************" << endl;
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	cout << "Current Singapore Local Time: ";
     cout << (now->tm_year + 1900) << '-' 
          << (now->tm_mon + 1) << '-'
          <<  now->tm_mday
          << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	cout << "**********************************************************************" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) {
