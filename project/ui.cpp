@@ -1,28 +1,29 @@
-#include <iostream>
-#include <vector>
-#include <sstream>
 #include "logic.h"
 #include "Task.h"
 #include "undo.h"
+
+#include <iostream>
+#include <vector>
+#include <sstream>
 #include <fstream> 
-#include <ctime>
 #include <algorithm>
 #include <string>
+#include <ctime>
+#include <windows.h>
 
-using namespace std;
-//DON'T MESS WITH THE REPO
+
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
 void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);//ui
+void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
 
 
 int main(int argc, char *argv[]) {
-	vector<task> toDoList, floatVec, deadlineVec, timedVec;
+	vector<task> toDoList, floatVec, deadlineVec, timedVec;//global scope
 	logic function;
 
 	getTextFileName(argc, argv);
-	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList );//logic function 
+	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList );
 	printWelcomeMessage();
 	readinput(toDoList, floatVec, deadlineVec, timedVec);
 
@@ -30,14 +31,37 @@ int main(int argc, char *argv[]) {
 }
 
 string getTextFileName(const int argc, char *argv[]) {
-	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];//input.txt
+	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
+	std::cout << "hahah";
 	return fileName;
 }
 
 void printWelcomeMessage() {
-	cout << "**********************************************************************" << endl;
-	cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
-	cout << "**********************************************************************" << endl;
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	std::cout << "**********************************************************************" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	std::cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	std::cout << "**********************************************************************" << endl;
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	std::cout << "Current Singapore Local Time: ";
+    std::cout << (now->tm_year + 1900) << '-' 
+         << (now->tm_mon + 1) << '-'
+         <<  now->tm_mday
+         << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	std::cout << "**********************************************************************" << endl;
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec){
@@ -57,7 +81,7 @@ void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &dea
 	};
 }
 
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) { //ui
+void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) {
 	int index, i=0, j=0, k=0;
 	task temp;
 	logic function;
@@ -117,6 +141,4 @@ void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<
 	cout << endl <<"**********************************************************************" << endl;
 	
 }
-
-
 

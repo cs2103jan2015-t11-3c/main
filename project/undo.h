@@ -19,6 +19,6 @@ public:
 
 	undo converttoundoclass(vector<undo> &undomemory, vector<task> toDoList);
 	vector<task> returnmemory();
-	int returncommandnumber();
+	int returnnum();
 };
 #endif

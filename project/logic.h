@@ -4,6 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <fstream>
+#include <algorithm>
+#include <stdlib.h>
 #include "parser.h"
 #include "Task.h"
 #include "storage.h"
@@ -47,6 +51,10 @@ public:
 	void sorttext(vector<task> &);
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
+
+	void searchTask(vector<task> &, string, string);
+	bool isCheckSearchStringDigit(string);
+	int convertNumStringToInt(string);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);

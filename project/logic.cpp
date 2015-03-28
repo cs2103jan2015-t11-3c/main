@@ -1,7 +1,4 @@
 #include "logic.h"
-#include <sstream>
-#include <fstream>
-#include <iostream>
 
 
 void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
@@ -113,7 +110,67 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		toDoList = currentundomemory.returnmemory();
 		undomemory.pop_back();
 	}
+	else if(command == "search") {
+		function.searchTask(toDoList, fileName, description);
+		return;
+	}
+
 }
+
+//search functions start here
+void logic::searchTask(vector<task> &toDoList, string fileName, string description) {
+	vector<task> tempVec;
+	unsigned int i;
+	task task;
+	logic logic;
+	for(i = 0; i < toDoList.size(); ++i) {
+	if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
+		unsigned int t = -1;
+		t = (task.returntext(i,toDoList)).find(description);
+		if(t != -1) {
+			tempVec.push_back(toDoList[i]);
+	}
+	} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+		int convertedInt = convertNumStringToInt(description);
+		if(task.returnstarttime(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnendtime(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if(task.returnstartdate(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnenddate(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnstartmonth(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnendmonth(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnstartyear(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else if (task.returnendyear(i,toDoList) == convertedInt) {
+			tempVec.push_back(toDoList[i]);
+		} else {}
+	}
+	}
+	cout << logic.displayAll(fileName, tempVec);
+}
+
+bool logic::isCheckSearchStringDigit(string description) {
+	unsigned int i;
+	bool result = true;
+	for(i = 0; i < description.size(); ++i) {
+		if(!isdigit(description[i])) {
+			result = false;
+		}
+	}
+return result;
+}
+
+int logic::convertNumStringToInt(string description) {
+	int convertedNum;
+	convertedNum = atoi(description.c_str());
+    return convertedNum;
+}
+//search functions end here
 
 int logic::checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec){
 	string temp;
@@ -143,8 +200,6 @@ int logic::checkfororiginalindex(string description, vector<task>floatVec, vecto
 	}
 }
 
-
-
 string logic::displayAll(const string fileName, vector<task> &toDoList) {
 	task temp;
 	ostringstream oss;
@@ -162,7 +217,6 @@ string logic::displayAll(const string fileName, vector<task> &toDoList) {
 	}
 	return oss.str();
 }
-
 
 void logic::deleteItem(const int index, const string fileName, vector<task> &toDoList) {
 	int size = toDoList.size();
@@ -294,10 +348,10 @@ void logic::markcompleted(int index, const string filename, vector<task> &toDoLi
 void logic::sorttext(vector<task> &toDoList){
 	int size = toDoList.size();
 	task next;
-
-	for(int i=0; i<size; ++i){
+	
+	for(int i=0; i<size-1; ++i){
 		for(int j=1; j<size-i; ++j){
-			if(next.returntext(j - 1, toDoList).compare(next.returntext(j, toDoList))>0){
+			if(next.returntext(j-1 , toDoList).compare(next.returntext(j, toDoList))>0){
 				task temp = toDoList[j-1];
 				toDoList[j-1] = toDoList[j];
 				toDoList[j] = temp;
@@ -312,7 +366,7 @@ void logic::sortdates(vector<task> &toDoList){
 	task temp;
 
 	for(i = 0; i < toDoList.size(); ++i) {
-		for(j = 1; j < toDoList.size() - i; ++j) {
+		for(j = 1; j < toDoList.size()-i; ++j) {
 			if(temp.returnendyear(j-1, toDoList) > temp.returnendyear(j, toDoList)) {
 				vector<task> tempVec;
 				tempVec.push_back(toDoList[j-1]);
@@ -320,6 +374,7 @@ void logic::sortdates(vector<task> &toDoList){
 				toDoList[j] = tempVec[0];
 				tempVec.pop_back();
  			}
+			else{}
 		}
 	
 	}//sort year
@@ -327,7 +382,8 @@ void logic::sortdates(vector<task> &toDoList){
 	for(i = 0; i < toDoList.size()-1; ++i) {
 		if(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList)){
 		for(j = 1; j < toDoList.size()-i; ++j) {
-			if((temp.returnendmonth(j-1, toDoList) > temp.returnendmonth(j, toDoList))&&(temp.returnendyear(j-i, toDoList) == temp.returnendyear(j, toDoList))) {
+			if((temp.returnendmonth(j-1, toDoList) > temp.returnendmonth(j, toDoList))
+				&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))) {
 				vector<task> tempVec1;
 				tempVec1.push_back(toDoList[j-1]);
 				toDoList[j-1] = toDoList[j];
@@ -335,13 +391,17 @@ void logic::sortdates(vector<task> &toDoList){
 				tempVec1.pop_back();
  			}
 		}
-	}
+		}
+		else{}
 	}//sort month
 
 	for(i = 0; i < toDoList.size()-1; ++i) {
-		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))) {
+		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))
+			&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))) {
 		for(j = 1; j < toDoList.size()-i; ++j) {
-			if((temp.returnenddate(j-1,toDoList) > temp.returnenddate(j,toDoList))&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))) {
+			if((temp.returnenddate(j-1,toDoList) > temp.returnenddate(j,toDoList))
+				&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))
+				&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))) {
 				vector<task> tempVec1;
 				tempVec1.push_back(toDoList[j-1]);
 				toDoList[j-1] = toDoList[j];
@@ -358,10 +418,13 @@ void logic::sorttime(vector<task> &toDoList){
 	task temp;
 	unsigned int i , j;
 	for(i = 0; i < toDoList.size()-1; ++i) {
-		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))
+		if((temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))
+			&&(temp.returnendmonth(i, toDoList) == temp.returnendmonth(i+1, toDoList))
 			&&(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))) {
 		for(j = 1; j < toDoList.size()-i; ++j) {
-			if((temp.returnendtime(j-1,toDoList) > temp.returnendtime(j,toDoList))&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))
+			if((temp.returnendtime(j-1,toDoList) > temp.returnendtime(j,toDoList))
+				&&(temp.returnendyear(j-1, toDoList) == temp.returnendyear(j, toDoList))
+				&&(temp.returnendmonth(j-1, toDoList) == temp.returnendmonth(j, toDoList))
 				&&(temp.returnendyear(i, toDoList) == temp.returnendyear(i+1, toDoList))) {
 				vector<task> tempVec1;
 				tempVec1.push_back(toDoList[j-1]);
@@ -381,4 +444,6 @@ void logic::printMessage(const string message) {
 void logic::printMessage(const string message1, const string message2) {
 	cout << endl << message1 << " " << message2 << endl;
 }
+
+
 

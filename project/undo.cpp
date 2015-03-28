@@ -18,6 +18,6 @@ vector<task> undo::returnmemory(){
 	return memory;
 }
 
-int undo::returncommandnumber(){
+int undo::returnnum(){
 	return num;
 }
