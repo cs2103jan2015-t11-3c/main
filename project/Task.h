@@ -8,7 +8,7 @@
 using namespace std;
 
 class task{
-	private:
+private:
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	int type;
@@ -24,7 +24,8 @@ public:
 
 	void addItemtypeone(string text);
 	void addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time);
-	void addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time);
+	void addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, 
+		                  int _e_date, int _e_month, int _e_year, int _e_time);
 	void completed(int index, vector<task> &toDoList);
 	void edittext(int index, string PartTochange, vector<task> &toDoList);
 	void edits_time(int index, int PartTochange, vector<task> &toDoList);
