@@ -1,7 +1,7 @@
 #include "parser.h"
 #include <iostream>
 #include <sstream>
-#include "logic.h"
+#include "logic.h" //need to remove this
 
 
 //Checks if the command entered is a recognised valid user command

@@ -4,7 +4,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "parser.h"
 #include "Task.h"
+#include "storage.h"
+#include "undo.h"
 
 using namespace std;
 
@@ -32,7 +35,8 @@ class logic{
 public:
 	void readToDoListFromTextFile(string fileName, vector<task> &toDoList);
 
-	void executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector <task>timedVec);
+	void executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, 
+		vector<task> &deadlineVec, vector<task> &timedVec, vector<undo> &undomemory, undo &currentmemory);
 	int checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec);
 	
 	string displayAll(const string, vector<task> &);

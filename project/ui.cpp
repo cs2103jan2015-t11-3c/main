@@ -2,8 +2,8 @@
 #include <vector>
 #include <sstream>
 #include "logic.h"
-#include "parser.h"
 #include "Task.h"
+#include "undo.h"
 #include <fstream> 
 #include <ctime>
 #include <algorithm>
@@ -43,13 +43,17 @@ void printWelcomeMessage() {
 void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec){
 	string command, description;
 	logic function;
+	vector<undo> undomemory;
+	undo currentmemory, undofunction;
+	
+	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 
 	while(command!="exit"){
 		showDefaultTaskList(toDoList, floatVec, deadlineVec, timedVec);
 		cout << endl << "command: ";
 		cin >> command;
 		getline(cin,description);
-		function.executeCommand(command, description, toDoList, floatVec, deadlineVec, timedVec);
+		function.executeCommand(command, description, toDoList, floatVec, deadlineVec, timedVec, undomemory, currentmemory);
 	};
 }
 

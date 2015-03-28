@@ -108,7 +108,7 @@ string task::displaytypetwo(int index, vector<task> &toDoList){
 	oss << endl<<  index+1 << "." << toDoList[index].text <<  " by " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
 			<< toDoList[index].e_month << "/" << toDoList[index].e_year;
 	return oss.str();
-}//changed "/"
+}
 
 string task::displaytypethree(int index, vector<task> &toDoList){
 	ostringstream oss;
@@ -116,7 +116,7 @@ string task::displaytypethree(int index, vector<task> &toDoList){
 			<< toDoList[index].s_month << "/" << toDoList[index].s_year << " to " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
 			<< toDoList[index].e_month << "/" << toDoList[index].e_year ;
 	return oss.str();
-}//changed "/"
+}
 
 int task::returntype(int index, vector<task> &toDoList){
 	return toDoList[index].type;

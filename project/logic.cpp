@@ -1,14 +1,12 @@
 #include "logic.h"
-#include "parser.h"
-#include "Task.h"
-#include "storage.h"
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 
 void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
 	fstream textFile;
-	string input;//deleted string temp
+	string input;
 	textFile.open(fileName.c_str());
 
 	//Remove the index of each line, eg: remove "1)" from "1) Some List Entry"
@@ -44,13 +42,15 @@ void logic::readToDoListFromTextFile(string fileName, vector<task> &toDoList) {
 }
 
 
-void logic::executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector <task>timedVec) {
+void logic::executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, 
+						   vector<task> &deadlineVec, vector<task>&timedVec, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
     logic function;
 	task datainput;
 	storage store;
 	parser parse;
+	undo undofunction;
 
 	parse.trimString(description);
 
@@ -72,12 +72,14 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
+		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
 	else if(command=="delete") {
 
 		function.deleteItem(checkfororiginalindex(description, floatVec, deadlineVec, timedVec), fileName, toDoList);
+		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
@@ -87,11 +89,13 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 	}
 	else if(command=="clear") {
 		function.clearAll(fileName, toDoList);
+		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
 	else if(command == "edit") {
 		function.editTask(checkfororiginalindex(description, floatVec, deadlineVec, timedVec),fileName,description, toDoList);
+		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
@@ -101,11 +105,16 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 	}
 	else if(command == "done") {
 		function.markcompleted(checkfororiginalindex(description, floatVec, deadlineVec, timedVec), fileName, toDoList);
+		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 		return;
 	}
-
+	else if(command == "undo"){
+		currentundomemory = undomemory[undomemory.size()-2];
+		toDoList = currentundomemory.returnmemory();
+		undomemory.pop_back();
+	}
 }
-	
+
 int logic::checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec){
 	string temp;
 	parser parse;

@@ -66,6 +66,7 @@
     <ClInclude Include="parser.h" />
     <ClInclude Include="storage.h" />
     <ClInclude Include="Task.h" />
+    <ClInclude Include="undo.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="storage.cpp" />
@@ -73,6 +74,7 @@
     <ClCompile Include="ui.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="parser.cpp" />
+    <ClCompile Include="undo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
