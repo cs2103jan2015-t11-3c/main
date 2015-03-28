@@ -155,7 +155,7 @@ int task::returnstartyear(int index, vector<task>&toDoList){
 }
 
 int task::returnstarttime(int index, vector<task>&toDoList){
-	return toDoList[index].e_time;
+	return toDoList[index].s_time;
 }
 
 int task::returntempnum(){
