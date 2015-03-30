@@ -18,7 +18,7 @@ using namespace std;
 
 //Constants
 const string DELIMITERS = " \n\t\v";
-//const string DEFAULT_SAVE_FILENAME = "SaveFile.txt";
+const string DEFAULT_SAVE_FILENAME = "SaveFile.txt";
 const int FILE_NAME_ARG_NUMBER = 1;
 const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to file";
 const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "deleted from file";

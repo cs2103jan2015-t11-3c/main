@@ -51,15 +51,15 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 				store.saveToSaveFile(fileName, toDoList);
 			}
 			else if(command=="display") {
-				cout << function.displayAll(fileName, toDoList);
+				cout << function.displayAll(toDoList);
 			}
 			else if(command=="clear") {
-				function.clearAll(fileName, toDoList);
+				function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName, toDoList);
 			}
 			else if(command == "edit") {
-				function.editTask(checkfororiginalindex(description, tempVec),fileName,description, toDoList);
+				function.editTask(checkfororiginalindex(description, tempVec),description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName, toDoList);
 			}
@@ -68,7 +68,7 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 				return;
 			}
 			else if(command == "done") {
-				function.markcompleted(checkfororiginalindex(description, tempVec), fileName, toDoList);
+				function.markcompleted(checkfororiginalindex(description, tempVec), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 			}
 			else if(command == "undo"){
@@ -141,7 +141,7 @@ void searchclass::searchTask(vector<task> &toDoList, vector<task> &tempVec, stri
 		} else {}
 	}
 	}
-	cout << logic.displayAll(fileName, tempVec);
+	cout << logic.displayAll(tempVec);
 }
 
 bool searchclass::isCheckSearchStringDigit(string description) {

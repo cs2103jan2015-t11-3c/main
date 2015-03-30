@@ -49,20 +49,20 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 			}
 			else if(command=="delete") {
 
-				function.deleteItem(checkfororiginalindex(description, defaultmemory), fileName, toDoList);
+				function.deleteItem(checkfororiginalindex(description, defaultmemory), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName, toDoList);
 			}
 			else if(command=="display") {
-				cout << function.displayAll(fileName, toDoList);
+				cout << function.displayAll(toDoList);
 			}
 			else if(command=="clear") {
-				function.clearAll(fileName, toDoList);
+				function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName, toDoList);
 			}
 			else if(command == "edit") {
-				function.editTask(checkfororiginalindex(description, defaultmemory),fileName,description, toDoList);
+				function.editTask(checkfororiginalindex(description, defaultmemory),description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName, toDoList);
 			}
@@ -71,7 +71,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				return;
 			}
 			else if(command == "done") {
-				function.markcompleted(checkfororiginalindex(description, defaultmemory), fileName, toDoList);
+				function.markcompleted(checkfororiginalindex(description, defaultmemory), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 			}
 			else if(command == "undo"){
