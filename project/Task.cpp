@@ -79,7 +79,7 @@ void task::edits_year(int PartTochange){
 	return;
 }
 void task::edite_time(int PartTochange){
-	s_time=PartTochange;
+	e_time=PartTochange;
 	return;
 }
 void task::edite_date(int PartTochange){

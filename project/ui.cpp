@@ -23,13 +23,15 @@ void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
 	logic function;
-	storage store;
+	storage *store=new storage;
 
 	getTextFileName(argc, argv);
-	store.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList);
+	//store->readToDoListFromTextFile(getTextFileName(argc, argv));
+	//store->readToDoListFromTextFile("SaveFile");
+	toDoList=store->readToDoListFromTextFile("SaveFile");	
 	printWelcomeMessage();
 	readinput(toDoList);
-
+	store->saveToSaveFile("SaveFile",toDoList);
 	return 0;
 }
 

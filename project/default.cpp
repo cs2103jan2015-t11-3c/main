@@ -23,7 +23,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
-					if(!store.isFloatDuplicated(datainput, toDoList))
+					if(!store.isFloatDuplicated(datainput))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("float task exist already");
@@ -31,7 +31,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				else if(parse.checktype(description) == 2){
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
-					if(!store.isDeadlineDuplicated(datainput, toDoList))
+					if(!store.isDeadlineDuplicated(datainput))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("deadline task exist already");
@@ -39,19 +39,19 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store.isTimeClashed(datainput, toDoList))
+					if(!store.isTimeClashed(datainput))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("timed slot clashes");
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName, toDoList);
+				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="delete") {
 
 				function.deleteItem(checkfororiginalindex(description, defaultmemory), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName, toDoList);
+				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="display") {
 				cout << function.displayAll(toDoList);
@@ -59,15 +59,15 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 			else if(command=="clear") {
 				function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName, toDoList);
+				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command == "edit") {
 				function.editTask(checkfororiginalindex(description, defaultmemory),description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName, toDoList);
+				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="exit") {
-				store.saveToSaveFile(fileName, toDoList);
+				store.saveToSaveFile(fileName,toDoList);
 				return;
 			}
 			else if(command == "done") {
@@ -188,3 +188,4 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	cout << endl <<"**********************************************************************" << endl;
 	
 }
+
