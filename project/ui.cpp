@@ -27,11 +27,10 @@ int main(int argc, char *argv[]) {
 
 	getTextFileName(argc, argv);
 	//store->readToDoListFromTextFile(getTextFileName(argc, argv));
-	//store->readToDoListFromTextFile("SaveFile");
-	toDoList=store->readToDoListFromTextFile("SaveFile");	
+	toDoList=store->readToDoListFromTextFile("SaveFile");	  // for testing only, by right should be the code above******
 	printWelcomeMessage();
 	readinput(toDoList);
-	store->saveToSaveFile("SaveFile",toDoList);
+	store->saveToSaveFile("SaveFile",toDoList);           
 	return 0;
 }
 
