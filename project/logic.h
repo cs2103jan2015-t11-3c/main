@@ -12,17 +12,18 @@
 #include "Task.h"
 #include "storage.h"
 #include "undo.h"
+#include "search.h"
 
 using namespace std;
 
 //Constants
 const string DELIMITERS = " \n\t\v";
-const string DEFAULT_SAVE_FILENAME = "SaveFile.txt";
+//const string DEFAULT_SAVE_FILENAME = "SaveFile.txt";
 const int FILE_NAME_ARG_NUMBER = 1;
-const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to";
-const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "deleted from";
-const string MESSAGE_ITEMS_CLEARED_SUCCESSFULLY = "all content deleted from";
-const string ERROR_LIST_IS_EMPTY = "is empty";
+const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to file";
+const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "deleted from file";
+const string MESSAGE_ITEMS_CLEARED_SUCCESSFULLY = "all content deleted from file";
+const string ERROR_LIST_IS_EMPTY = "file is empty";
 const string ERROR_INVALID_INDEX = "invalid index";
 const string ERROR_MISSING_DESCRIPTION = "no description entered";
 const string ERROR_INVALID_COMMAND = "invalid command";
@@ -37,26 +38,17 @@ static string fileName = "";
 
 class logic{
 public:
-	void readToDoListFromTextFile(string fileName, vector<task> &toDoList);
-
-	void executeCommand(string command, string description, vector<task> &toDoList, vector<task> &floatVec, 
-		vector<task> &deadlineVec, vector<task> &timedVec, vector<undo> &undomemory, undo &currentmemory);
-	int checkfororiginalindex(string description, vector<task>floatVec, vector<task>deadlineVec, vector<task>timedVec);
-	
-	string displayAll(const string, vector<task> &);
-	void deleteItem(const int, const string, vector<task> &);
-	void clearAll(const string, vector<task> &);
-	void editTask(int , string , string , vector<task> &);
-	void markcompleted(int, const string, vector<task> &);
-	void sorttext(vector<task> &);
-	void sortdates(vector<task> &);
-	void sorttime(vector<task> &);
-
-	void searchTask(vector<task> &, string, string);
-	bool isCheckSearchStringDigit(string);
-	int convertNumStringToInt(string);
+	string displayAll(vector<task> &);
+	void deleteItem(const int index, vector<task> &toDoList);
+	void clearAll(vector<task> &toDoList);
+	void editTask(int index, string description, vector<task> &toDoList);
+	void markcompleted(int index, vector<task> &toDoList);
+	void sorttext(vector<task> &toDoList);
+	//void sortdates(vector<task> &);
+	//void sorttime(vector<task> &);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);
+	
 };
 #endif 

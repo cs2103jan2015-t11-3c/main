@@ -24,7 +24,7 @@ bool parser::isValidCommand(const string command, const string description){
 		else
 		return true;
 	}
-	else if(command=="display"||command=="clear"||command=="exit"||command=="undo"||command=="search")
+	else if(command=="display"||command=="clear"||command=="exit"||command=="undo"||command=="search"||command == "default")
 		return true;
 
 	else if (command=="edit"){

@@ -26,32 +26,34 @@ public:
 	void addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time);
 	void addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, 
 		                  int _e_date, int _e_month, int _e_year, int _e_time);
-	void completed(int index, vector<task> &toDoList);
-	void edittext(int index, string PartTochange, vector<task> &toDoList);
-	void edits_time(int index, int PartTochange, vector<task> &toDoList);
-	void edits_date(int index, int PartTochange, vector<task> &toDoList);
-	void edits_month(int index, int PartTochange, vector<task> &toDoList);
-	void edits_year(int index, int PartTochange, vector<task> &toDoList);
-	void edite_time(int index, int PartTochange, vector<task> &toDoList);
-	void edite_date(int index, int PartTochange, vector<task> &toDoList);
-	void edite_month(int index, int PartTochange, vector<task> &toDoList);
-	void edite_year(int index, int PartTochange, vector<task> &toDoList);
 
+	void edittext(string PartTochange);
+	void edits_time(int PartTochange);
+	void edits_date(int PartTochange);
+	void edits_month(int PartTochange);
+	void edits_year(int PartTochange);
+	void edite_time(int PartTochange);
+	void edite_date(int PartTochange);
+	void edite_month(int PartTochange);
+	void edite_year(int PartTochange);
+	void editType(int PartTochange);
+	void editDone(bool PartTochange);
 
-	string displaytypeone(int index, vector<task> &toDoList);
-	string displaytypetwo(int index, vector<task> &toDoList);
-	string displaytypethree(int index, vector<task> &toDoList);
+	string displaytypeone(int index);
+	string displaytypetwo(int index);
+	string displaytypethree(int index);
 
-	int returntype(int index, vector<task> &toDoList);
-	string returntext(int index, vector<task>&toDoList);
-	int returnenddate(int index, vector<task>&toDoList);
-	int returnendmonth(int index, vector<task>&toDoList);
-	int returnendyear(int index, vector<task>&toDoList);
-	int returnendtime(int index, vector<task>&toDoList);
-	int returnstartdate(int index, vector<task>&toDoList);
-	int returnstartmonth(int index, vector<task>&toDoList);
-	int returnstartyear(int index, vector<task>&toDoList);
-	int returnstarttime(int index, vector<task>&toDoList);
+	int returntype();
+	bool returnstatus();
+	string returntext();
+	int returnenddate();
+	int returnendmonth();
+	int returnendyear();
+	int returnendtime();
+	int returnstartdate();
+	int returnstartmonth();
+	int returnstartyear();
+	int returnstarttime();
 	int returntempnum();
 
 };
