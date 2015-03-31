@@ -55,12 +55,13 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 	task datainput;
 	storage store;
 	parser parse;
+	bool result=true;
 
 	parse.trimString(description);
 
 	if(!parse.isValidCommand(command, description))
 		return;
-	else if(command=="add") {
+	else if(command=="add" ||command =="+") {
 		if(parse.checktype(description) == 1){  //floating task: add swimming 
 			parse.splitinputtypeone(description, text);
 			datainput.addItemtypeone(text);
@@ -68,33 +69,44 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 		}
 		else if(parse.checktype(description) == 2){
 			parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+			if(!isValidDate(e_date,e_month,e_year)) {
+				cout << "inValid date, try again" << endl;
+			}
 			datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
 		}
 		else if(parse.checktype(description) == 3){
 			parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+			if(!isValidDate(e_date,e_month,e_year)&&!isValidDate(s_date,s_month,s_year)) {
+				cout << "inValid Start and End Dates, try again" << endl;
+			}else if(!isValidDate(s_date,s_month,s_year)) {
+				cout << "inValid Start Date, try again" << endl;
+			}else if(!isValidDate(e_date,e_month,e_year)) {
+				cout << "inValid End Date, try again" << endl;
+			} else {
 			datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 			toDoList.push_back(datainput);
+			}
 		}
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
-	else if(command=="delete") {
+	else if(command=="delete"||command=="-"||command=="remove") {
 
 		function.deleteItem(checkfororiginalindex(description, floatVec, deadlineVec, timedVec), fileName, toDoList);
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
-	else if(command=="display") {
+	else if(command=="display"||command=="show") {
 		cout << function.displayAll(fileName, toDoList);
 		return;
 	}
-	else if(command=="clear") {
+	else if(command=="clear"||command=="clear all") {
 		function.clearAll(fileName, toDoList);
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
 	}
-	else if(command == "edit") {
+	else if(command == "edit"||command=="modify"||command=="change") {
 		function.editTask(checkfororiginalindex(description, floatVec, deadlineVec, timedVec),fileName,description, toDoList);
 		store.saveToSaveFile(fileName, function.displayAll(fileName, toDoList));
 		return;
@@ -113,6 +125,23 @@ void logic::executeCommand(string command, string description, vector<task> &toD
 	}
 
 }
+
+//check whether input date is valid function starts here
+bool logic::isleapyear(unsigned short year){
+	return (!(year%4) && (year%100) || !(year%400));
+}
+
+bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
+	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
+	if (!year || !month || !day || month>12)
+		return 0;
+	if (isleapyear(year) && month==2)
+		monthlen[1]++;
+	if (day>monthlen[month-1])
+		return 0;
+	return 1;
+}
+//check whether input date is valid ends here
 
 //search functions start here
 void logic::searchTask(vector<task> &toDoList, string fileName, string description) {
