@@ -16,35 +16,47 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 		parse.trimString(description);
 
 		if(parse.isValidCommand(command, description)){
-			if(command=="add") {
+			if(command=="add" ||command =="+") {
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
 					if(!store.isFloatDuplicated(datainput, toDoList))
-					toDoList.push_back(datainput);
+					       toDoList.push_back(datainput);
 					else
 						function.printMessage("float task exist already");
 				}
 				else if(parse.checktype(description) == 2){
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
-					if(!store.isDeadlineDuplicated(datainput, toDoList))
-					toDoList.push_back(datainput);
+					if(!store.isDeadlineDuplicated(datainput, toDoList)){
+						if(function.isValidDate(e_date,e_month,e_year))
+					       toDoList.push_back(datainput);
+						else
+							function.printMessage("inValid date, try again");
+					}
 					else
 						function.printMessage("deadline task exist already");
 				}
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store.isTimeClashed(datainput, toDoList))
-					toDoList.push_back(datainput);
+					if(!store.isTimeClashed(datainput, toDoList)){
+						if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+							cout << "inValid Start and End Dates, try again" << endl;
+						}else if(!function.isValidDate(s_date,s_month,s_year)) {
+							cout << "inValid Start Date, try again" << endl;
+						}else if(!function.isValidDate(e_date,e_month,e_year)) {
+							cout << "inValid End Date, try again" << endl;
+						}else{
+							toDoList.push_back(datainput);}
+					}
 					else
 						function.printMessage("timed slot clashes");
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
 			}
-			else if(command=="delete") {
+			else if(command=="delete"||command=="-"||command=="remove") {
 
 				function.deleteItem(checkfororiginalindex(description, tempVec), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));

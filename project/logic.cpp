@@ -1,5 +1,21 @@
 #include "logic.h"
 
+//check whether input date is valid function starts here
+bool logic::isleapyear(unsigned short year){
+	return (!(year%4) && (year%100) || !(year%400));
+}
+
+bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
+	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
+	if (!year || !month || !day || month>12)
+		return 0;
+	if (isleapyear(year) && month==2)
+		monthlen[1]++;
+	if (day>monthlen[month-1])
+		return 0;
+	return 1;
+}
+//check whether input date is valid ends here
 
 string logic::displayAll(vector<task> &toDoList) {
 	task temp;

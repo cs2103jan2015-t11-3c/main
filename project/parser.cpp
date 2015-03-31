@@ -9,14 +9,14 @@
 //Prints error messages if either of the aforementioned conditions are not met
 bool parser::isValidCommand(const string command, const string description){
 	logic function;
-	if(command=="add") {
+	if(command=="add"||command=="+") {
 		if(description.size()==0) {
 			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 		return true;
 	}
-	else if(command=="delete" ) {
+	else if(command=="delete"||command=="-"||command=="remove") {
 		if(description.size()==0) {
 			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
@@ -24,10 +24,10 @@ bool parser::isValidCommand(const string command, const string description){
 		else
 		return true;
 	}
-	else if(command=="display"||command=="clear"||command=="exit"||command=="undo"||command=="search"||command == "default")
+	else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||command=="exit"||command=="undo"||command=="search"||command=="default")
 		return true;
 
-	else if (command=="edit"){
+	else if (command=="edit"||command=="modify"||command=="change"){
 		if(description.size()==0) {
 			function.printMessage(ERROR_MISSING_INDEX);
 			return false;

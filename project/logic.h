@@ -47,6 +47,9 @@ public:
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
 
+	bool isleapyear(unsigned short);
+	bool isValidDate(unsigned short,unsigned short,unsigned short);
+
 	void printMessage(const string);
 	void printMessage(const string, const string);
 	
