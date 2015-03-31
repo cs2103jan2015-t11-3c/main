@@ -49,6 +49,7 @@ public:
 
 	bool isleapyear(unsigned short);
 	bool isValidDate(unsigned short,unsigned short,unsigned short);
+	bool isValidTime(int);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);

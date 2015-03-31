@@ -32,13 +32,16 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 					if(!store.isDeadlineDuplicated(datainput, toDoList)){
-						if(function.isValidDate(e_date,e_month,e_year))
+						if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
 					       toDoList.push_back(datainput);
-						else
-							function.printMessage("inValid date, try again");
+						} if(!function.isValidDate(e_date,e_month,e_year)) {
+							function.printMessage("invalid input date, try again");
+					} if(!function.isValidTime(e_time)) {
+						function.printMessage("invalid input timing, try again");
+						} 
+					}else {
+							function.printMessage("deadline task exist already");
 					}
-					else
-						function.printMessage("deadline task exist already");
 				}
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
@@ -50,10 +53,14 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 							cout << "inValid Start Date, try again" << endl;
 						}else if(!function.isValidDate(e_date,e_month,e_year)) {
 							cout << "inValid End Date, try again" << endl;
-						}else{
-							toDoList.push_back(datainput);}
-					}
-					else
+						}else if(!function.isValidTime(s_time)) {
+							cout << "invalid Start Timing, try again" << endl;
+						} else if(!function.isValidTime(e_time)) {
+							cout << "invalid End Timing, try again" << endl;
+						} else{
+							toDoList.push_back(datainput);
+						} 
+					} else
 						function.printMessage("timed slot clashes");
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
@@ -200,4 +207,3 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	cout << endl <<"**********************************************************************" << endl;
 	
 }
-

@@ -15,6 +15,15 @@ bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short y
 		return 0;
 	return 1;
 }
+
+bool logic::isValidTime(int time) {
+	if((time>=0)&&(time<=2400)) {
+		return 1;
+	} else {
+		return 0;
+	}
+
+}
 //check whether input date is valid ends here
 
 string logic::displayAll(vector<task> &toDoList) {
