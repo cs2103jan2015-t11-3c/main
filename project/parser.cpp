@@ -1,7 +1,7 @@
 #include "parser.h"
 #include <iostream>
 #include <sstream>
-#include "logic.h"
+#include "logic.h" //need to remove this
 
 
 //Checks if the command entered is a recognised valid user command
@@ -24,7 +24,11 @@ bool parser::isValidCommand(const string command, const string description){
 		else
 		return true;
 	}
+<<<<<<< HEAD
 	else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||command=="exit"||command=="undo"||command=="search")
+=======
+	else if(command=="display"||command=="clear"||command=="exit"||command=="undo"||command=="search"||command == "default")
+>>>>>>> 9fc3cc0009c4f5bb75ba04ba831eabe0a8b823e5
 		return true;
 
 	else if (command=="edit"||command=="modify"||command=="change"){

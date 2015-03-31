@@ -1,37 +1,42 @@
+#include "logic.h"
+#include "Task.h"
+#include "undo.h"
+#include "default.h"
+#include "storage.h"
+
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include "logic.h"
-#include "parser.h"
-#include "Task.h"
 #include <fstream> 
 #include <algorithm>
 #include <string>
 #include <ctime>
 #include <windows.h>
 
-using namespace std;
 
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
-void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
+void readinput(vector<task> &toDoList);
 void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
 
 
 int main(int argc, char *argv[]) {
-	vector<task> toDoList, floatVec, deadlineVec, timedVec;//global scope
+	vector<task> toDoList;
 	logic function;
+	storage *store=new storage;
 
 	getTextFileName(argc, argv);
-	function.readToDoListFromTextFile(getTextFileName(argc, argv), toDoList );
+	//store->readToDoListFromTextFile(getTextFileName(argc, argv));
+	toDoList=store->readToDoListFromTextFile("SaveFile");	  // for testing only, by right should be the code above******
 	printWelcomeMessage();
-	readinput(toDoList, floatVec, deadlineVec, timedVec);
-
+	readinput(toDoList);
+	store->saveToSaveFile("SaveFile",toDoList);           
 	return 0;
 }
 
 string getTextFileName(const int argc, char *argv[]) {
 	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
+	std::cout << "hahah";
 	return fileName;
 }
 
@@ -40,101 +45,47 @@ void printWelcomeMessage() {
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	cout << "**********************************************************************" << endl;
+	std::cout << "**********************************************************************" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
+	std::cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	cout << "**********************************************************************" << endl;
+	std::cout << "**********************************************************************" << endl;
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-	cout << "Current Singapore Local Time: ";
-    cout << (now->tm_year + 1900) << '-' 
+	std::cout << "Current Singapore Local Time: ";
+    std::cout << (now->tm_year + 1900) << '-' 
          << (now->tm_mon + 1) << '-'
          <<  now->tm_mday
          << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	cout << "**********************************************************************" << endl;
+	std::cout << "**********************************************************************" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec) {
-	int index, i=0, j=0, k=0;
-	task temp;
-	logic function;
-	vector<task> tempVec;
-	floatVec.clear();
-	deadlineVec.clear();
-	timedVec.clear();
-	
-	for(index = 0; index != toDoList.size(); ++index) {
-		tempVec.push_back(toDoList[index]);
-	}
-
-
-	for(index = 0; index != tempVec.size(); ++index) {
-		if(temp.returntype(index, tempVec) == 1){
-			floatVec.push_back(tempVec[index]);
-			floatVec[i].inserttempnum(index);
-			i++;
-		}
-		else if(temp.returntype(index, tempVec) == 2){
-			deadlineVec.push_back(tempVec[index]);
-			deadlineVec[j].inserttempnum(index);
-			j++;
-		}
-		else {
-			timedVec.push_back(tempVec[index]);
-			timedVec[k].inserttempnum(index);
-			k++;
-		}
-	}
-	
-	//*************************(1) float task (1)****************************************************************************
-	function.sorttext(floatVec);
-	
-	cout << "Floating tasks:" << endl;
-	for(index = 0; index != floatVec.size(); ++index)
-		cout << temp.displaytypeone(index, floatVec);
-
-
-	//*************************(2) deadline task (2)****************************************************************************
-    function.sortdates(deadlineVec);
-	function.sorttime(deadlineVec);
-
-	cout << endl << endl << "Deadline tasks:" << endl;
-	for(index = 0; index != deadlineVec.size(); ++index) 
-		cout << temp.displaytypetwo(index, deadlineVec);
-
-
-	//*************************(3) timed task (3)****************************************************************************
-	function.sortdates(timedVec);
-	function.sorttime(timedVec);
-	
-	cout << endl << endl <<  "Timed tasks:" << endl;
-	for(index = 0; index != timedVec.size(); ++index)
-	    cout << temp.displaytypethree(index, timedVec);
-
-	cout << endl <<"**********************************************************************" << endl;
-	
-}
-
-void readinput(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec){
+void readinput(vector<task> &toDoList){
 	string command, description;
-	logic function;
+	vector<undo> undomemory;
+	defaultclass defaultmemory, defaultfunction;
+	undo currentundomemory, undofunction;
+	searchclass searchfunction;
+	
+	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+	defaultfunction.showDefaultTaskList(toDoList);
+
+	cout << endl << "command: ";
+	cin >> command;
+	getline(cin,description);
 
 	while(command!="exit"){
-		//showDefaultTaskList(toDoList, floatVec, deadlineVec, timedVec);
-		cout << endl << "command: ";
-		cin >> command;
-		getline(cin,description);
-		function.executeCommand(command, description, toDoList, floatVec, deadlineVec, timedVec);
+		if(command == "search"||command == "display")
+			searchfunction.searchexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
+		else
+			 defaultfunction.defaultexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
 	};
 }
-
-

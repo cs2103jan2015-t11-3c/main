@@ -57,105 +57,117 @@ void task::addItemtypethree(string task, int _s_date, int _s_month, int _s_year,
 	complete = false;
 }
 
-void task::completed(int index, vector<task> &toDoList){
-	complete = true;
-};
+void task::edittext(string PartTochange){
+	text=PartTochange;
+	return;
+}
+void task::edits_time(int PartTochange){
+	s_time=PartTochange;
+	return;
 
-void task::edittext(int index, string PartTochange, vector<task> &toDoList){
-	toDoList[index].text = PartTochange;
-};
+}
+void task::edits_date(int PartTochange){
+	s_date=PartTochange;
+	return;
+}
+void task::edits_month(int PartTochange){
+	s_month=PartTochange;
+	return;
+}
+void task::edits_year(int PartTochange){
+	s_year=PartTochange;
+	return;
+}
+void task::edite_time(int PartTochange){
+	e_time=PartTochange;
+	return;
+}
+void task::edite_date(int PartTochange){
+	e_date=PartTochange;
+	return;
+}
+void task::edite_month(int PartTochange){
+	e_month=PartTochange;
+	return;
+}
+void task::edite_year(int PartTochange){
+	e_year=PartTochange;
+	return;
+}
 
-void task::edits_time(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].s_time = PartTochange;
-};
+void task::editType(int PartTochange){
+	type=PartTochange;
+	return;
+}
+void task::editDone(bool PartTochange){
+	complete=PartTochange;
+	return;
+}
 
-void task::edits_date(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].s_date = PartTochange;
-};
 
-void task::edits_month(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].s_month = PartTochange;
-};
-
-void task::edits_year(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].s_year = PartTochange;
-};
-
-void task::edite_time(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].e_time = PartTochange;
-};
-
-void task::edite_date(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].e_date = PartTochange;
-};
-
-void task::edite_month(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].e_month = PartTochange;
-};
-
-void task::edite_year(int index, int PartTochange, vector<task> &toDoList){
-	toDoList[index].e_year = PartTochange;
-};
-
-string task::displaytypeone(int index, vector<task> &toDoList){
+string task::displaytypeone(int index){
 	ostringstream oss;
-	oss << endl<<  index+1 << "." << toDoList[index].text;
+	oss << endl<<  index+1 << "." << text;
 	return oss.str();
 }
 
-string task::displaytypetwo(int index, vector<task> &toDoList){
+string task::displaytypetwo(int index){
 	ostringstream oss;
-	oss << endl<<  index+1 << "." << toDoList[index].text <<  " by " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
-			<< toDoList[index].e_month << "/" << toDoList[index].e_year;
+	oss << endl<<  index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year;
 	return oss.str();
-}//changed "/"
+}
 
-string task::displaytypethree(int index, vector<task> &toDoList){
+string task::displaytypethree(int index){
 	ostringstream oss;
-	 oss << endl << index+1 << "." << toDoList[index].text << " from " <<toDoList[index].s_time << " on "<<toDoList[index].s_date<<"/"
-			<< toDoList[index].s_month << "/" << toDoList[index].s_year << " to " << toDoList[index].e_time << " on " << toDoList[index].e_date<<"/"
-			<< toDoList[index].e_month << "/" << toDoList[index].e_year ;
+	 oss << endl << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
+			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year ;
 	return oss.str();
-}//changed "/"
-
-int task::returntype(int index, vector<task> &toDoList){
-	return toDoList[index].type;
 }
 
-string task::returntext(int index, vector<task>&toDoList){
-	return toDoList[index].text;
+int task::returntype(){
+	return type;
 }
 
-int task::returnenddate(int index, vector<task>&toDoList){
-	return toDoList[index].e_date;
+bool task::returnstatus(){
+	return complete;
 }
 
-int task::returnendmonth(int index, vector<task>&toDoList){
-	return toDoList[index].e_month;
+string task::returntext(){
+	return text;
 }
 
-int task::returnendyear(int index, vector<task>&toDoList){
-	return toDoList[index].e_year;
+int task::returnenddate(){
+	return e_date;
 }
 
-int task::returnendtime(int index, vector<task>&toDoList){
-	return toDoList[index].e_time;
+int task::returnendmonth(){
+	return e_month;
 }
 
-int task::returnstartdate(int index, vector<task>&toDoList){
-	return toDoList[index].s_date;
+int task::returnendyear(){
+	return e_year;
 }
 
-int task::returnstartmonth(int index, vector<task>&toDoList){
-	return toDoList[index].s_month;
+int task::returnendtime(){
+	return e_time;
 }
 
-int task::returnstartyear(int index, vector<task>&toDoList){
-	return toDoList[index].s_year;
+int task::returnstartdate(){
+	return s_date;
 }
 
-int task::returnstarttime(int index, vector<task>&toDoList){
-	return toDoList[index].s_time;
+int task::returnstartmonth(){
+	return s_month;
+}
+
+int task::returnstartyear(){
+	return s_year;
+}
+
+int task::returnstarttime(){
+	return s_time;
 }
 
 int task::returntempnum(){

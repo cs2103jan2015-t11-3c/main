@@ -62,17 +62,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="default.h" />
     <ClInclude Include="logic.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="search.h" />
     <ClInclude Include="storage.h" />
     <ClInclude Include="Task.h" />
+    <ClInclude Include="undo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="default.cpp" />
+    <ClCompile Include="search.cpp" />
     <ClCompile Include="storage.cpp" />
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="ui.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="parser.cpp" />
+    <ClCompile Include="undo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
