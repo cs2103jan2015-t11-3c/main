@@ -65,6 +65,7 @@
     <ClInclude Include="default.h" />
     <ClInclude Include="logic.h" />
     <ClInclude Include="parser.h" />
+    <ClInclude Include="recurringTask.h" />
     <ClInclude Include="search.h" />
     <ClInclude Include="storage.h" />
     <ClInclude Include="Task.h" />
@@ -72,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="default.cpp" />
+    <ClCompile Include="recurringTask.cpp" />
     <ClCompile Include="search.cpp" />
     <ClCompile Include="storage.cpp" />
     <ClCompile Include="Task.cpp" />
