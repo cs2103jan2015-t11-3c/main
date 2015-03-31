@@ -26,17 +26,15 @@ int main(int argc, char *argv[]) {
 	storage *store=new storage;
 
 	getTextFileName(argc, argv);
-	//store->readToDoListFromTextFile(getTextFileName(argc, argv));
-	toDoList=store->readToDoListFromTextFile("SaveFile");	  // for testing only, by right should be the code above******
+	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
-	readinput(toDoList);
-	store->saveToSaveFile("SaveFile",toDoList);           
+	readinput(toDoList);       
 	return 0;
 }
 
 string getTextFileName(const int argc, char *argv[]) {
 	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
-	std::cout << "hahah";
+	std::cout << fileName << "loaded succesfully" << endl;
 	return fileName;
 }
 

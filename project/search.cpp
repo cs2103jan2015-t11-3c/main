@@ -20,7 +20,7 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
-					if(!store.isFloatDuplicated(datainput))
+					if(!store.isFloatDuplicated(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("float task exist already");
@@ -28,7 +28,7 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 				else if(parse.checktype(description) == 2){
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
-					if(!store.isDeadlineDuplicated(datainput))
+					if(!store.isDeadlineDuplicated(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("deadline task exist already");
@@ -36,7 +36,7 @@ void searchclass::searchexecuteCommand(string &command, string &description, vec
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store.isTimeClashed(datainput))
+					if(!store.isTimeClashed(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("timed slot clashes");

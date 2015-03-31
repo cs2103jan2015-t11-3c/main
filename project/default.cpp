@@ -23,7 +23,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
-					if(!store.isFloatDuplicated(datainput))
+					if(!store.isFloatDuplicated(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("float task exist already");
@@ -31,7 +31,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				else if(parse.checktype(description) == 2){
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
-					if(!store.isDeadlineDuplicated(datainput))
+					if(!store.isDeadlineDuplicated(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("deadline task exist already");
@@ -39,7 +39,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store.isTimeClashed(datainput))
+					if(!store.isTimeClashed(datainput, toDoList))
 					toDoList.push_back(datainput);
 					else
 						function.printMessage("timed slot clashes");
@@ -169,8 +169,8 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 
 
 	//*************************(2) deadline task (2)****************************************************************************
-    //function.sortdates(defaultmemory.deadlineVec);
-	//function.sorttime(defaultmemory.deadlineVec);
+    function.sortdates(defaultmemory.deadlineVec);
+	function.sorttime(defaultmemory.deadlineVec);
 
 	cout << endl << endl << "Deadline tasks:" << endl;
 	for(index = 0; index != defaultmemory.deadlineVec.size(); ++index) 
@@ -178,8 +178,8 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 
 
 	//*************************(3) timed task (3)****************************************************************************
-	//function.sortdates(defaultmemory.timedVec);
-	//function.sorttime(defaultmemory.timedVec);
+	function.sortdates(defaultmemory.timedVec);
+	function.sorttime(defaultmemory.timedVec);
 	
 	cout << endl << endl <<  "Timed tasks:" << endl;
 	for(index = 0; index != defaultmemory.timedVec.size(); ++index)

@@ -9,13 +9,9 @@ storage::storage(void)
 {
 }
 
-
 storage::~storage(void)
 {
 }
-
-
-
 
 string storage::toString(vector<task> &toDoList) {
 	ostringstream oss;
@@ -51,46 +47,12 @@ void storage::displayAll(const string fileName) {
 void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	fstream textFile;
 	
-	textFile.open(fileName.c_str(), fstream::out);
+	textFile.open(fileName, fstream::out);
 	textFile << toString(toDoList);
 	textFile.close();
 	
 }
 
-
-/*
-
-void storage::addItem( ) {
-		task i;
-		string description;
-
-		cin>>description;
-		i.edittext(description);
-		int sdate,smonth,syear,stime,edate,emonth,eyear,etime;
-		cin>>sdate>>smonth>>syear>>stime
-			>>edate>>emonth>>eyear>>etime;
-
-		i.edits_date(sdate);
-		i.edits_month(smonth);
-		i.edits_year(syear);
-		i.edits_time(stime);
-		i.edite_date(edate);
-		i.edite_month(emonth);
-		i.edite_year(eyear);
-		i.edite_time(etime);
-		
-		int type;
-		bool status;
-		cin>>type;
-		i.editType(type);
-		cin>>status;
-		i.editDone(status);
-
-	 toDoList.push_back(i);
-// _size++
-} 
-
-*/
  vector<task> storage::readToDoListFromTextFile(string fileName) {
 	fstream textFile;
 	string input;
@@ -100,7 +62,7 @@ void storage::addItem( ) {
 	//Adds the rest of the line to the to-do list after removing leading and following whitespaces
 	 while(getline(textFile,input)) {
 		size_t pos = input.find('.');
-		input = input.substr(pos+1);
+		input = input.substr(pos+2);
 		
 		string text;
 		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
@@ -143,7 +105,8 @@ void storage::addItem( ) {
 		istringstream in(description);
 		in>>extra>>status;
 		i.editDone(status);
-		
+		cout << i.returnstartdate();
+
 	    getline(textFile,description);
 		_toDoList.push_back(i);
 
@@ -167,7 +130,7 @@ void storage::addItem( ) {
 	outFile<< toString(toDoList);
 	outFile.close();
 
-	system("del SaveFile.txt");
+	system("del SaveFile");
 	return true;
 }
  
@@ -183,23 +146,10 @@ void storage::addItem( ) {
 	}
 }
 
- bool storage::isTaskDuplicated(task newTask) {
-	
-	if (newTask.returntype() == 1) {
-		return isFloatDuplicated(newTask);
-	} else {
-		if (newTask.returntype() == 2) {
-			return isDeadlineDuplicated(newTask);
-		} else {
-			return false;
-		}
-	}	
 
-}
-
-bool storage::isFloatDuplicated(task newTask) {
-	for (int i=1;i<=_toDoList.size();i++) {
-		if ((newTask.returntext())==(_toDoList[i-1].returntext())) {
+bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
+	for (int i=1;i<=toDoList.size();i++) {
+		if (newTask.returntext()==toDoList[i-1].returntext()) {
 				return true;
 			}
 		
@@ -208,11 +158,11 @@ bool storage::isFloatDuplicated(task newTask) {
 }
 
 
-bool storage::isDeadlineDuplicated(task newTask) {
-		for (int i=1;i<=_toDoList.size();i++) {
-		if ((newTask.returntext())==(_toDoList[i-1].returntext())) {
-			if ((newTask.returnendyear())==(_toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(_toDoList[i-1].returnendmonth())
-				&&(newTask.returnenddate())==(_toDoList[i-1].returnenddate()&&(newTask.returnendtime())==(_toDoList[i-1].returnendtime())))
+bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
+		for (int i=1;i<=toDoList.size();i++) {
+		if ((newTask.returntext())==(toDoList[i-1].returntext())) {
+			if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
+				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate()&&(newTask.returnendtime())==(toDoList[i-1].returnendtime())))
 				return true;
 			}
 		
@@ -221,14 +171,14 @@ bool storage::isDeadlineDuplicated(task newTask) {
 }
 
 
-bool storage:: isTimeClashed(task newTask){
-	for (int i=1;i<=_toDoList.size();i++) {
-		if ((newTask.returnendyear())==(_toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(_toDoList[i-1].returnendmonth())
-				&&(newTask.returnenddate())==(_toDoList[i-1].returnenddate())
-				&&(newTask.returnstartyear())==(_toDoList[i-1].returnstartyear())&&(newTask.returnstartmonth())==(_toDoList[i-1].returnstartmonth())
-				&&(newTask.returnstartdate())==(_toDoList[i-1].returnstartdate()))
-			if ((newTask.returnendtime())>=(_toDoList[i-1].returnstarttime())
-				&& (newTask.returnstarttime())<(_toDoList[i-1].returnendtime())) 
+bool storage:: isTimeClashed(task newTask, vector<task> &toDoList){
+	for (int i=1;i<=toDoList.size();i++) {
+		if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
+				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate())
+				&&(newTask.returnstartyear())==(toDoList[i-1].returnstartyear())&&(newTask.returnstartmonth())==(toDoList[i-1].returnstartmonth())
+				&&(newTask.returnstartdate())==(toDoList[i-1].returnstartdate()))
+			if ((newTask.returnendtime())>=(toDoList[i-1].returnstarttime())
+				&& (newTask.returnstarttime())<(toDoList[i-1].returnendtime())) 
 				return true;
 			}
 		

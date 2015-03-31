@@ -13,14 +13,13 @@ private:
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	int type;
 	int tempnum;
+	int temp;
 	bool complete;
 
 
 public:
 	task(void);
 	~task(void);
-
-	void inserttempnum(int index);
 
 	void addItemtypeone(string text);
 	void addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time);
@@ -38,6 +37,8 @@ public:
 	void edite_year(int PartTochange);
 	void editType(int PartTochange);
 	void editDone(bool PartTochange);
+	void inserttempnum(int index);
+	void edittemp(int index);
 
 	string displaytypeone(int index);
 	string displaytypetwo(int index);
@@ -55,6 +56,7 @@ public:
 	int returnstartyear();
 	int returnstarttime();
 	int returntempnum();
+	int returntemp();
 
 };
 

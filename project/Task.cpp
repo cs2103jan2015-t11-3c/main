@@ -104,6 +104,11 @@ void task::editDone(bool PartTochange){
 	return;
 }
 
+void task::edittemp(int index){
+	temp = index;
+	return;
+}
+
 
 string task::displaytypeone(int index){
 	ostringstream oss;
@@ -172,4 +177,8 @@ int task::returnstarttime(){
 
 int task::returntempnum(){
 	return tempnum;
+}
+
+int task::returntemp(){
+	return temp;
 }
