@@ -17,7 +17,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 		parse.trimString(description);
 
 		if(parse.isValidCommand(command, description)){
-			if(!parse.isValidCommand(command, description))
+			if(!parse.isValidCommand(command, description))    ///////////////////////////////////////////////////something wrong???
 				return;
 			else if(command=="add" ||command =="+") {
 				if(parse.checktype(description) == 1){

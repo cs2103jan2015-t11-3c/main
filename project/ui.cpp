@@ -28,7 +28,8 @@ int main(int argc, char *argv[]) {
 	getTextFileName(argc, argv);
 	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
-	readinput(toDoList);       
+	readinput(toDoList);     
+	store->saveToSaveFile(getTextFileName(argc, argv),toDoList);
 	return 0;
 }
 
