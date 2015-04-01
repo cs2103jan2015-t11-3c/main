@@ -83,7 +83,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					cout << function.displayTypeOne(toDoList);
 				} if(description=="tomorrow"||description=="tomor") {
 					cout << function.displayTypeTwo(toDoList);
-				} if (description=="today+2") {
+				} if (description=="today+2"||description=="tomor+1") {
 					cout << function.displayTypeThree(toDoList);
 				} if(description=="") {
 					cout << function.displayAll(toDoList);
