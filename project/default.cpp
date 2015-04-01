@@ -32,7 +32,9 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 					if(!store.isDeadlineDuplicated(datainput, toDoList)){
-						if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
+						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							function.printMessage("Date entered is already overdued");
+						} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
 					       toDoList.push_back(datainput);
 						} if(!function.isValidDate(e_date,e_month,e_year)) {
 							function.printMessage("invalid input date, try again");
@@ -47,7 +49,11 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					if(!store.isTimeClashed(datainput, toDoList)){
-						if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							function.printMessage("Ending date entered is already overdued");
+						}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
+							function.printMessage("Starting date entered is already overdued");
+						}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
 							cout << "inValid Start and End Dates, try again" << endl;
 						}else if(!function.isValidDate(s_date,s_month,s_year)) {
 							cout << "inValid Start Date, try again" << endl;
@@ -62,10 +68,10 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 						} 
 					} else
 						function.printMessage("timed slot clashes");
-				}
+				} 
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
-			}
+			}//finish add function
 			else if(command=="delete"||command=="-"||command=="remove") {
 
 				function.deleteItem(checkfororiginalindex(description, defaultmemory), toDoList);

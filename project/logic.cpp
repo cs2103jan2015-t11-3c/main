@@ -1,4 +1,6 @@
 #include "logic.h"
+#include <ctime>
+#include <iostream>
 
 //check whether input date is valid function starts here
 bool logic::isleapyear(unsigned short year){
@@ -7,7 +9,7 @@ bool logic::isleapyear(unsigned short year){
 
 bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
 	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
-	if (!year || !month || !day || month>12)
+	if (!year || !month || !day || month>12 || year > 2030)
 		return 0;
 	if (isleapyear(year) && month==2)
 		monthlen[1]++;
@@ -22,7 +24,25 @@ bool logic::isValidTime(int time) {
 	} else {
 		return 0;
 	}
+}
 
+bool logic::checkIsDateOverdue(int day, int month, int year) {
+	bool result = true;
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int systemDay, systemMonth, systemYear;
+	systemDay = timePtr->tm_mday;
+	systemMonth = timePtr->tm_mon + 1;
+	systemYear = timePtr->tm_year+1900;
+
+	if(year < systemYear) {
+		return false;
+	} else if(year == systemYear && month < systemMonth) {
+		return  false;
+	} else if(year == systemYear && month == systemMonth && day < systemDay) {
+		return false;
+	}
+	return result;
 }
 //check whether input date is valid ends here
 
