@@ -82,7 +82,7 @@ void readinput(vector<task> &toDoList){
 	getline(cin,description);
 
 	while(command!="exit"){
-		if(command == "search"||command == "display")
+		if(command == "search"/*||command == "display"*/)
 			searchfunction.searchexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
 		else
 			 defaultfunction.defaultexecuteCommand(command, description, toDoList, undomemory, currentundomemory);

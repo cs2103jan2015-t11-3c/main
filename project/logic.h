@@ -39,6 +39,10 @@ static string fileName = "";
 class logic{
 public:
 	string displayAll(vector<task> &);
+	string displayTypeOne(vector<task> &);
+	string displayTypeTwo(vector<task> &);
+	string displayTypeThree(vector<task> &);
+
 	void deleteItem(const int index, vector<task> &toDoList);
 	void clearAll(vector<task> &toDoList);
 	void editTask(int index, string description, vector<task> &toDoList);
@@ -51,6 +55,10 @@ public:
 	bool isValidDate(unsigned short,unsigned short,unsigned short);
 	bool isValidTime(int);
 	bool checkIsDateOverdue(int, int, int);
+
+	int getSystemDay();
+	int getSystemMonth();
+	int getSystemYear();
 
 	void printMessage(const string);
 	void printMessage(const string, const string);

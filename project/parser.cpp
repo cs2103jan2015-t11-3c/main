@@ -1,6 +1,7 @@
 #include "parser.h"
 #include <iostream>
 #include <sstream>
+#include <string>
 #include "logic.h" //need to remove this
 
 

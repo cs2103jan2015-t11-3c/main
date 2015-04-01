@@ -79,7 +79,15 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="display") {
-				cout << function.displayAll(toDoList);
+				if(description=="today") {
+					cout << function.displayTypeOne(toDoList);
+				} if(description=="tomorrow"||description=="tomor") {
+					cout << function.displayTypeTwo(toDoList);
+				} if (description=="today+2") {
+					cout << function.displayTypeThree(toDoList);
+				} if(description=="") {
+					cout << function.displayAll(toDoList);
+				}
 			}
 			else if(command=="clear") {
 				function.clearAll(toDoList);
@@ -118,6 +126,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 	}
 
 }
+
 int defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory){
 	string temp;
 	int index, originindex;

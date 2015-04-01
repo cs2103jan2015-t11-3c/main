@@ -64,6 +64,118 @@ string logic::displayAll(vector<task> &toDoList) {
 	return oss.str();
 }
 
+string logic::displayTypeOne(vector<task> &toDoList) { //display today's tasks
+	logic logic;
+	ostringstream oss;
+	int day, month, year;
+	if(toDoList.size()==0) {
+		printMessage(ERROR_LIST_IS_EMPTY);
+	} else {
+		for(unsigned i = 0; i < toDoList.size(); i++){
+			if(toDoList[i].returntype() == 2) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+
+				if((day == logic.getSystemDay()) &&( month == logic.getSystemMonth() )&& (year == logic.getSystemYear())) {
+					oss<<toDoList[i].displaytypetwo(i);
+				} else{}
+
+			} else if(toDoList[i].returntype() == 3) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+				if(day == logic.getSystemDay() && month == logic.getSystemMonth() && year == logic.getSystemYear()) {
+			    oss <<  toDoList[i].displaytypethree(i);
+				}else{}
+			} else {}
+		}
+	}
+return oss.str();
+}
+
+string logic::displayTypeTwo(vector<task> &toDoList) { //display tomorrow's tasks
+	logic logic;
+	ostringstream oss;
+	int day, month, year;
+	if(toDoList.size()==0) {
+		printMessage(ERROR_LIST_IS_EMPTY);
+	} else {
+		for(unsigned i = 0; i < toDoList.size(); i++){
+			if(toDoList[i].returntype() == 2) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+
+				if((day == (logic.getSystemDay())+1) && (month == logic.getSystemMonth())&& (year == logic.getSystemYear())) {
+					oss<<toDoList[i].displaytypetwo(i);
+				} else{}
+
+			} else if(toDoList[i].returntype() == 3) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+				if(day == (logic.getSystemDay())+1 && month == logic.getSystemMonth() && year == logic.getSystemYear()) {
+			    oss <<  toDoList[i].displaytypethree(i);
+				}else{}
+			} else {}
+		}
+	}
+return oss.str();
+}
+
+string logic::displayTypeThree(vector<task> &toDoList) { //display the day after tomorrow's tasks
+	logic logic;
+	ostringstream oss;
+	int day, month, year;
+	if(toDoList.size()==0) {
+		printMessage(ERROR_LIST_IS_EMPTY);
+	} else {
+		for(unsigned i = 0; i < toDoList.size(); i++){
+			if(toDoList[i].returntype() == 2) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+
+				if((day == (logic.getSystemDay())+2) && (month == logic.getSystemMonth())&& (year == logic.getSystemYear())) {
+					oss<<toDoList[i].displaytypetwo(i);
+				} else{}
+
+			} else if(toDoList[i].returntype() == 3) {
+				day = toDoList[i].returnenddate();
+				month = toDoList[i].returnendmonth();
+				year = toDoList[i].returnendyear();
+				if(day == (logic.getSystemDay())+2 && month == logic.getSystemMonth() && year == logic.getSystemYear()) {
+			    oss <<  toDoList[i].displaytypethree(i);
+				}else{}
+			} else {}
+		}
+	}
+return oss.str();
+
+}
+
+int logic::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+int logic::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+int logic::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
+}
+
 void logic::deleteItem(const int index, vector<task> &toDoList) {
 	int size = toDoList.size();
 	if(size==0) {
