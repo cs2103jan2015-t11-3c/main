@@ -3,12 +3,12 @@
 void defaultclass::defaultexecuteCommand(string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	vector<task> tempVec;
     logic function;
 	task datainput;
 	storage store;
 	parser parse;
 	undo undofunction;
-	searchclass searchfunction;
 	defaultclass defaultmemory;
 
 	defaultmemory.updatedefaultmemory(toDoList);
@@ -17,9 +17,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 		parse.trimString(description);
 
 		if(parse.isValidCommand(command, description)){
-			if(!parse.isValidCommand(command, description))
-				return;
-			else if(command=="add" ||command =="+") {
+			if(command=="add" ||command =="+") {
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
@@ -32,49 +30,64 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
 					if(!store.isDeadlineDuplicated(datainput, toDoList)){
-						if(function.isValidDate(e_date,e_month,e_year))
+						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							function.printMessage("Date entered is already overdued");
+						} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
 					       toDoList.push_back(datainput);
-						else
-							function.printMessage("inValid date, try again");
+						} if(!function.isValidDate(e_date,e_month,e_year)) {
+							function.printMessage("invalid input date, try again");
+					} if(!function.isValidTime(e_time)) {
+						function.printMessage("invalid input timing, try again");
+						} 
+					}else {
+							function.printMessage("deadline task exist already");
 					}
-					else
-						function.printMessage("deadline task exist already");
 				}
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					if(!store.isTimeClashed(datainput, toDoList)){
-						if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							function.printMessage("Ending date entered is already overdued");
+						}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
+							function.printMessage("Starting date entered is already overdued");
+						}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
 							cout << "inValid Start and End Dates, try again" << endl;
 						}else if(!function.isValidDate(s_date,s_month,s_year)) {
 							cout << "inValid Start Date, try again" << endl;
 						}else if(!function.isValidDate(e_date,e_month,e_year)) {
 							cout << "inValid End Date, try again" << endl;
-						}else{
-							toDoList.push_back(datainput);}
-					}
-					else
+						}else if(!function.isValidTime(s_time)) {
+							cout << "invalid Start Timing, try again" << endl;
+						} else if(!function.isValidTime(e_time)) {
+							cout << "invalid End Timing, try again" << endl;
+						} else{
+							toDoList.push_back(datainput);
+						} 
+					} else
 						function.printMessage("timed slot clashes");
-				}
+				} 
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
-			}
+			}//finish add function
 			else if(command=="delete"||command=="-"||command=="remove") {
 
-				function.deleteItem(checkfororiginalindex(description, defaultmemory), toDoList);
+				function.deleteItem(checkfororiginalindex(description, defaultmemory, tempVec), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="display") {
-				cout << function.displayAll(toDoList);
+				tempVec.clear();
+				function.display(toDoList, tempVec, fileName, description);
 			}
+			
 			else if(command=="clear") {
 				function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
 			}
 			else if(command == "edit") {
-				function.editTask(checkfororiginalindex(description, defaultmemory),description, toDoList);
+				function.editTask(checkfororiginalindex(description, defaultmemory, tempVec),description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
 			}
@@ -83,7 +96,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				return;
 			}
 			else if(command == "done") {
-				function.markcompleted(checkfororiginalindex(description, defaultmemory), toDoList);
+				function.markcompleted(checkfororiginalindex(description, defaultmemory, tempVec), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 			}
 			else if(command == "undo"){
@@ -92,7 +105,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				undomemory.pop_back();
 			}
 			else if(command == "search") {
-				return;
+				function.searchTask(toDoList, tempVec, fileName, description);
 			}
 			else if(command == "default") {
 				showDefaultTaskList(toDoList);
@@ -105,8 +118,10 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 	}
 
 }
-int defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory){
+
+int defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec){
 	string temp;
+	parser parse;
 	int index, originindex;
 
 	istringstream in(description);
@@ -127,7 +142,11 @@ int defaultclass::checkfororiginalindex(string description, defaultclass default
 	    return originindex;
 	}
 	else{
-	return 0;}
+		index = parse.convertStringToIntegerIndex(description);
+		originindex = tempVec[index].returntempnum();
+		return originindex;
+	}
+	return 0;
 }
 
 void defaultclass::updatedefaultmemory(vector<task> &toDoList){
@@ -200,4 +219,3 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	cout << endl <<"**********************************************************************" << endl;
 	
 }
-

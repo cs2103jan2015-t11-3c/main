@@ -8,11 +8,11 @@
 #include <fstream>
 #include <algorithm>
 #include <stdlib.h>
+#include <ctime>
 #include "parser.h"
 #include "Task.h"
 #include "storage.h"
 #include "undo.h"
-#include "search.h"
 
 using namespace std;
 
@@ -39,6 +39,7 @@ static string fileName = "";
 class logic{
 public:
 	string displayAll(vector<task> &);
+	
 	void deleteItem(const int index, vector<task> &toDoList);
 	void clearAll(vector<task> &toDoList);
 	void editTask(int index, string description, vector<task> &toDoList);
@@ -47,8 +48,21 @@ public:
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
 
+	void searchTask(vector<task> &, vector<task> &, string, string);
+	bool isCheckSearchStringDigit(string);
+	int convertNumStringToInt(string);
+
+	void display(vector<task> &, vector<task> &, string, string);
+	int getSystemDay();
+	int getSystemMonth();
+	int getSystemYear();
+
+	void pushback(vector<task>& toDoList, vector<task>& tempVec, int index);
+
 	bool isleapyear(unsigned short);
 	bool isValidDate(unsigned short,unsigned short,unsigned short);
+	bool isValidTime(int);
+	bool checkIsDateOverdue(int, int, int);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);

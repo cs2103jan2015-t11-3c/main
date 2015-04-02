@@ -8,7 +8,6 @@
 #include "logic.h"
 #include "parser.h"
 #include "undo.h"
-#include "search.h"
 
 using namespace std;
 
@@ -21,7 +20,7 @@ public:
 	void updatedefaultmemory(vector<task> &toDoList);
 	void showDefaultTaskList(vector<task> &toDoList);
 	void defaultexecuteCommand(string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentmemory);
-	int checkfororiginalindex(string description, defaultclass defaultmemory);
+	int checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec);
 };
 #endif
 

@@ -23,12 +23,13 @@ void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
 	logic function;
-	storage *store=new storage;
+	storage store;
 
 	getTextFileName(argc, argv);
-	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
+	toDoList = store.readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
-	readinput(toDoList);       
+	readinput(toDoList);     
+	store.saveToSaveFile(getTextFileName(argc, argv),toDoList);
 	return 0;
 }
 
@@ -71,7 +72,6 @@ void readinput(vector<task> &toDoList){
 	vector<undo> undomemory;
 	defaultclass defaultmemory, defaultfunction;
 	undo currentundomemory, undofunction;
-	searchclass searchfunction;
 	
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 	defaultfunction.showDefaultTaskList(toDoList);
@@ -81,9 +81,6 @@ void readinput(vector<task> &toDoList){
 	getline(cin,description);
 
 	while(command!="exit"){
-		if(command == "search"||command == "display")
-			searchfunction.searchexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
-		else
-			 defaultfunction.defaultexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
+		defaultfunction.defaultexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
 	};
 }

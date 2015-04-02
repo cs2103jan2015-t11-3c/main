@@ -1,21 +1,5 @@
 #include "logic.h"
-
-//check whether input date is valid function starts here
-bool logic::isleapyear(unsigned short year){
-	return (!(year%4) && (year%100) || !(year%400));
-}
-
-bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
-	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
-	if (!year || !month || !day || month>12)
-		return 0;
-	if (isleapyear(year) && month==2)
-		monthlen[1]++;
-	if (day>monthlen[month-1])
-		return 0;
-	return 1;
-}
-//check whether input date is valid ends here
+#include <iostream>
 
 string logic::displayAll(vector<task> &toDoList) {
 	task temp;
@@ -212,6 +196,201 @@ void logic::sorttime(vector<task> &toDoList){
 		}
 	}
 }
+
+void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description) {
+	unsigned int i;
+	task task;
+	logic logic;
+
+	tempVec.clear();
+
+	for(i = 0; i < toDoList.size(); ++i) {
+	if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
+		unsigned int t = -1;
+		t = (toDoList[i].returntext()).find(description);
+		if(t != -1) {
+			pushback(toDoList, tempVec, i);
+	}
+	} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+		int convertedInt = convertNumStringToInt(description);
+		if(toDoList[i].returnstarttime() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendtime() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if(toDoList[i].returnstartdate() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnenddate() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnstartmonth() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendmonth() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnstartyear() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendyear() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else {}
+	}
+	}
+	cout << displayAll(tempVec);
+}
+
+bool logic::isCheckSearchStringDigit(string description) {
+	unsigned int i;
+	bool result = true;
+	for(i = 0; i < description.size(); ++i) {
+		if(!isdigit(description[i])) {
+			result = false;
+		}
+	}
+return result;
+}
+
+int logic::convertNumStringToInt(string description) {
+	int convertedNum;
+	convertedNum = atoi(description.c_str());
+    return convertedNum;
+}
+
+void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
+	int size = toDoList.size(), day, month, year;
+
+
+	if(description == "today"){
+		for(int i=0; i<size; i++){
+			day = toDoList[i].returnenddate();
+			month = toDoList[i].returnendmonth();
+			year = toDoList[i].returnendyear();
+			if((day == (getSystemDay())+1) && (month == getSystemMonth())&& (year == getSystemYear())){
+				pushback(toDoList, tempVec, i);
+				sorttext(tempVec);
+			}
+		}
+	}
+	else if(description == "tomorrow"){
+		for(int i=0; i<size; i++){
+			day = toDoList[i].returnenddate();
+			month = toDoList[i].returnendmonth();
+			year = toDoList[i].returnendyear();
+			if((day == (getSystemDay())+1) && (month == getSystemMonth())&& (year == getSystemYear())){
+				pushback(toDoList, tempVec, i);
+				sorttext(tempVec);
+			}
+		}
+	}
+	else if(description == "not done"){
+		for(int i=0; i<size; i++){
+			bool status = toDoList[i].returnstatus();
+			if(status == false){
+				pushback(toDoList, tempVec, i);
+				sortdates(tempVec);
+				sorttime(tempVec);
+			}
+		}
+	}
+	else if(description == "float"){
+		for(int i=0; i<size; i++){
+			int type = toDoList[i].returntype();
+			if(type == 1){
+				pushback(toDoList, tempVec, i);
+				sorttext(tempVec);
+			}
+		}
+	}
+	else if(description == "deadline"){
+		for(int i=0; i<size; i++){
+			int type = toDoList[i].returntype();
+			if(type == 2){
+				pushback(toDoList, tempVec, i);
+				sortdates(tempVec);
+				sorttime(tempVec);
+			}
+		}
+	}
+	else if(description == "timed"){
+		for(int i=0; i<size; i++){
+			int type = toDoList[i].returntype();
+			if(type == 3){
+				pushback(toDoList, tempVec, i);
+				sortdates(tempVec);
+				sorttime(tempVec);
+			}
+		}
+	}
+	cout << displayAll(tempVec);
+}
+
+int logic::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+int logic::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+int logic::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
+}
+
+void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
+	task task_;
+	task_ = toDoList[index];
+	task_.inserttempnum(index);
+	tempVec.push_back(task_);
+}
+
+//check whether input date is valid function starts here
+bool logic::isleapyear(unsigned short year){
+	return (!(year%4) && (year%100) || !(year%400));
+}
+
+bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
+	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
+	if (!year || !month || !day || month>12 || year > 2030)
+		return 0;
+	if (isleapyear(year) && month==2)
+		monthlen[1]++;
+	if (day>monthlen[month-1])
+		return 0;
+	return 1;
+}
+
+bool logic::isValidTime(int time) {
+	if((time>=0)&&(time<=2400)) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+bool logic::checkIsDateOverdue(int day, int month, int year) {
+	bool result = true;
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int systemDay, systemMonth, systemYear;
+	systemDay = timePtr->tm_mday;
+	systemMonth = timePtr->tm_mon + 1;
+	systemYear = timePtr->tm_year+1900;
+
+	if(year < systemYear) {
+		return false;
+	} else if(year == systemYear && month < systemMonth) {
+		return  false;
+	} else if(year == systemYear && month == systemMonth && day < systemDay) {
+		return false;
+	}
+	return result;
+}
+//check whether input date is valid ends here
 
 
 void logic::printMessage(const string message) {
