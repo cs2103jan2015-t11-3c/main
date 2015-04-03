@@ -30,7 +30,7 @@ void recurringTask::AddRecurring(string recurType,int e_date,int e_month,int e_y
 void recurringTask::DailyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList){
 	int n=30;                                                                   //the default recurring period for daily task is set to be 30 days
 	logic function;
-    task datainput;
+
 	for(int i=1;i<=n;i++){
 		if (function.isValidDate(e_date,e_month,e_year)){
           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
@@ -52,7 +52,7 @@ void recurringTask::DailyRec(int e_date,int e_month,int e_year,int s_date,int s_
 void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList){
 	int n=52;                           //default recurring period for weekly task is 1 year(52)weeks;
 	logic function;
-    task datainput;
+   
 	for(int i=1;i<=n;i++){
 		if (function.isValidDate(e_date,e_month,e_year)){
              addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
@@ -88,7 +88,7 @@ void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s
 void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList){
 	int n=12;                          //default recurring period is 12 month if user do not specify
 	logic function;
-    task datainput;
+    
 	for(int i=1;i<=n;i++){
 		if (function.isValidDate(e_date,e_month,e_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
@@ -121,7 +121,7 @@ void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int 
 void recurringTask::YearlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList){
     int n=5;
 	logic function;
-    task datainput;
+
 	for(int i=1;i<=n;i++){
 		if (function.isValidDate(e_date,e_month,e_year)){
            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
@@ -159,7 +159,7 @@ int recurringTask::getNumDays(int month,int year){
 }
 
 void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<task> &toDoList){
-	 task datainput;
+	 task datainput(description);
 	 datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
 	
 	 toDoList.push_back(datainput);
@@ -167,7 +167,7 @@ void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<t
 }
 
 void recurringTask::addRecTimed(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList){
-	 task datainput;
+	 task datainput(description);
 	 datainput.addItemtypethree( s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	 toDoList.push_back(datainput);
 	 return;

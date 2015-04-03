@@ -219,12 +219,12 @@ void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 		tempVec.push_back(toDoList[index]);
 
 	for(index = 0; index != tempVec.size(); ++index){
-		if(tempVec[index].returntype() == 1){
+		if(tempVec[index].returntype() =="float"){
 			floatVec_.push_back(tempVec[index]);
 			floatVec_[i].inserttempnum(index);
 			i++;
 		}
-		else if(tempVec[index].returntype() == 2){
+		else if(tempVec[index].returntype() == "deadline"){
 			deadlineVec_.push_back(tempVec[index]);
 			deadlineVec_[j].inserttempnum(index);
 			j++;
@@ -265,7 +265,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 		for(int i=0;i<pos;i++) {
 			cout<<" ";
 		}
-		cout << defaultmemory.floatVec[index].displaytypeone(index) << endl;
+		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
 
 
@@ -290,7 +290,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 		for(int i=0;i<pos;i++) {
 			cout<<" ";
 		}
-		cout << defaultmemory.deadlineVec[index].displaytypetwo(index) << endl;
+		cout << defaultmemory.deadlineVec[index].displayDeadline(index) << endl;
 	}
 
 
@@ -314,7 +314,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 		for(int i=0;i<pos;i++) {
 			cout<<" ";
 		}
-	    cout << defaultmemory.timedVec[index].displaytypethree(index) << endl;
+	    cout << defaultmemory.timedVec[index].displayTimed(index) << endl;
 
 	}
 	HANDLE hConsole;

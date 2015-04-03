@@ -11,7 +11,7 @@ class task{
 private:
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
-	int type;
+	string type;
 	int tempnum;
 	int temp;
 	bool complete;
@@ -35,16 +35,16 @@ public:
 	void edite_date(int PartTochange);
 	void edite_month(int PartTochange);
 	void edite_year(int PartTochange);
-	void editType(int PartTochange);
+	void editType(string PartTochange);
 	void editDone(bool PartTochange);
 	void inserttempnum(int index);
 	void edittemp(int index);
 
-	string displaytypeone(int index);
-	string displaytypetwo(int index);
-	string displaytypethree(int index);
+	string displayFloat(int index);
+	string displayDeadline(int index);
+	string displayTimed(int index);
 
-	int returntype();
+	string returntype();
 	bool returnstatus();
 	string returntext();
 	int returnenddate();

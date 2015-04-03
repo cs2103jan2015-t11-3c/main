@@ -26,7 +26,7 @@ void task::inserttempnum(int index){
 };
 
 void task::addItemtypeone(){
-	type = 1;
+	type = "float";
 
 }
 
@@ -36,7 +36,7 @@ void task::addItemtypetwo( int _e_date, int _e_month, int _e_year, int _e_time){
 	e_month= _e_month;
 	e_year= _e_year;
 	e_time= _e_time;
-	type = 2;
+	type = "deadline";
 
 }
 
@@ -50,7 +50,7 @@ void task::addItemtypethree( int _s_date, int _s_month, int _s_year, int _s_time
 	e_month= _e_month;
 	e_year= _e_year;
 	e_time= _e_time;
-	type = 3;
+	type = "timed";
 
 }
 
@@ -92,7 +92,7 @@ void task::edite_year(int PartTochange){
 	return;
 }
 
-void task::editType(int PartTochange){
+void task::editType(string PartTochange){
 	type=PartTochange;
 	return;
 }
@@ -107,20 +107,20 @@ void task::edittemp(int index){
 }
 
 
-string task::displaytypeone(int index){
+string task::displayFloat(int index){
 	ostringstream oss;
 	oss << index+1 << "." << text;
 	return oss.str();
 }
 
-string task::displaytypetwo(int index){
+string task::displayDeadline(int index){
 	ostringstream oss;
 	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year;
 	return oss.str();
 }
 
-string task::displaytypethree(int index){
+string task::displayTimed(int index){
 	ostringstream oss;
 	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
 			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
@@ -149,7 +149,7 @@ string task::displaytimed() {
 	return oss.str();
 }
 
-int task::returntype(){
+string task::returntype(){
 	return type;
 }
 

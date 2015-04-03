@@ -71,7 +71,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		task i;
 		bool status;
 		char buffer;
-	    int type;
+	    string type;
 		string description;
 		string extra;
 
