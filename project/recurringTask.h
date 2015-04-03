@@ -3,22 +3,28 @@
 #include "logic.h"
 class recurringTask
 {
-
+private:
+	string description;
+	int s_time;
+	int e_time;
 public:
 	recurringTask(void);
+	recurringTask(string text, int stime ,int etime);
 	~recurringTask(void);
 
-	void AddRecurring(string recurType,string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,int type,vector<task> &toDoList);
+	void AddRecurring(string recurType,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList);
 
-	void DailyRec(string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,int type,vector<task> &toDoList);
-	void WeeklyRec(string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,int type,vector<task> &toDoList);
-	void MonthlyRec(string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,int type,vector<task> &toDoList);
-	void YearlyRec(string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,int type,vector<task> &toDoList);
+	void DailyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList);
+	void WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList);
+	void MonthlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList);
+	void YearlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,int type,vector<task> &toDoList);
 	bool isValidforMoreDays(int month);
-	void addRecDeadline(string description, int e_date, int e_month, int e_year, int e_time,vector<task> &toDoList);
-	void addRecTimed(string description,int e_date,int e_month,int e_year,int e_time,int s_date,int s_month,int s_year,int s_time,vector<task> &toDoList);
+	void addRecDeadline( int e_date, int e_month, int e_year, vector<task> &toDoList);
+	void addRecTimed(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList);
 
 	int getNumDays(int month,int year);
+
+	void addTodifferentType(int type, int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList);
 
 	int recurPeriod();
 

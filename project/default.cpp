@@ -23,7 +23,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 
 		if(parse.isValidCommand(command, description)){
 			if(command=="add" ||command =="+") {
-				recurringTask recurTask;
+			
 				size_t start = description.find_first_not_of(" ");
 				size_t end = description.find_first_of(" ");
 				string recurringCommandWord = description.substr(start, end - start);
@@ -31,37 +31,46 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
 						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+						recurringTask recurTask(description,0,e_time);
+						
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+						recurringTask recurTask(description,s_time,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="weekly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
 						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+						recurringTask recurTask(description,0,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+						recurringTask recurTask(description,s_time,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if (recurringCommandWord=="monthly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
 						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+						recurringTask recurTask(description,0,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+						recurringTask recurTask(description,s_time,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="yearly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
 						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+						recurringTask recurTask(description,0,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+						recurringTask recurTask(description,s_time,e_time);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else {
 				if(parse.checktype(description) == 1){
