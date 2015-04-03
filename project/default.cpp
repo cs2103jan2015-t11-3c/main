@@ -236,28 +236,69 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	//*************************(1) float task (1)****************************************************************************
 	function.sorttext(defaultmemory.floatVec);
 	
-	cout << "Floating tasks:" << endl;
-	for(index = 0; index != defaultmemory.floatVec.size(); ++index)
-		cout << defaultmemory.floatVec[index].displaytypeone(index);
+	int pos=(int)((80-15)/2);
+	for(int i=0;i<pos;i++) {
+			cout<<" ";
+	}
+	cout << "Floating tasks:" << endl << endl;
+
+
+	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
+		int size;
+		size = (defaultmemory.floatVec[index].displayfloat()).size();
+		int pos=(int)((80-size)/2);
+		for(int i=0;i<pos;i++) {
+			cout<<" ";
+		}
+		cout << defaultmemory.floatVec[index].displaytypeone(index) << endl;
+	}
 
 
 	//*************************(2) deadline task (2)****************************************************************************
     function.sortdates(defaultmemory.deadlineVec);
 	function.sorttime(defaultmemory.deadlineVec);
 
-	cout << endl << endl << "Deadline tasks:" << endl;
-	for(index = 0; index != defaultmemory.deadlineVec.size(); ++index) 
-		cout << defaultmemory.deadlineVec[index].displaytypetwo(index);
+	cout << endl;
+	int pos1=(int)((80-15)/2);
+	for(int i=0;i<pos1;i++) {
+			cout<<" ";
+	}
+	cout <<  "Deadline tasks:" << endl << endl;
+
+
+	for(index = 0; index != defaultmemory.deadlineVec.size(); ++index) {
+		int size;
+		size = (defaultmemory.deadlineVec[index].displaydeadline()).size();
+		int pos=(int)((80-size)/2);
+		for(int i=0;i<pos;i++) {
+			cout<<" ";
+		}
+		cout << defaultmemory.deadlineVec[index].displaytypetwo(index) << endl;
+	}
 
 
 	//*************************(3) timed task (3)****************************************************************************
 	function.sortdates(defaultmemory.timedVec);
 	function.sorttime(defaultmemory.timedVec);
 	
-	cout << endl << endl <<  "Timed tasks:" << endl;
-	for(index = 0; index != defaultmemory.timedVec.size(); ++index)
-	    cout << defaultmemory.timedVec[index].displaytypethree(index);
+	cout << endl;
+	int pos2=(int)((80-12)/2);
+	for(int i=0;i<pos2;i++) {
+			cout<<" ";
+	}
+	cout <<  "Timed tasks:" << endl << endl;
 
-	cout << endl <<"**********************************************************************" << endl;
+
+	for(index = 0; index != defaultmemory.timedVec.size(); ++index) {
+		int size;
+		size = (defaultmemory.timedVec[index].displaytimed()).size();
+		int pos=(int)((80-size)/2);
+		for(int i=0;i<pos;i++) {
+			cout<<" ";
+		}
+	    cout << defaultmemory.timedVec[index].displaytypethree(index) << endl;
+
+	}
+
 	
 }

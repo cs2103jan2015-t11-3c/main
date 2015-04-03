@@ -58,6 +58,10 @@ public:
 	int returntempnum();
 	int returntemp();
 
+	string displayfloat();
+	string displaydeadline();
+	string displaytimed();
+
 };
 
 #endif

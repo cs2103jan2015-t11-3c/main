@@ -112,20 +112,41 @@ void task::edittemp(int index){
 
 string task::displaytypeone(int index){
 	ostringstream oss;
-	oss << endl<<  index+1 << "." << text;
+	oss << index+1 << "." << text;
 	return oss.str();
 }
 
 string task::displaytypetwo(int index){
 	ostringstream oss;
-	oss << endl<<  index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
+	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year;
 	return oss.str();
 }
 
 string task::displaytypethree(int index){
 	ostringstream oss;
-	 oss << endl << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
+	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
+			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year ;
+	return oss.str();
+}
+
+string task::displayfloat() {
+	ostringstream oss;
+	oss << text;
+	return oss.str();
+}
+
+string task::displaydeadline() {
+	ostringstream oss;
+	oss << text <<  " by " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year;
+	return oss.str();
+}
+
+string task::displaytimed() {
+	ostringstream oss;
+	 oss << text << " from " <<s_time << " on "<<s_date<<"/"
 			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year ;
 	return oss.str();

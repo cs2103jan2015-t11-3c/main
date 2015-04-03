@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "Task.h"
 #include "logic.h"
 #include "parser.h"
