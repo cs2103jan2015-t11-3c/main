@@ -1,4 +1,9 @@
 #include "default.h"
+#include <iostream>
+#include <sstream>
+#include <fstream> 
+#include <algorithm>
+#include <windows.h>
 
 void defaultclass::defaultexecuteCommand(string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
@@ -259,10 +264,12 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	function.sorttime(defaultmemory.deadlineVec);
 
 	cout << endl;
+	std::cout << endl <<  "********************************************************************************" << endl;
 	int pos1=(int)((80-15)/2);
 	for(int i=0;i<pos1;i++) {
 			cout<<" ";
 	}
+	
 	cout <<  "Deadline tasks:" << endl << endl;
 
 
@@ -282,6 +289,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	function.sorttime(defaultmemory.timedVec);
 	
 	cout << endl;
+	std::cout << endl <<  "********************************************************************************" << endl;
 	int pos2=(int)((80-12)/2);
 	for(int i=0;i<pos2;i++) {
 			cout<<" ";
@@ -299,6 +307,11 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList) {
 	    cout << defaultmemory.timedVec[index].displaytypethree(index) << endl;
 
 	}
-
-	
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+	std::cout << endl <<  "********************************************************************************";
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }

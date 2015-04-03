@@ -44,17 +44,26 @@ void printWelcomeMessage() {
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	std::cout << "**********************************************************************" << endl;
+	std::cout << "*************************************************************************" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	cout << endl;
+	int pos2=(int)((80-53)/2);
+	for(int i=0;i<pos2;i++) {
+			cout<<" ";
+	}
 	std::cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	std::cout << "**********************************************************************" << endl;
+	std::cout << endl <<  "********************************************************************************" << endl;
     time_t t = time(0);   // get time now
     struct tm * now = localtime( & t );
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	int pos=(int)((80-39)/2);
+	for(int i=0;i<pos;i++) {
+			cout<<" ";
+	}
 	std::cout << "Current Singapore Local Time: ";
     std::cout << (now->tm_year + 1900) << '-' 
          << (now->tm_mon + 1) << '-'
@@ -62,7 +71,7 @@ void printWelcomeMessage() {
          << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	std::cout << "**********************************************************************" << endl;
+	std::cout << endl << "********************************************************************************" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
@@ -76,7 +85,7 @@ void readinput(vector<task> &toDoList){
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 	defaultfunction.showDefaultTaskList(toDoList);
 
-	cout << endl << "command: ";
+	cout << "command: ";
 	cin >> command;
 	getline(cin,description);
 
