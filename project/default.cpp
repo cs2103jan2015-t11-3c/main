@@ -10,7 +10,6 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	vector<task> tempVec;
     logic function;
-	task datainput;
 	storage store;
 	parser parse;
 	undo undofunction;
@@ -74,8 +73,8 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					}
 				} else {
 				if(parse.checktype(description) == 1){
-					parse.splitinputtypeone(description, text);
-					datainput.addItemtypeone(text);
+					task datainput(description);
+					datainput.addItemtypeone();
 					if(!store.isFloatDuplicated(datainput, toDoList))
 					       toDoList.push_back(datainput);
 					else
@@ -83,7 +82,8 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				}
 				else if(parse.checktype(description) == 2){
 					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
-					datainput.addItemtypetwo(text, e_date, e_month, e_year, e_time);
+					task datainput(description);
+					datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
 					if(!store.isDeadlineDuplicated(datainput, toDoList)){
 						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
 							function.printMessage("Date entered is already overdued");
@@ -100,7 +100,8 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				}
 				else if(parse.checktype(description) == 3){
 					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					datainput.addItemtypethree(text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+					task datainput(description);
+					datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					if(!store.isTimeClashed(datainput, toDoList)){
 						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
 							function.printMessage("Ending date entered is already overdued");

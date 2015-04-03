@@ -160,7 +160,7 @@ int recurringTask::getNumDays(int month,int year){
 
 void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<task> &toDoList){
 	 task datainput;
-	 datainput.addItemtypetwo(description, e_date, e_month, e_year, e_time);
+	 datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
 	
 	 toDoList.push_back(datainput);
 	 return;
@@ -168,7 +168,7 @@ void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<t
 
 void recurringTask::addRecTimed(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList){
 	 task datainput;
-	 datainput.addItemtypethree(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+	 datainput.addItemtypethree( s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	 toDoList.push_back(datainput);
 	 return;
 }

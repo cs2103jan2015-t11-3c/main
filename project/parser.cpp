@@ -80,9 +80,6 @@ int parser::checktype(string description){
 		return 1;
 }
 
-void parser::splitinputtypeone(string description, string &text){
-	text = description;
-}
 		
 void parser::splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
