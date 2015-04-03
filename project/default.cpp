@@ -5,12 +5,12 @@
 #include <algorithm>
 #include <windows.h>
 
-void defaultclass::defaultexecuteCommand(string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
+void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	vector<task> tempVec;
     logic function;
-	storage store;
+	storage *stor=store;
 	parser parse;
 	undo undofunction;
 	defaultclass defaultmemory;
@@ -75,7 +75,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				if(parse.checktype(description) == 1){
 					task datainput(description);
 					datainput.addItemtypeone();
-					if(!store.isFloatDuplicated(datainput, toDoList))
+					if(!store->isFloatDuplicated(datainput, toDoList))
 					       toDoList.push_back(datainput);
 					else
 						function.printMessage("float task exist already");
@@ -84,7 +84,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 					task datainput(description);
 					datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
-					if(!store.isDeadlineDuplicated(datainput, toDoList)){
+					if(!store->isDeadlineDuplicated(datainput, toDoList)){
 						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
 							function.printMessage("Date entered is already overdued");
 						} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
@@ -102,7 +102,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					task datainput(description);
 					datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store.isTimeClashed(datainput, toDoList)){
+					if(!store->isTimeClashed(datainput, toDoList)){
 						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
 							function.printMessage("Ending date entered is already overdued");
 						}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
@@ -125,13 +125,13 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				} 
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName,toDoList);
+				store->saveToSaveFile(fileName,toDoList);
 			}//finish add function
 			else if(command=="delete"||command=="-"||command=="remove") {
 
 				function.deleteItem(checkfororiginalindex(description, defaultmemory, tempVec), toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName,toDoList);
+				store->saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="display") {
 				tempVec.clear();
@@ -141,15 +141,15 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 			else if(command=="clear") {
 				function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName,toDoList);
+				store->saveToSaveFile(fileName,toDoList);
 			}
 			else if(command == "edit") {
 				function.editTask(checkfororiginalindex(description, defaultmemory, tempVec),description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				store.saveToSaveFile(fileName,toDoList);
+				store->saveToSaveFile(fileName,toDoList);
 			}
 			else if(command=="exit") {
-				store.saveToSaveFile(fileName,toDoList);
+				store->saveToSaveFile(fileName,toDoList);
 				return;
 			}
 			else if(command == "done") {

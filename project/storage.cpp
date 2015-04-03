@@ -159,13 +159,13 @@ bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
 
 
 bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
-		for (int i=1;i<=toDoList.size();i++) {
-				cout<<newTask.returntext()<<toDoList[i-1].returntext()<<endl
+ 	            for (int i=1;i<=toDoList.size();i++) {
+			/*	cout<<newTask.returntext()<<toDoList[i-1].returntext()<<endl
 				<<newTask.returnendyear()<<toDoList[i-1].returnendyear()<<endl<<
 				newTask.returnendmonth()<<toDoList[i-1].returnendmonth()<<endl<<
 				newTask.returnenddate()<<toDoList[i-1].returnenddate()<<endl<<
 				newTask.returnendtime()<<toDoList[i-1].returnendtime()<<endl;
-
+*/
 		if ((newTask.returntext())==(toDoList[i-1].returntext())) {
 			if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
 				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate()&&(newTask.returnendtime())==(toDoList[i-1].returnendtime())))
