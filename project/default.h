@@ -8,6 +8,7 @@
 #include "logic.h"
 #include "parser.h"
 #include "undo.h"
+#include "recurringTask.h"
 
 using namespace std;
 

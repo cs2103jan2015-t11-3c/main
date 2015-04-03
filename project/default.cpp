@@ -18,6 +18,39 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 
 		if(parse.isValidCommand(command, description)){
 			if(command=="add" ||command =="+") {
+				recurringTask recurTask;
+				size_t start = description.find_first_not_of(" ");
+				size_t end = description.find_first_of(" ");
+				string recurringCommandWord = description.substr(start, end - start);
+				if(recurringCommandWord=="daily") {
+					description = description.substr(end + 1);
+					if(parse.checktype(description) == 2) {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+					} else {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+					}
+				} else if(recurringCommandWord=="weekly") {
+					description = description.substr(end + 1);
+					if(parse.checktype(description) == 2) {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+					} else {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+					}
+				} else if (recurringCommandWord=="monthly") {
+					description = description.substr(end + 1);
+					if(parse.checktype(description) == 2) {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+					} else {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+					}
+				} else if(recurringCommandWord=="yearly") {
+					description = description.substr(end + 1);
+					if(parse.checktype(description) == 2) {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
+					} else {
+						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
+					}
+				} else {
 				if(parse.checktype(description) == 1){
 					parse.splitinputtypeone(description, text);
 					datainput.addItemtypeone(text);
@@ -67,6 +100,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					} else
 						function.printMessage("timed slot clashes");
 				} 
+				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store.saveToSaveFile(fileName,toDoList);
 			}//finish add function
