@@ -29,45 +29,45 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				if(recurringCommandWord=="daily") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
-						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,0,e_time);
 						
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
-						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="weekly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
-						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
-						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if (recurringCommandWord=="monthly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
-						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
-						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="yearly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
-						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
-						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
@@ -81,7 +81,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 						function.printMessage("float task exist already");
 				}
 				else if(parse.checktype(description) == 2){
-					parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
+					parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 					task datainput(description);
 					datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
 					if(!store.isDeadlineDuplicated(datainput, toDoList)){
@@ -99,7 +99,7 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 					}
 				}
 				else if(parse.checktype(description) == 3){
-					parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+					parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					task datainput(description);
 					datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 					if(!store.isTimeClashed(datainput, toDoList)){
