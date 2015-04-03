@@ -261,7 +261,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
 			year = toDoList[i].returnendyear();
-			if((day == (getSystemDay())+1) && (month == getSystemMonth())&& (year == getSystemYear())){
+			if(day == getSystemDay() && (month == getSystemMonth())&& (year == getSystemYear())){
 				pushback(toDoList, tempVec, i);
 				sorttext(tempVec);
 			}

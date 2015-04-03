@@ -25,29 +25,37 @@ void defaultclass::defaultexecuteCommand(string &command, string &description, v
 				if(recurringCommandWord=="daily") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
 					} else {
+						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
 					}
 				} else if(recurringCommandWord=="weekly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
 					} else {
+						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
 					}
 				} else if (recurringCommandWord=="monthly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
 					} else {
+						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
 					}
 				} else if(recurringCommandWord=="yearly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						parse.splitinputtypetwo(description, text, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,0,0,0,0,2,toDoList);
 					} else {
+						parse.splitinputtypethree(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurTask.AddRecurring(recurringCommandWord,description,e_date,e_month,e_year,e_time,s_date,s_month,s_year,s_time,2,toDoList);
 					}
 				} else {
