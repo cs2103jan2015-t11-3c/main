@@ -33,7 +33,7 @@ void recurringTask::DailyRec(string description,int e_date,int e_month,int e_yea
 		if(type==3)
 			addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
 
-		  e_date=e_date+i;
+		  e_date=e_date+1;
 		}
 		else{
 			e_date=1;
@@ -43,7 +43,7 @@ void recurringTask::DailyRec(string description,int e_date,int e_month,int e_yea
 			addRecDeadline(description, e_date, e_month, e_year, e_time,toDoList);
 		  if(type==3)
 			addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
-		  e_date=e_date+i;
+		  e_date=e_date+1;
 		}
 		 
 		}
@@ -62,7 +62,7 @@ void recurringTask::WeeklyRec(string description,int e_date,int e_month,int e_ye
 	   	if(type==3)
 			addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
 
-		  e_date=e_date+7*i;
+		  e_date=e_date+7;
 		}
 		else{
 			e_date=e_date-getNumDays(e_month,e_year);                      
@@ -72,7 +72,7 @@ void recurringTask::WeeklyRec(string description,int e_date,int e_month,int e_ye
 			  addRecDeadline(description, e_date, e_month, e_year, e_time,toDoList);
 	   	      if(type==3)
 			  addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
-			   e_date=e_date+7*i;
+			   e_date=e_date+7;
 			}
 			else{
 				e_year++;                                           //move to the next year
@@ -83,7 +83,7 @@ void recurringTask::WeeklyRec(string description,int e_date,int e_month,int e_ye
 			        addRecDeadline(description, e_date, e_month, e_year, e_time,toDoList);
 	   	             if(type==3)
 			         addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
-			       e_date=e_date+7*i;
+			       e_date=e_date+7;
 				}
 			}
 		}
@@ -105,7 +105,7 @@ void recurringTask::MonthlyRec(string description,int e_date,int e_month,int e_y
 		if(type=3)
 			addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
 
-		  e_month=e_month+i;
+		  e_month=e_month+1;
 		}
 		else if(!isValidforMoreDays(e_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
 			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)){
@@ -153,7 +153,7 @@ void recurringTask::YearlyRec(string description,int e_date,int e_month,int e_ye
 		if(type==3)
 			addRecTimed(description, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time,toDoList);
 
-		  e_year=e_year+i;
+		  e_year=e_year+1;
 		}
 	}
 		return;
