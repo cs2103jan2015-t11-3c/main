@@ -71,7 +71,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		task i;
 		bool status;
 		char buffer;
-	    int type;
+	    string type;
 		string description;
 		string extra;
 
@@ -149,23 +149,20 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 
 bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
 	for (int i=1;i<=toDoList.size();i++) {
-		if (newTask.returntext()==toDoList[i-1].returntext()) {
+		if(( toDoList[i-1].returntype() == "float")&&(newTask.returntext()==toDoList[i-1].returntext()))
 				return true;
-			}
-		
-	}
+		}
 	return false;
 }
 
 
 bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
-		for (int i=1;i<=toDoList.size();i++) {
+	for (int i=1;i<=toDoList.size();i++) {
 		if ((newTask.returntext())==(toDoList[i-1].returntext())) {
-			if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
-				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate()&&(newTask.returnendtime())==(toDoList[i-1].returnendtime())))
+			if ((newTask.returnendyear()==toDoList[i-1].returnendyear())&&(newTask.returnendmonth()== toDoList[i-1].returnendmonth())
+				&&(newTask.returnenddate()==toDoList[i-1].returnenddate())&&(newTask.returnendtime()==toDoList[i-1].returnendtime()))
 				return true;
-			}
-		
+		}
 	}
 	return false;
 }

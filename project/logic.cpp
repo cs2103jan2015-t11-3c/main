@@ -8,12 +8,12 @@ string logic::displayAll(vector<task> &toDoList) {
 		printMessage(ERROR_LIST_IS_EMPTY);
 	else {
 		for(unsigned i = 0; i < toDoList.size(); i++){
-			if(toDoList[i].returntype() == 1)
-				oss << toDoList[i].displaytypeone(i);
-			else if(toDoList[i].returntype() == 2)
-				oss << toDoList[i].displaytypetwo(i);
-			else if(toDoList[i].returntype() == 3)
-			    oss <<  toDoList[i].displaytypethree(i);
+			if(toDoList[i].returntype() == "float")
+				oss << toDoList[i].displayFloat(i)<< endl;
+			else if(toDoList[i].returntype() == "deadline")
+				oss << toDoList[i].displayDeadline(i)<< endl;
+			else if(toDoList[i].returntype() == "timed")
+			    oss <<  toDoList[i].displayTimed(i) << endl;
 		}
 	}
 	return oss.str();
@@ -54,12 +54,12 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 		printMessage(ERROR_INVALID_INDEX);
 		return;
 	}
-	else if(toDoList[index].returntype() == 1){
+	else if(toDoList[index].returntype() == "float"){
 		size_t pos = description.find("-name");
 		PartTochange = description.substr(pos+6);
 		toDoList[index].edittext(PartTochange);
 	}
-	else if(toDoList[index].returntype() == 2){
+	else if(toDoList[index].returntype() == "deadline"){
 		size_t foundname = description.find("-name");
 		size_t founddue = description.find("-due");
 		if(foundname!=std::string::npos){
@@ -83,7 +83,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_year(e_year);
 		}
 	}
-	else if(toDoList[index].returntype() == 3){
+	else if(toDoList[index].returntype() == "timed"){
 		size_t foundname = description.find("-name");
 		size_t foundstart = description.find("-start");
 		size_t foundend = description.find("-end");
@@ -290,8 +290,8 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 	else if(description == "float"){
 		for(int i=0; i<size; i++){
-			int type = toDoList[i].returntype();
-			if(type == 1){
+			string type = toDoList[i].returntype();
+			if(type == "float"){
 				pushback(toDoList, tempVec, i);
 				sorttext(tempVec);
 			}
@@ -299,8 +299,8 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 	else if(description == "deadline"){
 		for(int i=0; i<size; i++){
-			int type = toDoList[i].returntype();
-			if(type == 2){
+			string type = toDoList[i].returntype();
+			if(type =="deadline"){
 				pushback(toDoList, tempVec, i);
 				sortdates(tempVec);
 				sorttime(tempVec);
@@ -309,8 +309,8 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 	else if(description == "timed"){
 		for(int i=0; i<size; i++){
-			int type = toDoList[i].returntype();
-			if(type == 3){
+			string type = toDoList[i].returntype();
+			if(type =="timed"){
 				pushback(toDoList, tempVec, i);
 				sortdates(tempVec);
 				sorttime(tempVec);

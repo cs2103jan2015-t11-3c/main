@@ -8,13 +8,9 @@ task::task(void) {}
 
 task::~task(void) {}
 
-void task::inserttempnum(int index){
-	tempnum = index;
-};
-
-void task::addItemtypeone(string _text){
-
-	text = _text;
+task::task(string task){
+	text=task;
+	s_date=0;
 	s_date=0;
 	s_month=0;
 	s_year=0;
@@ -23,28 +19,30 @@ void task::addItemtypeone(string _text){
 	e_month=0;
 	e_year=0;
 	e_time=0;
-	type = 1;
 	complete = false;
 }
 
-void task::addItemtypetwo(string task, int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::inserttempnum(int index){
+	tempnum = index;
+};
 
-	text = task;
-	s_date=0;
-	s_month=0;
-	s_year=0;
-	s_time=0;
+void task::addItemtypeone(){
+	type = "float";
+
+}
+
+void task::addItemtypetwo( int _e_date, int _e_month, int _e_year, int _e_time){ 
+
 	e_date= _e_date;
 	e_month= _e_month;
 	e_year= _e_year;
 	e_time= _e_time;
-	type = 2;
-	complete = false;
+	type = "deadline";
+
 }
 
-void task::addItemtypethree(string task, int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::addItemtypethree( int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
 	
-	text = task;
 	s_date= _s_date;
 	s_month= _s_month;
 	s_year= _s_year;
@@ -53,8 +51,8 @@ void task::addItemtypethree(string task, int _s_date, int _s_month, int _s_year,
 	e_month= _e_month;
 	e_year= _e_year;
 	e_time= _e_time;
-	type = 3;
-	complete = false;
+	type = "timed";
+
 }
 
 void task::edittext(string PartTochange){
@@ -95,7 +93,7 @@ void task::edite_year(int PartTochange){
 	return;
 }
 
-void task::editType(int PartTochange){
+void task::editType(string PartTochange){
 	type=PartTochange;
 	return;
 }
@@ -110,20 +108,20 @@ void task::edittemp(int index){
 }
 
 
-string task::displaytypeone(int index){
+string task::displayFloat(int index){
 	ostringstream oss;
 	oss << index+1 << "." << text;
 	return oss.str();
 }
 
-string task::displaytypetwo(int index){
+string task::displayDeadline(int index){
 	ostringstream oss;
 	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year;
 	return oss.str();
 }
 
-string task::displaytypethree(int index){
+string task::displayTimed(int index){
 	ostringstream oss;
 	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
 			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
@@ -152,7 +150,7 @@ string task::displaytimed() {
 	return oss.str();
 }
 
-int task::returntype(){
+string task::returntype(){
 	return type;
 }
 

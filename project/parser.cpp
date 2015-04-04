@@ -80,11 +80,8 @@ int parser::checktype(string description){
 		return 1;
 }
 
-void parser::splitinputtypeone(string description, string &text){
-	text = description;
-}
 		
-void parser::splitinputtypetwo(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
+void parser::splitinputDeadline(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 	char c;
 
@@ -101,7 +98,7 @@ void parser::splitinputtypetwo(string description, string &text, int &e_date, in
 		in>>e_year;//15
 }//added char c;
 
-void parser::splitinputtypethree(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
+void parser::splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 	char c;
 	

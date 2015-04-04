@@ -20,7 +20,7 @@ private:
 	vector<task> timedVec;
 public:
 	void updatedefaultmemory(vector<task> &toDoList);
-	void showDefaultTaskList(vector<task> &toDoList);
+	void showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory);
 	void defaultexecuteCommand(string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentmemory);
 	int checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec);
 };

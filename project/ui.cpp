@@ -83,7 +83,7 @@ void readinput(vector<task> &toDoList){
 	undo currentundomemory, undofunction;
 	
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-	defaultfunction.showDefaultTaskList(toDoList);
+	defaultfunction.showDefaultTaskList(toDoList, defaultmemory);
 
 	cout << "command: ";
 	cin >> command;
