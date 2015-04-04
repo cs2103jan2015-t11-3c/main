@@ -61,6 +61,8 @@ public:
 	string displayfloat();
 	string displaydeadline();
 	string displaytimed();
+	string displayDefaultTasks(int);
+	string displayDefaultTasksWithTwoTimes(int);
 
 };
 
