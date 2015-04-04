@@ -128,7 +128,7 @@ string task::displayTimed(int index){
 			<< e_month << "/" << e_year ;
 	return oss.str();
 }
-
+//===============================================================
 string task::displayfloat() {
 	ostringstream oss;
 	oss << text;
@@ -147,9 +147,22 @@ string task::displaytimed() {
 	 oss << text << " from " <<s_time << " on "<<s_date<<"/"
 			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year ;
+
 	return oss.str();
 }
 
+string task::displayDefaultTasks(int index) {
+	ostringstream oss;
+	oss << index+1 << ". " << "[by " << e_time << "] " << text;
+	return oss.str();
+}
+
+string task::displayDefaultTasksWithTwoTimes(int index) {
+	ostringstream oss;
+	oss << index+1 << ". " << "[" << s_time << "-" << e_time << "] " << text;
+	return oss.str();
+}
+//===============================================================
 string task::returntype(){
 	return type;
 }

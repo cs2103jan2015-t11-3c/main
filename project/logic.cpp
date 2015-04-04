@@ -1,6 +1,21 @@
 #include "logic.h"
 #include <iostream>
 
+void logic::sortEndTime(vector<task> &toDoList){
+	task temp;
+	unsigned int i , j;
+
+    for(i = 0; i < toDoList.size(); ++i) {
+		for(j = 1; j < toDoList.size()-i; ++j) {
+			if(toDoList[j-1].returnendtime() > toDoList[j].returnendtime()){
+				temp = toDoList[j-1];
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = temp;
+			}
+		}
+	}
+}
+
 string logic::displayAll(vector<task> &toDoList) {
 	task temp;
 	ostringstream oss;

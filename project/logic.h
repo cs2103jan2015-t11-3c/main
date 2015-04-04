@@ -38,6 +38,9 @@ static string fileName = "";
 
 class logic{
 public:
+
+	void sortEndTime(vector<task> &);
+
 	string displayAll(vector<task> &);
 	
 	void deleteItem(const int index, vector<task> &toDoList);

@@ -1,12 +1,12 @@
 1. mother
 Start: 0/ 0/ 0	0
-End: 25/ 3/ 2016	 1800
+End: 5/ 4/ 2015	 1800
 Type: deadline
 Completed: 0
 
 2. i hate ise
 Start: 0/ 0/ 0	0
-End: 26/ 7/ 2015	 2100
+End: 5/ 4/ 2015	 2100
 Type: deadline
 Completed: 0
 
@@ -29,8 +29,8 @@ Type: deadline
 Completed: 0
 
 6. sleeping
-Start: 28/ 7/ 2017	1100
-End: 29/ 8/ 2017	 1200
+Start: 4/ 4/ 2015	1100
+End: 4/ 4/ 2015	 1200
 Type: timed
 Completed: 0
 
@@ -44,5 +44,11 @@ Completed: 0
 Start: 12/ 1/ 2016	1100
 End: 28/ 2/ 2016	 2000
 Type: timed
+Completed: 0
+
+9. mother
+Start: 0/ 0/ 0	0
+End: 23/ 7/ 2015	 1800
+Type: deadline
 Completed: 0
 

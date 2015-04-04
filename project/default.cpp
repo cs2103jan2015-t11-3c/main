@@ -4,8 +4,42 @@
 #include <fstream> 
 #include <algorithm>
 #include <windows.h>
+#include <ctime>
 
-void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
+void defaultclass::updatedefaultmemory(vector<task> &toDoList){
+	vector<task> floatVec_;
+	task temp;
+	int index, i=0, j=0, k=0;
+
+	for(index = 0; index != toDoList.size(); ++index) {
+		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
+			   todayTaskVec.push_back(toDoList[index]);
+			   todayTaskVec[i].inserttempnum(index);
+			   i++;
+		}
+	}
+
+	for(index = 0; index != toDoList.size(); ++index) {
+		if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
+			   tomorTaskVec.push_back(toDoList[index]);
+			   tomorTaskVec[j].inserttempnum(index);
+			   j++;
+		}
+	}
+
+
+	for(index = 0; index != toDoList.size(); ++index){
+		if(toDoList[index].returntype() =="float"){
+			floatVec_.push_back(toDoList[index]);
+			floatVec_[k].inserttempnum(index);
+			k++;
+		}
+	}
+	floatVec = floatVec_;
+}
+
+void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, 
+										 undo &currentundomemory) {
 	string text;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
 	vector<task> tempVec;
@@ -128,12 +162,14 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 					} 
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 			}//finish add function
 			else if(command=="delete"||command=="-"||command=="remove") {
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.deleteItem(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 				}
 			}
@@ -151,6 +187,7 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.editTask(originindex ,description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 				}
 			}
@@ -168,9 +205,11 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				currentundomemory = undomemory[undomemory.size()-2];
 				toDoList = currentundomemory.returnmemory();
 				undomemory.pop_back();
+				showDefaultTaskList(toDoList, defaultmemory);
 			}
 			else if(command == "search") {
 				function.searchTask(toDoList, tempVec, fileName, description);
+				showDefaultTaskList(toDoList, defaultmemory);
 			}
 			else if(command == "default") {
 				showDefaultTaskList(toDoList, defaultmemory);
@@ -203,27 +242,27 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 			function.printMessage(ERROR_LIST_IS_EMPTY);
 			return false;
 		}
-		else if((index >= size)||(index <= 0)){
+		else if((index >= size)||(index < 0)){
 			function.printMessage(INVALID_INDEX);
 			return false;
 		}
 		originindex = defaultmemory.floatVec[index].returntempnum();
 	}
-	else if(temp == "deadline"){
-		size = defaultmemory.deadlineVec.size();
+	else if(temp == "today"){
+		size = defaultmemory.todayTaskVec.size();
 		if(size==0){
 			function.printMessage(ERROR_LIST_IS_EMPTY);
 			return false;
 		}
-		else if((index >= size)||(index <= 0)){
+		else if((index >= size)||(index < 0)){
 			function.printMessage(INVALID_INDEX);
 			return false;
 		}
 
-		originindex = defaultmemory.deadlineVec[index].returntempnum();
+		originindex = defaultmemory.todayTaskVec[index].returntempnum();
 	}
-	else if(temp == "timed"){
-		size = defaultmemory.timedVec.size();
+	else if(temp == "tomorrow"){
+		size = defaultmemory.tomorTaskVec.size();
 		if(size==0){
 			function.printMessage(ERROR_LIST_IS_EMPTY);
 			return false;
@@ -233,7 +272,7 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 			return false;
 		}
 
-		originindex = defaultmemory.timedVec[index].returntempnum();
+		originindex = defaultmemory.tomorTaskVec[index].returntempnum();
 	}
 	else{
 		istringstream intemp(description);
@@ -255,46 +294,17 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 	return true;
 }
 
-void defaultclass::updatedefaultmemory(vector<task> &toDoList){
-	vector<task> tempVec, floatVec_, deadlineVec_, timedVec_;
-	task temp;
-	int index, i=0, j=0, k=0;
-
-	floatVec.clear();
-	deadlineVec.clear();
-	timedVec.clear();
-
-	for(index = 0; index != toDoList.size(); ++index)
-		tempVec.push_back(toDoList[index]);
-
-	for(index = 0; index != tempVec.size(); ++index){
-		if(tempVec[index].returntype() =="float"){
-			floatVec_.push_back(tempVec[index]);
-			floatVec_[i].inserttempnum(index);
-			i++;
-		}
-		else if(tempVec[index].returntype() == "deadline"){
-			deadlineVec_.push_back(tempVec[index]);
-			deadlineVec_[j].inserttempnum(index);
-			j++;
-		}
-		else {
-			timedVec_.push_back(tempVec[index]);
-			timedVec_[k].inserttempnum(index);
-			k++;
-		}
-	}
-	floatVec = floatVec_;
-	timedVec = timedVec_;
-	deadlineVec = deadlineVec_;
-}
-
 
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
 	int index, i=0, j=0, k=0;
 	logic function;
 	vector<task> tempVec;	
+	time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
 
+	defaultmemory.todayTaskVec.clear();
+	defaultmemory.tomorTaskVec.clear();
+	defaultmemory.floatVec.clear();
 	defaultmemory.updatedefaultmemory(toDoList);
 	//*************************(1) float task (1)****************************************************************************
 	function.sorttext(defaultmemory.floatVec);
@@ -304,7 +314,6 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout<<" ";
 	}
 	cout << "Floating tasks:" << endl << endl;
-
 
 	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
 		int size;
@@ -316,7 +325,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
 
-
+	/*
 	//*************************(2) deadline task (2)****************************************************************************
     function.sortdates(defaultmemory.deadlineVec);
 	function.sorttime(defaultmemory.deadlineVec);
@@ -353,6 +362,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout<<" ";
 	}
 	cout <<  "Timed tasks:" << endl << endl;
+	
 
 
 	for(index = 0; index != defaultmemory.timedVec.size(); ++index) {
@@ -363,7 +373,6 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout<<" ";
 		}
 	    cout << defaultmemory.timedVec[index].displayTimed(index) << endl;
-
 	}
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
@@ -371,5 +380,75 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 	std::cout << endl <<  "********************************************************************************";
 	SetConsoleTextAttribute
-    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);*/
+
+	//=========================================================Today===================================================================
+
+	cout << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << 
+		     "============================================================" << endl << endl;
+	function.sortEndTime(defaultmemory.todayTaskVec);
+
+	for(i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
+		int s_day,s_month,s_year,e_day,e_month,e_year;
+
+		s_day=defaultmemory.todayTaskVec[i].returnstartdate();
+		s_month=defaultmemory.todayTaskVec[i].returnstartmonth();
+		s_year=defaultmemory.todayTaskVec[i].returnstartyear();
+
+		e_day=defaultmemory.todayTaskVec[i].returnenddate();
+		e_month=defaultmemory.todayTaskVec[i].returnendmonth();
+		e_year=defaultmemory.todayTaskVec[i].returnendyear();
+
+		if(s_day==e_day && s_month==e_month && s_year==e_year) {
+			cout << defaultmemory.todayTaskVec[i].displayDefaultTasksWithTwoTimes(i)<<endl;
+		} else {
+			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i)<<endl;
+		}
+	}
+	cout <<endl;
+
+
+	//========================================================Tomorrow=================================================================
+	cout << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << 
+		     "============================================================" << endl;
+
+	function.sortEndTime(defaultmemory.tomorTaskVec);
+
+	for(i = 0; i != defaultmemory.tomorTaskVec.size(); ++i){
+		int s_day,s_month,s_year,e_day,e_month,e_year;
+
+		s_day=defaultmemory.tomorTaskVec[i].returnstartdate();
+		s_month=defaultmemory.tomorTaskVec[i].returnstartmonth();
+		s_year=defaultmemory.tomorTaskVec[i].returnstartyear();
+
+		e_day=defaultmemory.tomorTaskVec[i].returnenddate();
+		e_month=defaultmemory.tomorTaskVec[i].returnendmonth();
+		e_year=defaultmemory.tomorTaskVec[i].returnendyear();
+
+		if(s_day==e_day && s_month==e_month && s_year==e_year) {
+			cout << defaultmemory.tomorTaskVec[i].displayDefaultTasksWithTwoTimes(i)<<endl;
+		} else {
+		cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i)<<endl;
+		}
+	}
+	cout <<endl;
+
+}
+
+bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
+	logic logic;
+	if(e_day == logic.getSystemDay() && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
+	logic logic;
+	if(e_day == (logic.getSystemDay()+1) && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+		return true;
+	} else {
+		return false;
+	}
 }

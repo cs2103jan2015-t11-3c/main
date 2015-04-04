@@ -92,4 +92,6 @@ void readinput(vector<task> &toDoList, storage *store){
 	while(command!="exit"){
 		defaultfunction.defaultexecuteCommand(store,command, description, toDoList, undomemory, currentundomemory);
 	};
+
+	
 }
