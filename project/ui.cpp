@@ -16,20 +16,20 @@
 
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
-void readinput(vector<task> &toDoList);
+void readinput(vector<task> &toDoList,storage * store);
 void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
 
 
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
 	logic function;
-	storage store;
+	storage *store=new storage;
 
 	getTextFileName(argc, argv);
-	toDoList = store.readToDoListFromTextFile(getTextFileName(argc, argv));
+	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
-	readinput(toDoList);     
-	store.saveToSaveFile(getTextFileName(argc, argv),toDoList);
+	readinput(toDoList,store);     
+	store->saveToSaveFile(getTextFileName(argc, argv),toDoList);
 	return 0;
 }
 
@@ -76,7 +76,7 @@ void printWelcomeMessage() {
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-void readinput(vector<task> &toDoList){
+void readinput(vector<task> &toDoList, storage *store){
 	string command, description;
 	vector<undo> undomemory;
 	defaultclass defaultmemory, defaultfunction;
@@ -90,6 +90,6 @@ void readinput(vector<task> &toDoList){
 	getline(cin,description);
 
 	while(command!="exit"){
-		defaultfunction.defaultexecuteCommand(command, description, toDoList, undomemory, currentundomemory);
+		defaultfunction.defaultexecuteCommand(store,command, description, toDoList, undomemory, currentundomemory);
 	};
 }

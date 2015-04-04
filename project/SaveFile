@@ -16,3 +16,33 @@ End: 23/ 7/ 2015	 1800
 Type: deadline
 Completed: 0
 
+4. hhhhhhhhhhhhhh
+Start: 0/ 0/ 0	0
+End: 0/ 0/ 0	 0
+Type: float
+Completed: 0
+
+5. meeting
+Start: 0/ 0/ 0	0
+End: 12/ 1/ 2016	 1100
+Type: deadline
+Completed: 0
+
+6. sleeping
+Start: 28/ 7/ 2017	1100
+End: 29/ 8/ 2017	 1200
+Type: timed
+Completed: 0
+
+7. payment
+Start: 12/ 3/ 2016	1100
+End: 28/ 12/ 2016	 2000
+Type: timed
+Completed: 0
+
+8. pay money
+Start: 12/ 1/ 2016	1100
+End: 28/ 2/ 2016	 2000
+Type: timed
+Completed: 0
+
