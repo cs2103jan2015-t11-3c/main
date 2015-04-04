@@ -23,7 +23,7 @@ public:
 
 	void showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory);
 	void defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentmemory);
-	int checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec);
+	bool checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex);
 };
 #endif
 

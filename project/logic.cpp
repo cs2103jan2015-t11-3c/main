@@ -20,18 +20,8 @@ string logic::displayAll(vector<task> &toDoList) {
 }
 
 void logic::deleteItem(const int index, vector<task> &toDoList) {
-	int size = toDoList.size();
-	if(size==0) {
-		printMessage(ERROR_LIST_IS_EMPTY);
-	}
-	else if(index>=size||index<0) {
-		printMessage(ERROR_INVALID_INDEX);
-		
-	}
-	else {
+		cout << toDoList[index].returntext() << " succesfully deleted";
 		toDoList.erase(toDoList.begin()+index);
-		cout << "deleted";
-	}
 }
 
 void logic::clearAll(vector<task> &toDoList) {
@@ -45,19 +35,11 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 	task taskclass;
 	char c;
 
-	int size = toDoList.size();
-	if(size == 0) {
-		printMessage(ERROR_LIST_IS_EMPTY);
-		return;
-	}
-	else if(index > size||index < 0) {
-		printMessage(ERROR_INVALID_INDEX);
-		return;
-	}
-	else if(toDoList[index].returntype() == "float"){
+	if(toDoList[index].returntype() == "float"){
 		size_t pos = description.find("-name");
 		PartTochange = description.substr(pos+6);
 		toDoList[index].edittext(PartTochange);
+		printMessage("succesfully edited");
 	}
 	else if(toDoList[index].returntype() == "deadline"){
 		size_t foundname = description.find("-name");
@@ -82,6 +64,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
 		}
+		printMessage("succesfully edited");
 	}
 	else if(toDoList[index].returntype() == "timed"){
 		size_t foundname = description.find("-name");
@@ -123,6 +106,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
 		}
+		printMessage("succesfully edited");
 	}
 }
 
@@ -131,17 +115,8 @@ void logic::markcompleted(int index, vector<task> &toDoList){
 	int size = toDoList.size();
 	index = index - 1;
 
-	if(size==0) {
-		printMessage(ERROR_LIST_IS_EMPTY);
-	}
-	else if(index>=size||index<0) {
-		printMessage(ERROR_INVALID_INDEX);
-		
-	}
-	else {
-		toDoList[index].editDone(true);
-		cout << "task marked completed";
-	}
+	toDoList[index].editDone(true);
+	printMessage(toDoList[index].returntext(), "completed");
 }
 
 void logic::sorttext(vector<task> &toDoList){

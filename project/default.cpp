@@ -7,7 +7,7 @@
 
 void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
 	vector<task> tempVec;
     logic function;
 	storage *stor=store;
@@ -22,7 +22,7 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 
 		if(parse.isValidCommand(command, description)){
 			if(command=="add" ||command =="+") {
-			
+
 				size_t start = description.find_first_not_of(" ");
 				size_t end = description.find_first_of(" ");
 				string recurringCommandWord = description.substr(start, end - start);
@@ -31,7 +31,6 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 					if(parse.checktype(description) == 2) {
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(description,0,e_time);
-						
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
@@ -72,66 +71,71 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else {
-				if(parse.checktype(description) == 1){
-					task datainput(description);
-					datainput.addItemtypeone();
-					if(!store->isFloatDuplicated(datainput, toDoList))
-					       toDoList.push_back(datainput);
-					else
-						function.printMessage("float task exist already");
-				}
-				else if(parse.checktype(description) == 2){
-					parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-					task datainput(text);
-					datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
-					if(!store->isDeadlineDuplicated(datainput, toDoList)){
-						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
-							function.printMessage("Date entered is already overdued");
-						} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
-					       toDoList.push_back(datainput);
-						} if(!function.isValidDate(e_date,e_month,e_year)) {
-							function.printMessage("invalid input date, try again");
-					} if(!function.isValidTime(e_time)) {
-						function.printMessage("invalid input timing, try again");
-						} 
-					}else {
-							function.printMessage("deadline task exist already");
-					}
-				}
-				else if(parse.checktype(description) == 3){
-					parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					task datainput(text);
-					datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-					if(!store->isTimeClashed(datainput, toDoList)){
-						if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
-							function.printMessage("Ending date entered is already overdued");
-						}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
-							function.printMessage("Starting date entered is already overdued");
-						}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
-							cout << "inValid Start and End Dates, try again" << endl;
-						}else if(!function.isValidDate(s_date,s_month,s_year)) {
-							cout << "inValid Start Date, try again" << endl;
-						}else if(!function.isValidDate(e_date,e_month,e_year)) {
-							cout << "inValid End Date, try again" << endl;
-						}else if(!function.isValidTime(s_time)) {
-							cout << "invalid Start Timing, try again" << endl;
-						} else if(!function.isValidTime(e_time)) {
-							cout << "invalid End Timing, try again" << endl;
-						} else{
+					if(parse.checktype(description) == 1){
+						task datainput(description);
+						datainput.addItemtypeone();
+						if(!store->isFloatDuplicated(datainput, toDoList)){
 							toDoList.push_back(datainput);
-						} 
-					} else
-						function.printMessage("timed slot clashes");
-				} 
+							function.printMessage(text, "succesfully added");
+						}
+						else
+							function.printMessage("float task exist already");
+					}
+					else if(parse.checktype(description) == 2){
+						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
+						task datainput(text);
+						datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
+						if(!store->isDeadlineDuplicated(datainput, toDoList)){
+							if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+								function.printMessage("Date entered is already overdued");
+							} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
+								toDoList.push_back(datainput);
+								function.printMessage(text, "succesfully added");
+							} if(!function.isValidDate(e_date,e_month,e_year)) {
+								function.printMessage("invalid input date, try again");
+							} if(!function.isValidTime(e_time)) {
+								function.printMessage("invalid input timing, try again");
+							} 
+						}else {
+							function.printMessage("deadline task exist already");
+						}
+					}
+					else if(parse.checktype(description) == 3){
+						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						task datainput(text);
+						datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						if(!store->isTimeClashed(datainput, toDoList)){
+							if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+								function.printMessage("Ending date entered is already overdued");
+							}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
+								function.printMessage("Starting date entered is already overdued");
+							}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+								cout << "inValid Start and End Dates, try again" << endl;
+							}else if(!function.isValidDate(s_date,s_month,s_year)) {
+								cout << "inValid Start Date, try again" << endl;
+							}else if(!function.isValidDate(e_date,e_month,e_year)) {
+								cout << "inValid End Date, try again" << endl;
+							}else if(!function.isValidTime(s_time)) {
+								cout << "invalid Start Timing, try again" << endl;
+							} else if(!function.isValidTime(e_time)) {
+								cout << "invalid End Timing, try again" << endl;
+							} else{
+								toDoList.push_back(datainput);
+								function.printMessage(text, "succesfully added");
+							} 
+						} else
+							function.printMessage("timed slot clashes");
+					} 
 				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store->saveToSaveFile(fileName,toDoList);
 			}//finish add function
 			else if(command=="delete"||command=="-"||command=="remove") {
-
-				function.deleteItem(checkfororiginalindex(description, defaultmemory, tempVec), toDoList);
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+				function.deleteItem(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store->saveToSaveFile(fileName,toDoList);
+				}
 			}
 			else if(command=="display") {
 				tempVec.clear();
@@ -144,17 +148,21 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				store->saveToSaveFile(fileName,toDoList);
 			}
 			else if(command == "edit") {
-				function.editTask(checkfororiginalindex(description, defaultmemory, tempVec),description, toDoList);
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+				function.editTask(originindex ,description, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store->saveToSaveFile(fileName,toDoList);
+				}
 			}
 			else if(command=="exit") {
 				store->saveToSaveFile(fileName,toDoList);
 				return;
 			}
 			else if(command == "done") {
-				function.markcompleted(checkfororiginalindex(description, defaultmemory, tempVec), toDoList);
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+				function.markcompleted(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				}
 			}
 			else if(command == "undo"){
 				currentundomemory = undomemory[undomemory.size()-2];
@@ -176,10 +184,12 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 
 }
 
-int defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec){
+bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
 	string temp;
 	parser parse;
-	int index, originindex;
+	logic function;
+	unsigned int index;
+	int size;
 
 	istringstream in(description);
 	in>> temp;
@@ -187,26 +197,62 @@ int defaultclass::checkfororiginalindex(string description, defaultclass default
 	index = index -1;
 
 	if(temp == "float"){
+		size = defaultmemory.floatVec.size();
+
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		}
+		else if((index >= size)||(index <= 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
 		originindex = defaultmemory.floatVec[index].returntempnum();
-		return originindex;
 	}
 	else if(temp == "deadline"){
-	    originindex = defaultmemory.deadlineVec[index].returntempnum();
-		return originindex;
+		size = defaultmemory.deadlineVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		}
+		else if((index >= size)||(index <= 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+
+		originindex = defaultmemory.deadlineVec[index].returntempnum();
 	}
 	else if(temp == "timed"){
+		size = defaultmemory.timedVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		}
+		else if((index >= size)||(index <= 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+
 		originindex = defaultmemory.timedVec[index].returntempnum();
-	    return originindex;
 	}
 	else{
 		istringstream intemp(description);
 		intemp >> index;
-
 		index = index - 1;
+
+		size = tempVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		}
+		else if((index >= size)||(index <= 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+
 		originindex = tempVec[index].returntempnum();
-		return originindex;
 	}
-	return 0;
+	return true;
 }
 
 void defaultclass::updatedefaultmemory(vector<task> &toDoList){
