@@ -69,13 +69,12 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,0,e_time);
-						cout << "TEST::"<<text;
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 					} else {
 						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
 					}
 				} else if(recurringCommandWord=="weekly") {
 					description = description.substr(end + 1);
@@ -83,12 +82,12 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 					} else {
 						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
 					}
 				} else if (recurringCommandWord=="monthly") {
 					description = description.substr(end + 1);
@@ -96,12 +95,12 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 					} else {
 						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
 					}
 				} else if(recurringCommandWord=="yearly") {
 					description = description.substr(end + 1);
@@ -109,12 +108,12 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 					} else {
 						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
+						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
 					}
 				} else {
 					if(parse.checktype(description) == "float"){
