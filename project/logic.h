@@ -23,7 +23,7 @@ const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to file";
 const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "successfully deleted from file";
 const string MESSAGE_ITEM_EDITED_SUCCESSFULLY = "successfully edited";
 const string MESSAGE_ITEMS_CLEARED_SUCCESSFULLY = "all content deleted from file";
-const string ERROR_LIST_IS_EMPTY = "file is empty";
+const string ERROR_LIST_IS_EMPTY = "Empty";
 const string INVALID_INDEX = "invalid index";
 const string MESSAGE_DATE_OVERDUE = "Date entered is already overdued";
 const string MESSAGE_START_DATE_OVERDUE = "Starting date entered is already overdued";
@@ -40,6 +40,10 @@ const string MESSAGE_END_TIME_INVALID = "End timing is invalid";
 const string MESSAGE_DUPLICATE_DEADLINE_TASK = "deadline task exist already";
 
 const string MESSAGE_TIME_SLOT_CLASH = "Time slots clash";
+
+const string MESSAGE_SEARCH_FAILED = "There is no result found";
+
+const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display command";
 
 
 

@@ -36,21 +36,19 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 	task taskclass;
 	char c;
 
-	if(toDoList[index].returntype() == "float"){
+	if(toDoList[index].returntype() == "float") {
 		size_t pos = description.find("-name");
 		PartTochange = description.substr(pos+6);
 		toDoList[index].edittext(PartTochange);
 		if (system("CLS")) system("clear");
 		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
-	}
-	else if(toDoList[index].returntype() == "deadline"){
+	} else if(toDoList[index].returntype() == "deadline"){
 		size_t foundname = description.find("-name");
 		size_t founddue = description.find("-due");
 		if(foundname!=std::string::npos){
 			PartTochange = description.substr(foundname+6);
 		toDoList[index].edittext(PartTochange);
-		}
-		else if(founddue!=std::string::npos){
+		} else if(founddue!=std::string::npos){
 			PartTochange = description.substr(founddue+5);
 			istringstream in(PartTochange);
 			in>>e_time;;
@@ -184,34 +182,38 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fil
 	tempVec.clear();
 
 	for(i = 0; i < toDoList.size(); ++i) {
-	if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
-		unsigned int t = -1;
-		t = (toDoList[i].returntext()).find(description);
-		if(t != -1) {
-			pushback(toDoList, tempVec, i);
+		if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
+			unsigned int t = -1;
+			t = (toDoList[i].returntext()).find(description);
+			if(t != -1) {
+				pushback(toDoList, tempVec, i);
+			}
+		} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+			int convertedInt = convertNumStringToInt(description);
+			if(toDoList[i].returnstarttime() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnendtime() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if(toDoList[i].returnstartdate() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnenddate() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnstartmonth() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnendmonth() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnstartyear() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else if (toDoList[i].returnendyear() == convertedInt) {
+				pushback(toDoList, tempVec, i);
+			} else {}
+		}
 	}
-	} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
-		int convertedInt = convertNumStringToInt(description);
-		if(toDoList[i].returnstarttime() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnendtime() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if(toDoList[i].returnstartdate() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnenddate() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnstartmonth() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnendmonth() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnstartyear() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else if (toDoList[i].returnendyear() == convertedInt) {
-			pushback(toDoList, tempVec, i);
-		} else {}
-	}
-	}
+	if( tempVec.size() == 0) {
+		printMessage(MESSAGE_SEARCH_FAILED);
+	} else {
 	cout << displayAll(tempVec);
+	}
 }
 
 bool logic::isCheckSearchStringDigit(string description) {
@@ -232,10 +234,11 @@ int logic::convertNumStringToInt(string description) {
 }
 
 void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
-	int size, day, month, year;
+	int size, day, month, year, count = 0;
 	size = toDoList.size();
 
 	if(description == "today"){
+		count++;
 		for(int i=0; i<size; i++){
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
@@ -247,6 +250,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 		}
 	}
 	else if(description == "tomorrow" || description == "tmr" || description == "tomor"){
+		count++;
 		for(int i=0; i<size; i++){
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
@@ -258,6 +262,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 		}
 	}
 	else if(description == "not done"){
+		count++;
 		for(int i=0; i<size; i++){
 			bool status = toDoList[i].returnstatus();
 			if(status == false){
@@ -268,6 +273,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 		}
 	}
 	else if(description == "float"){
+		count++;
 		for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type == "float"){
@@ -277,6 +283,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 		}
 	}
 	else if(description == "deadline"){
+		count++;
 		for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type =="deadline"){
@@ -287,6 +294,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 		}
 	}
 	else if(description == "timed"){
+		count++;
 		for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type =="timed"){
@@ -295,15 +303,18 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 				sorttime(tempVec);
 			}
 		}
-	}
+	} 
+	if(count == 0) {
+		printMessage(MESSAGE_INVALID_DISPLAY_COMMAND);
+	} else {
 	cout << displayAll(tempVec);
+	}
 }
 
 string logic::displayAll(vector<task> &tempVec) {
 	task temp;
 	ostringstream oss;
 	if(tempVec.size()==0) {
-		if (system("CLS")) system("clear");
 		printMessage(ERROR_LIST_IS_EMPTY);
 	}
 	else {
