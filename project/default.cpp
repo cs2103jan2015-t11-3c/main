@@ -60,11 +60,16 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				size_t start = description.find_first_not_of(" ");
 				size_t end = description.find_first_of(" ");
 				string recurringCommandWord = description.substr(start, end - start);
+				size_t posOfBy = description.find("by");//daily task by 2000 on 4/4/2016
+				size_t posOfFrom = description.find("from");
+
 				if(recurringCommandWord=="daily") {
-					description = description.substr(end + 1);
+					text = description.substr(end+1,posOfBy-1-end);
+					description = description.substr(end+1);
 					if(parse.checktype(description) == 2) {
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,0,e_time);
+						recurringTask recurTask(text,0,e_time);
+						cout << "TEST::"<<text;
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
