@@ -1,5 +1,4 @@
-#ifndef UNDO_H
-#define UNDO_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -21,4 +20,4 @@ public:
 	vector<task> returnmemory();
 	int returnnum();
 };
-#endif
+

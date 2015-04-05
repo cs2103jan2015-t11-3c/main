@@ -1,5 +1,4 @@
-#ifndef DEFAULT_H
-#define DEFAULT_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -31,6 +30,6 @@ public:
 	bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year);
 
 };
-#endif
+
 
 

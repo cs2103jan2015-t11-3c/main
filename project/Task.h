@@ -1,5 +1,4 @@
-#ifndef TASK_H
-#define TASK_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -66,5 +65,5 @@ public:
 
 };
 
-#endif
+
 

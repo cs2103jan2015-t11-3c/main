@@ -1,40 +1,31 @@
 #include "parser.h"
-#include <iostream>
 #include <sstream>
-#include <string>
-#include "logic.h" //need to remove this
 
 
 //Checks if the command entered is a recognised valid user command
 //Checks if the description entered is valid for the command entered
 //Prints error messages if either of the aforementioned conditions are not met
 bool parser::isValidCommand(const string command, const string description){
-	logic function;
 	if(command=="add"||command=="+") {
 		if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_DESCRIPTION);
+			printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 		return true;
 	}
-	else if(command=="delete"||command=="-"||command=="remove") {
-		if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_DESCRIPTION);
-			return false;
-		}
-		else
-		return true;
-	}
+
 	else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||command=="exit"||command=="undo"||command=="search"||command=="default")
 		return true;
 
-	else if (command=="edit"||command=="modify"||command=="change"){
+	else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"){
 		if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_INDEX);
+			printMessage(ERROR_MISSING_INDEX);
 			return false;
-	}   else return true;
+	}  
+		return true;
 	}
-	function.printMessage(ERROR_INVALID_COMMAND);
+
+	printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
 }
@@ -82,15 +73,15 @@ int parser::convertStringToInteger(const string description) {
 	return output;
 }
 
-int parser::checktype(string description){
-	size_t foundtype2 = description.find("by");
-	size_t foundtype3 = description.find("from");
-	if(foundtype2!=std::string::npos)
-		return 2;
-	else if(foundtype3!=std::string::npos)
-		return 3;
+string parser::checktype(string description){
+	size_t foundtypeDeadline = description.find("by");
+	size_t foundtypeTimed = description.find("from");
+	if(foundtypeDeadline!=std::string::npos)
+		return "deadline";
+	else if(foundtypeTimed!=std::string::npos)
+		return "timed";
 	else
-		return 1;
+		return "float";
 }
 
 		
@@ -121,7 +112,7 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		}
 		e_year=convertStringToInteger(year);
 
-}//added char c;
+}
 
 void parser::splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
@@ -170,7 +161,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		}		
 		
 		e_year=convertStringToInteger(eyear);
-}//added char c;
+}
 
 
 
@@ -225,4 +216,8 @@ bool parser::isNumerical(string month){
     }
     return true;
 
+}
+
+void parser::printMessage(const string message) {
+	cout << endl << message << endl;
 }

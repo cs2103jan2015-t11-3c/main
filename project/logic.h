@@ -1,5 +1,4 @@
-#ifndef LOGIC_H
-#define LOGIC_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -17,7 +16,7 @@
 using namespace std;
 
 //Constants
-const string DELIMITERS = " \n\t\v";
+
 const string DEFAULT_SAVE_FILENAME = "SaveFile";
 const int FILE_NAME_ARG_NUMBER = 1;
 const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to file";
@@ -25,9 +24,7 @@ const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "deleted from file";
 const string MESSAGE_ITEMS_CLEARED_SUCCESSFULLY = "all content deleted from file";
 const string ERROR_LIST_IS_EMPTY = "file is empty";
 const string INVALID_INDEX = "invalid index";
-const string ERROR_MISSING_DESCRIPTION = "no description entered";
-const string ERROR_INVALID_COMMAND = "invalid command";
-const string ERROR_MISSING_INDEX="missing index";
+
 
 //Global Variables
 static string fileName = "";
@@ -71,4 +68,4 @@ public:
 	void printMessage(const string, const string);
 	
 };
-#endif 
+
