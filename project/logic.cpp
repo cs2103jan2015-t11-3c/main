@@ -19,7 +19,8 @@ void logic::sortEndTime(vector<task> &toDoList){
 
 
 void logic::deleteItem(const int index, vector<task> &toDoList) {
-		cout << toDoList[index].returntext() << " succesfully deleted";
+		cout << toDoList[index].returntext() ;
+		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
 		toDoList.erase(toDoList.begin()+index);
 }
 
@@ -40,7 +41,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 		PartTochange = description.substr(pos+6);
 		toDoList[index].edittext(PartTochange);
 		if (system("CLS")) system("clear");
-		printMessage("succesfully edited");
+		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	}
 	else if(toDoList[index].returntype() == "deadline"){
 		size_t foundname = description.find("-name");
@@ -65,7 +66,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
 		}
-		printMessage("succesfully edited");
+		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	}
 	else if(toDoList[index].returntype() == "timed"){
 		size_t foundname = description.find("-name");
@@ -108,7 +109,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_year(e_year);
 		}
 		if (system("CLS")) system("clear");
-		printMessage("succesfully edited");
+		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	}
 }
 

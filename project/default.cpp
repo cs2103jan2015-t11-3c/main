@@ -166,17 +166,17 @@ void defaultclass::printErrorMsgForAddDeadlineTask(task datainput, vector<task> 
 	if (system("CLS")) system("clear");
 						if(!store->isDeadlineDuplicated(datainput, toDoList)){
 							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
-								function.printMessage("Date entered is already overdued");
+								function.printMessage(MESSAGE_DATE_OVERDUE);
 							} else if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
 								toDoList.push_back(datainput);
-								function.printMessage(text, "succesfully added");
+								function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);//** IS SUCCESSFULLY ADDED
 							} else if(!function.isValidDate(e_date,e_month,e_year)) {
-								function.printMessage("invalid input date, try again");
+								function.printMessage(MESSAGE_DATE_INVALID);
 							} else if(!function.isValidTime(e_time)) {
-								function.printMessage("invalid input timing, try again");
+								function.printMessage(MESSAGE_TIME_INVALID);
 							} 
 						}else {
-							function.printMessage("deadline task exist already");
+							function.printMessage(MESSAGE_DUPLICATE_DEADLINE_TASK);
 						}
 }
 
@@ -205,25 +205,25 @@ void defaultclass::printErrorMsgForAddTimedTask(task datainput, vector<task> &to
 	if (system("CLS")) system("clear");
 						if(!store->isTimeClashed(datainput, toDoList)){
 							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
-								function.printMessage("Ending date entered is already overdued");
+								function.printMessage(MESSAGE_END_DATE_OVERDUE);
 							} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
-								function.printMessage("Starting date entered is already overdued");
+								function.printMessage(MESSAGE_START_DATE_OVERDUE);
 							}else if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
-								cout << "inValid Start and End Dates, try again" << endl;
+								function.printMessage(MESSAGE_BOTH_DATE_INVALID);
 							}else if(!function.isValidDate(s_date,s_month,s_year)) {
-								cout << "inValid Start Date, try again" << endl;
+								function.printMessage(MESSAGE_START_DATE_INVALID);
 							}else if(!function.isValidDate(e_date,e_month,e_year)) {
-								cout << "inValid End Date, try again" << endl;
+								function.printMessage(MESSAGE_END_DATE_INVALID);
 							}else if(!function.isValidTime(s_time)) {
-								cout << "invalid Start Timing, try again" << endl;
+								function.printMessage(MESSAGE_START_TIME_INVALID);
 							} else if(!function.isValidTime(e_time)) {
-								cout << "invalid End Timing, try again" << endl;
+								function.printMessage(MESSAGE_END_TIME_INVALID);
 							} else{
 								toDoList.push_back(datainput);
 								function.printMessage(text, "succesfully added");
 							} 
 						} else {
-							function.printMessage("timed slot clashes");
+							function.printMessage(MESSAGE_TIME_SLOT_CLASH);
 						}
 }
 
