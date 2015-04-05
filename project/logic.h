@@ -62,7 +62,7 @@ public:
 	bool isleapyear(unsigned short);
 	bool isValidDate(unsigned short,unsigned short,unsigned short);
 	bool isValidTime(int);
-	bool checkIsDateOverdue(int, int, int);
+	bool checkIsDateOverdue(int, int, int, int);
 
 	void printMessage(const string);
 	void printMessage(const string, const string);

@@ -153,15 +153,16 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
+						if (system("CLS")) system("clear");
 						if(!store->isDeadlineDuplicated(datainput, toDoList)){
-							if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 								function.printMessage("Date entered is already overdued");
-							} if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
+							} else if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
 								toDoList.push_back(datainput);
 								function.printMessage(text, "succesfully added");
-							} if(!function.isValidDate(e_date,e_month,e_year)) {
+							} else if(!function.isValidDate(e_date,e_month,e_year)) {
 								function.printMessage("invalid input date, try again");
-							} if(!function.isValidTime(e_time)) {
+							} else if(!function.isValidTime(e_time)) {
 								function.printMessage("invalid input timing, try again");
 							} 
 						}else {
@@ -179,10 +180,11 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+						if (system("CLS")) system("clear");
 						if(!store->isTimeClashed(datainput, toDoList)){
-							if(!function.checkIsDateOverdue(e_date,e_month,e_year)) {
+							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 								function.printMessage("Ending date entered is already overdued");
-							}if(!function.checkIsDateOverdue(s_date,s_month,s_year)) {
+							}if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
 								function.printMessage("Starting date entered is already overdued");
 							}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
 								cout << "inValid Start and End Dates, try again" << endl;

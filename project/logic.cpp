@@ -367,20 +367,25 @@ bool logic::isValidTime(int time) {
 	}
 }
 
-bool logic::checkIsDateOverdue(int day, int month, int year) {
+bool logic::checkIsDateOverdue(int day, int month, int year,int timing) {
 	bool result = true;
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
-	int systemDay, systemMonth, systemYear;
+	int systemDay, systemMonth, systemYear, systemHr, systemMin, systemTiming;
 	systemDay = timePtr->tm_mday;
 	systemMonth = timePtr->tm_mon + 1;
 	systemYear = timePtr->tm_year+1900;
+	systemHr = timePtr->tm_hour;
+	systemMin = timePtr->tm_min;
+	systemTiming = systemHr*100 + systemMin;
 
 	if(year < systemYear) {
 		return false;
 	} else if(year == systemYear && month < systemMonth) {
 		return  false;
 	} else if(year == systemYear && month == systemMonth && day < systemDay) {
+		return false;
+	} else if(year == systemYear && month == systemMonth && day == systemDay && timing < systemTiming) {
 		return false;
 	}
 	return result;
