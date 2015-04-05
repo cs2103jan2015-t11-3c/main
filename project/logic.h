@@ -19,7 +19,7 @@ using namespace std;
 
 const string DEFAULT_SAVE_FILENAME = "SaveFile";
 const int FILE_NAME_ARG_NUMBER = 1;
-const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "added to file";
+const string MESSAGE_ITEM_ADDED_SUCCESSFULLY = "is added to file";
 const string MESSAGE_ITEM_DELETED_SUCCESSFULLY = "successfully deleted from file";
 const string MESSAGE_ITEM_EDITED_SUCCESSFULLY = "successfully edited";
 const string MESSAGE_ITEMS_CLEARED_SUCCESSFULLY = "all content deleted from file";
@@ -44,6 +44,8 @@ const string MESSAGE_TIME_SLOT_CLASH = "Time slots clash";
 const string MESSAGE_SEARCH_FAILED = "There is no result found";
 
 const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display command";
+
+const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
 
 
 
@@ -86,7 +88,7 @@ public:
 	bool checkIsDateOverdue(int, int, int, int);
 
 	void printMessage(const string);
-	void printMessage(const string, const string);
+	void printMessage( string, const string);
 	
 };
 

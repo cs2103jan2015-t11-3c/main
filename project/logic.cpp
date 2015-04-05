@@ -415,10 +415,6 @@ void logic::printMessage(const string message) {
 	cout << endl << message << endl;
 }
 
-void logic::printMessage(const string message1, const string message2) {
+void logic::printMessage( string message1, const string message2) {
 	cout << endl << message1 << " " << message2 << endl;
 }
-
-
-
-
