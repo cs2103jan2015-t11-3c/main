@@ -1,6 +1,6 @@
 #include "parser.h"
 #include <sstream>
-
+#include "logic.h"
 
 //Checks if the command entered is a recognised valid user command
 //Checks if the description entered is valid for the command entered
@@ -93,11 +93,26 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 	string month;
 	string year;
 
+	
+	
 	size_t bypos = description.find("by");
 	text = description.substr(0 , bypos-1);//"meeting"
 	description = description.substr(bypos + 3);
 	istringstream in(description);// meeting by 1800 31 06 2016
 		in>>e_time;//1800
+
+		if(containShortForm(description)){
+			logic getDate;
+			if(shortForm(description)=="today"){
+			e_date=getDate.getSystemDay();		
+			}
+			if(shortForm(description)=="tomorrow"){
+			e_date=getDate.getSystemDay()+1;
+			}
+			e_month=getDate.getSystemMonth();
+			e_year=getDate.getSystemYear();
+	}
+		else{
 		in>>temp;//on
 		in>>e_date;//31
 		in>>c;//"/"
@@ -114,6 +129,7 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		e_year=convertStringToInteger(year);
 
 }
+}
 
 void parser::splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
@@ -127,6 +143,25 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	description = description.substr(bypos+5);
 	istringstream in(description);
 	in>>s_time;//1900
+
+	int spos=description.find("to ");
+
+
+	if(containShortForm(description.substr(0,spos))){
+		    in>>temp;
+		
+			logic getDate;
+			if(shortForm(description.substr(0,spos))=="today"){
+			s_date=getDate.getSystemDay();		
+			}
+			if(shortForm(description.substr(0,spos))=="tomorrow"){
+			s_date=getDate.getSystemDay()+1;
+			}
+			s_month=getDate.getSystemMonth();
+			s_year=getDate.getSystemYear();
+	}
+
+	else{
 	in>>temp;//on
 	in>>s_date;//28
 	in>>c;//"/"
@@ -143,11 +178,26 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		int pos=date.find("to");
 		syear=date.substr(tend+1,pos-tend);
 		s_year=convertStringToInteger(syear);
-
+	}
 		
 	    in>>temp;//to
 	    in>>e_time;//2000
-	    in>>temp;//on
+		 in>>temp;//on
+		if(containShortForm(temp)){
+		
+			logic getDate;
+			if(shortForm(temp)=="today"){
+			e_date=getDate.getSystemDay();		
+			}
+			if(shortForm(temp)=="tomorrow"){
+			e_date=getDate.getSystemDay()+1;
+			}
+			e_month=getDate.getSystemMonth();
+			e_year=getDate.getSystemYear();
+	}
+
+		else{
+	   
 	    in>>e_date;//29
 	    in>>c;//"/"
 		in>>date;
@@ -162,6 +212,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		}		
 		
 		e_year=convertStringToInteger(eyear);
+		}
 }
 
 
@@ -221,4 +272,33 @@ bool parser::isNumerical(string month){
 
 void parser::printMessage(const string message) {
 	cout << endl << message << endl;
+}
+
+
+bool parser::containShortForm(string description){
+	int n=description.find("today");
+	if(n!=-1)
+		return true;
+	int m=description.find("tomorrow");
+	if(m!=-1)
+		return true;
+	int p=description.find("tmr");
+	if(p!=-1)
+		return true;
+
+	return false;
+}
+
+
+string parser::shortForm(string description){
+	int n=description.find("today");
+	if(n!=-1)
+		return "today";
+	int m=description.find("tomorrow");
+	if(m!=-1)
+		return "tomorrow";
+	int p=description.find("tmr");
+	if(p!=-1)
+		return "tomorrow";
+
 }

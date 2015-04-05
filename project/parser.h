@@ -26,6 +26,9 @@ public:
 	int convertAlphabetMonthToInteger (string month);
 
 	void printMessage(const string message);
+	bool containShortForm(string description);
+	string shortForm(string description);
+
 
 };
 
