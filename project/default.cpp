@@ -134,6 +134,7 @@ void defaultclass::addFloatTask(string description,vector<task> &toDoList,storag
 
 	task datainput(description);
 	datainput.addItemtypeone();
+	if (system("CLS")) system("clear");
 	if(!store->isFloatDuplicated(datainput, toDoList)) {
 		toDoList.push_back(datainput);
 		function.printMessage(text, "succesfully added");
@@ -216,6 +217,7 @@ void defaultclass::deleteTask(string description,vector<task> &toDoList,storage 
 	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.deleteItem(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				if (system("CLS")) system("clear");
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 				}
@@ -226,6 +228,7 @@ void defaultclass::displayTask(string description, vector<task> &toDoList) {
 	vector<task> tempVec;
 
 	tempVec.clear();
+	if (system("CLS")) system("clear");
     function.display(toDoList, tempVec, fileName, description);
 }
 
@@ -289,7 +292,7 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 			} else if(command=="delete"||command=="-"||command=="remove") {
-				deleteTask( description,toDoList,store,undomemory);
+				deleteTask(description,toDoList,store,undomemory);
 			} else if(command=="display") {
 				displayTask(description,toDoList);
 			} else if(command=="clear") {

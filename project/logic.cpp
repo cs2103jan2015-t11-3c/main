@@ -25,6 +25,7 @@ void logic::deleteItem(const int index, vector<task> &toDoList) {
 
 void logic::clearAll(vector<task> &toDoList) {
 	toDoList.clear();
+	if (system("CLS")) system("clear");
 	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
 }
 
@@ -38,6 +39,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 		size_t pos = description.find("-name");
 		PartTochange = description.substr(pos+6);
 		toDoList[index].edittext(PartTochange);
+		if (system("CLS")) system("clear");
 		printMessage("succesfully edited");
 	}
 	else if(toDoList[index].returntype() == "deadline"){
@@ -105,6 +107,7 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
 		}
+		if (system("CLS")) system("clear");
 		printMessage("succesfully edited");
 	}
 }
@@ -115,6 +118,7 @@ void logic::markcompleted(int index, vector<task> &toDoList){
 	index = index - 1;
 
 	toDoList[index].editDone(true);
+	if (system("CLS")) system("clear");
 	printMessage(toDoList[index].returntext(), "completed");
 }
 
@@ -297,8 +301,10 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 string logic::displayAll(vector<task> &tempVec) {
 	task temp;
 	ostringstream oss;
-	if(tempVec.size()==0)
+	if(tempVec.size()==0) {
+		if (system("CLS")) system("clear");
 		printMessage(ERROR_LIST_IS_EMPTY);
+	}
 	else {
 		for(unsigned i = 0; i < tempVec.size(); i++){
 			if(tempVec[i].returntype() == "float") {
