@@ -64,49 +64,56 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				size_t posOfFrom = description.find("from");
 
 				if(recurringCommandWord=="daily") {
-					text = description.substr(end+1,posOfBy-1-end);
 					description = description.substr(end+1);
 					if(parse.checktype(description) == 2) {
+						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						recurringTask recurTask(text,0,e_time);
 						cout << "TEST::"<<text;
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
+						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,s_time,e_time);
+						recurringTask recurTask(text,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="weekly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,0,e_time);
+						recurringTask recurTask(text,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
+						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,s_time,e_time);
+						recurringTask recurTask(text,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if (recurringCommandWord=="monthly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,0,e_time);
+						recurringTask recurTask(text,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
+						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,s_time,e_time);
+						recurringTask recurTask(text,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else if(recurringCommandWord=="yearly") {
 					description = description.substr(end + 1);
 					if(parse.checktype(description) == 2) {
+						text = description.substr(end+1,posOfBy-1-end);
 						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,0,e_time);
+						recurringTask recurTask(text,0,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,2,toDoList);
 					} else {
+						text = description.substr(end+1,posOfFrom-1-end);
 						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(description,s_time,e_time);
+						recurringTask recurTask(text,s_time,e_time);
 						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,2,toDoList);
 					}
 				} else {
@@ -214,7 +221,6 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 			}
 			else if(command == "search") {
 				function.searchTask(toDoList, tempVec, fileName, description);
-				showDefaultTaskList(toDoList, defaultmemory);
 			}
 			else if(command == "default") {
 				showDefaultTaskList(toDoList, defaultmemory);
@@ -329,63 +335,6 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		}
 		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
-
-	/*
-	//*************************(2) deadline task (2)****************************************************************************
-    function.sortdates(defaultmemory.deadlineVec);
-	function.sorttime(defaultmemory.deadlineVec);
-
-	cout << endl;
-	std::cout << endl <<  "********************************************************************************" << endl;
-	int pos1=(int)((80-15)/2);
-	for(int i=0;i<pos1;i++) {
-			cout<<" ";
-	}
-	
-	cout <<  "Deadline tasks:" << endl << endl;
-
-
-	for(index = 0; index != defaultmemory.deadlineVec.size(); ++index) {
-		int size;
-		size = (defaultmemory.deadlineVec[index].displaydeadline()).size();
-		int pos=(int)((80-size)/2);
-		for(int i=0;i<pos;i++) {
-			cout<<" ";
-		}
-		cout << defaultmemory.deadlineVec[index].displayDeadline(index) << endl;
-	}
-
-
-	//*************************(3) timed task (3)****************************************************************************
-	function.sortdates(defaultmemory.timedVec);
-	function.sorttime(defaultmemory.timedVec);
-	
-	cout << endl;
-	std::cout << endl <<  "********************************************************************************" << endl;
-	int pos2=(int)((80-12)/2);
-	for(int i=0;i<pos2;i++) {
-			cout<<" ";
-	}
-	cout <<  "Timed tasks:" << endl << endl;
-	
-
-
-	for(index = 0; index != defaultmemory.timedVec.size(); ++index) {
-		int size;
-		size = (defaultmemory.timedVec[index].displaytimed()).size();
-		int pos=(int)((80-size)/2);
-		for(int i=0;i<pos;i++) {
-			cout<<" ";
-		}
-	    cout << defaultmemory.timedVec[index].displayTimed(index) << endl;
-	}
-	HANDLE hConsole;
-    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute
-    (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	std::cout << endl <<  "********************************************************************************";
-	SetConsoleTextAttribute
-    (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);*/
 
 	//=========================================================Today===================================================================
 

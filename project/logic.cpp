@@ -257,7 +257,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			}
 		}
 	}
-	else if(description == "tomorrow"){
+	else if(description == "tomorrow"||"tmr"||"tomor"){
 		for(int i=0; i<size; i++){
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
