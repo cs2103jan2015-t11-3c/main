@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -21,13 +19,33 @@ private:
 	vector<task> tomorTaskVec;
 	
 public:
-	void updatedefaultmemory(vector<task> &toDoList);
-	void showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory);
-	void defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentmemory);
-	bool checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex);
+	void updatedefaultmemory(vector<task> &);
+	void showDefaultTaskList(vector<task> &, defaultclass &);
+	void defaultexecuteCommand(storage *, string &, string &, vector<task> &, vector<undo> &, undo &);
+	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
 
-	bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year);
-	bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year);
+	bool checkIfIsToday(int,int,int);
+	bool checkIfIsTomorrow(int,int,int);
+
+	string getRecurruingCommandWord(string);
+
+	int getStartPosition(string);
+	int getEndPosition(string);
+	int getPosOfBy(string);
+	int getPosOfFrom(string);
+
+	void addRecurringTask(string,string,vector<task> &);
+	void addDeadlineAndTimedRecurringTask(string,string,vector<task> &);
+	void addDeadlineRecurTask(string,string,vector<task> &);
+	void addTimedRecurTask(string,string,vector<task> &);
+
+	void addFloatTask(string,vector<task> &,storage *);
+	void addDeadlineTask(string,vector<task> &,storage *);
+	void addTimedTask(string,vector<task> &,storage *);
+
+	void deleteTask(string,vector<task> &,storage *,vector<undo> &);
+	void displayTask(string,vector<task> &);
+	void clearTasks(storage *,vector<task> &, vector<undo> &);
 
 };
 

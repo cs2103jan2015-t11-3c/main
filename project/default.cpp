@@ -16,20 +16,11 @@ void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 			   todayTaskVec.push_back(toDoList[index]);
 			   todayTaskVec[i].inserttempnum(index);
 			   i++;
-		}
-	}
-
-	for(index = 0; index != toDoList.size(); ++index) {
-		if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
+		}else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
 			   tomorTaskVec.push_back(toDoList[index]);
 			   tomorTaskVec[j].inserttempnum(index);
 			   j++;
-		}
-	}
-
-
-	for(index = 0; index != toDoList.size(); ++index){
-		if(toDoList[index].returntype() =="float"){
+		}else if(toDoList[index].returntype() =="float"){
 			floatVec_.push_back(toDoList[index]);
 			floatVec_[k].inserttempnum(index);
 			k++;
@@ -38,96 +29,128 @@ void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 	floatVec = floatVec_;
 }
 
-void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, 
-										 undo &currentundomemory) {
+string defaultclass::getRecurruingCommandWord(string description) {
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+	string recurringCommandWord = description.substr(start, end - start);	
+	return recurringCommandWord;
+}
+
+int defaultclass::getStartPosition(string description) {
+	int start = description.find_first_not_of(" ");
+	return start;
+}
+
+int defaultclass::getEndPosition(string description) {
+	int end = description.find_first_of(" ");
+	return end;
+}
+
+int defaultclass::getPosOfBy(string description) {
+    int posOfBy;
+	posOfBy = description.find("by");
+	return posOfBy;
+}
+
+int defaultclass::getPosOfFrom(string description) {
+	int posOfFrom;
+	posOfFrom = description.find("from");
+	return posOfFrom;
+}
+
+void defaultclass::addRecurringTask(string recurringCommandWord, string description, vector<task> & toDoList) {
 	string text;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
-	vector<task> tempVec;
+	parser parse;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int end, posOfFrom, posOfBy;
+	
+	end = getEndPosition(description);
+	posOfBy = getPosOfBy(description);
+	posOfFrom = getPosOfFrom(description);
+
+	description = description.substr(end+1);
+	addDeadlineAndTimedRecurringTask(description,recurringCommandWord,toDoList);
+}
+
+void defaultclass::addDeadlineAndTimedRecurringTask(string description,string recurringCommandWord,vector<task> &toDoList) {
+	string text;
+	parser parse;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int end, posOfFrom, posOfBy;
+
+	end = getEndPosition(description);
+	posOfBy = getPosOfBy(description);
+	posOfFrom = getPosOfFrom(description);
+	
+	if(parse.checktype(description) == "deadline") {
+		addDeadlineRecurTask(description,recurringCommandWord,toDoList);
+	} else {
+		addTimedRecurTask(description,recurringCommandWord,toDoList);
+	}
+}
+
+void defaultclass::addDeadlineRecurTask(string description,string recurringCommandWord, vector<task> &toDoList) {
+	string text;
+	parser parse;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int end, posOfFrom, posOfBy;
+
+	end = getEndPosition(description);
+	posOfBy = getPosOfBy(description);
+	posOfFrom = getPosOfFrom(description);
+
+	string type;
+	type = "deadline";
+
+	    text = description.substr(end+1,posOfBy-1-end);
+		parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
+		recurringTask recurTask(text,0,e_time);
+		recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,type,toDoList);
+}
+
+void defaultclass::addTimedRecurTask(string description,string recurringCommandWord, vector<task> &toDoList) {
+	string text;
+	parser parse;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int end, posOfFrom, posOfBy;
+
+	end = getEndPosition(description);
+	posOfBy = getPosOfBy(description);
+	posOfFrom = getPosOfFrom(description);
+
+	string type;
+	type = "timed";
+
+	text = description.substr(end+1,posOfFrom-1-end);
+		parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+		recurringTask recurTask(text,s_time,e_time);
+		recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,type,toDoList);
+}
+
+void defaultclass::addFloatTask(string description,vector<task> &toDoList,storage *store) {
+	storage *stor = store;
+	string text;
+	logic function;
+
+	task datainput(description);
+	datainput.addItemtypeone();
+	if(!store->isFloatDuplicated(datainput, toDoList)) {
+		toDoList.push_back(datainput);
+		function.printMessage(text, "succesfully added");
+	} else {
+		function.printMessage("float task exist already");
+	}
+}
+
+void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,storage *store) {
+	string text;
+	parser parse;
     logic function;
 	storage *stor=store;
-	parser parse;
-	undo undofunction;
-	defaultclass defaultmemory;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 
-	defaultmemory.updatedefaultmemory(toDoList);
-	
-	while(command!="exit"){
-		parse.trimString(description);
 
-		if(parse.isValidCommand(command, description)){
-			if(command=="add" ||command =="+") {
-
-				size_t start = description.find_first_not_of(" ");
-				size_t end = description.find_first_of(" ");
-				string recurringCommandWord = description.substr(start, end - start);
-				size_t posOfBy = description.find("by");//daily task by 2000 on 4/4/2016
-				size_t posOfFrom = description.find("from");
-
-				if(recurringCommandWord=="daily") {
-					description = description.substr(end+1);
-					if(parse.checktype(description) == "deadline") {
-						text = description.substr(end+1,posOfBy-1-end);
-						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
-					} else {
-						text = description.substr(end+1,posOfFrom-1-end);
-						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
-					}
-				} else if(recurringCommandWord=="weekly") {
-					description = description.substr(end + 1);
-					if(parse.checktype(description) == "deadline") {
-						text = description.substr(end+1,posOfBy-1-end);
-						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
-					} else {
-						text = description.substr(end+1,posOfFrom-1-end);
-						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
-					}
-				} else if (recurringCommandWord=="monthly") {
-					description = description.substr(end + 1);
-					if(parse.checktype(description) == "deadline") {
-						text = description.substr(end+1,posOfBy-1-end);
-						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
-					} else {
-						text = description.substr(end+1,posOfFrom-1-end);
-						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
-					}
-				} else if(recurringCommandWord=="yearly") {
-					description = description.substr(end + 1);
-					if(parse.checktype(description) == "deadline") {
-						text = description.substr(end+1,posOfBy-1-end);
-						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,0,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
-					} else {
-						text = description.substr(end+1,posOfFrom-1-end);
-						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						recurringTask recurTask(text,s_time,e_time);
-						recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
-					}
-				} else {
-					if(parse.checktype(description) == "float"){
-						task datainput(description);
-						datainput.addItemtypeone();
-						if(!store->isFloatDuplicated(datainput, toDoList)){
-							toDoList.push_back(datainput);
-							function.printMessage(text, "succesfully added");
-						}
-						else
-							function.printMessage("float task exist already");
-					}
-					else if(parse.checktype(description) == "deadline"){
-						parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
+	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
 						if(!store->isDeadlineDuplicated(datainput, toDoList)){
@@ -144,9 +167,16 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 						}else {
 							function.printMessage("deadline task exist already");
 						}
-					}
-					else if(parse.checktype(description) == "timed"){
-						parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+}
+
+void defaultclass::addTimedTask(string description,vector<task> &toDoList,storage *store) {
+	string text;
+	parser parse;
+    logic function;
+	storage *stor=store;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+
+	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						if(!store->isTimeClashed(datainput, toDoList)){
@@ -170,67 +200,128 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 							} 
 						} else
 							function.printMessage("timed slot clashes");
-					} 
-				}
-				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-				showDefaultTaskList(toDoList, defaultmemory);
-				store->saveToSaveFile(fileName,toDoList);
-			}//finish add function
-			else if(command=="delete"||command=="-"||command=="remove") {
-				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+}
+
+void defaultclass::deleteTask(string description,vector<task> &toDoList,storage *store,vector<undo> &undomemory) {
+	
+	int originindex;
+    logic function;
+	undo undofunction;
+	storage *stor=store;
+	vector<task> tempVec;
+	defaultclass defaultmemory;
+
+	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.deleteItem(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 				}
-			}
-			else if(command=="display") {
-				tempVec.clear();
-				function.display(toDoList, tempVec, fileName, description);
-			}
-			
-			else if(command=="clear") {
-				function.clearAll(toDoList);
+}
+
+void defaultclass::displayTask(string description, vector<task> &toDoList) {
+	logic function;
+	vector<task> tempVec;
+
+	tempVec.clear();
+    function.display(toDoList, tempVec, fileName, description);
+}
+
+void defaultclass::clearTasks(storage *store,vector<task> &toDoList, vector<undo> &undomemory) {
+	logic function;
+	undo undofunction;
+	storage *stor=store;
+
+	function.clearAll(toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				store->saveToSaveFile(fileName,toDoList);
-			}
-			else if(command == "edit") {
-				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
-				function.editTask(originindex ,description, toDoList);
+}
+
+void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
+	
+	string text;
+	parser parse;
+    logic function;
+	undo undofunction;
+	storage *stor=store;
+	vector<task> tempVec;
+	defaultclass defaultmemory;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
+
+	defaultmemory.updatedefaultmemory(toDoList);
+	
+	while(command != "exit"){
+		parse.trimString(description);
+		if(parse.isValidCommand(command, description)) {
+			if(command == "add" || command =="+") {
+				string recurringCommandWord;
+				int end, posOfBy, posOfFrom;
+
+				end = getEndPosition(description);
+				posOfBy = getPosOfBy(description);
+			    posOfFrom = getPosOfFrom(description);
+				recurringCommandWord = getRecurruingCommandWord(description);
+
+				if(recurringCommandWord=="daily") {
+					recurringCommandWord=="daily";
+					addRecurringTask(recurringCommandWord,description, toDoList);
+				} else if(recurringCommandWord=="weekly") {
+					recurringCommandWord=="weekly";
+					addRecurringTask(recurringCommandWord,description, toDoList);
+				} else if (recurringCommandWord=="monthly") {
+					recurringCommandWord=="monthly";
+					addRecurringTask(recurringCommandWord,description, toDoList);
+				} else if(recurringCommandWord=="yearly") {
+					recurringCommandWord=="yearly";
+					addRecurringTask(recurringCommandWord,description, toDoList);
+				} else {
+					if(parse.checktype(description) == "float") {
+						addFloatTask(description,toDoList,store);
+					} else if(parse.checktype(description) == "deadline") {
+						addDeadlineTask(description,toDoList,store);
+					} else if(parse.checktype(description) == "timed") {
+						addTimedTask(description,toDoList,store);
+					} 
+				}
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
+			} else if(command=="delete"||command=="-"||command=="remove") {
+				deleteTask( description,toDoList,store,undomemory);
+			} else if(command=="display") {
+				displayTask(description,toDoList);
+			} else if(command=="clear") {
+				clearTasks( store,toDoList,undomemory);
+			} else if(command == "edit") {
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
+					function.editTask(originindex ,description, toDoList);
+					undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+					showDefaultTaskList(toDoList, defaultmemory);
+					store->saveToSaveFile(fileName,toDoList);
 				}
-			}
-			else if(command=="exit") {
+			} else if(command=="exit") {
 				store->saveToSaveFile(fileName,toDoList);
 				return;
-			}
-			else if(command == "done") {
+			} else if(command == "done") {
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.markcompleted(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				}
-			}
-			else if(command == "undo"){
+			} else if(command == "undo") {
 				currentundomemory = undomemory[undomemory.size()-2];
 				toDoList = currentundomemory.returnmemory();
 				undomemory.pop_back();
 				showDefaultTaskList(toDoList, defaultmemory);
-			}
-			else if(command == "search") {
+			} else if(command == "search") {
 				function.searchTask(toDoList, tempVec, fileName, description);
-			}
-			else if(command == "default") {
+			} else if(command == "default") {
 				showDefaultTaskList(toDoList, defaultmemory);
 			}
-
-		}
-		cout << endl << "command: ";
-		cin >> command;
-		getline(cin,description);
-	}
-
+}
+cout << endl << "command: ";
+cin >> command;
+getline(cin,description);
+}
 }
 
 bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
@@ -304,41 +395,24 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 	return true;
 }
 
-
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
-	int index, i=0, j=0, k=0;
+	int index, i;
 	logic function;
-	vector<task> tempVec;	
-	time_t t = time(0);   // get time now
-    struct tm * now = localtime( & t );
+	time_t t = time(0);  
+    struct tm * now = localtime(& t);
 
+	defaultmemory.floatVec.clear();
 	defaultmemory.todayTaskVec.clear();
 	defaultmemory.tomorTaskVec.clear();
-	defaultmemory.floatVec.clear();
 	defaultmemory.updatedefaultmemory(toDoList);
-	//*************************(1) float task (1)****************************************************************************
-	function.sorttext(defaultmemory.floatVec);
-	
-	int pos=(int)((80-15)/2);
-	for(int i=0;i<pos;i++) {
-			cout<<" ";
-	}
-	cout << "Floating tasks:" << endl << endl;
 
+	function.sorttext(defaultmemory.floatVec);
+	cout << endl << "[Floating]" << endl << endl;
 	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
-		int size;
-		size = (defaultmemory.floatVec[index].displayfloat()).size();
-		int pos=(int)((80-size)/2);
-		for(int i=0;i<pos;i++) {
-			cout<<" ";
-		}
 		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
 
-	//=========================================================Today===================================================================
-
-	cout << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << 
-		     "============================================================" << endl << endl;
+	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl << endl;
 	function.sortEndTime(defaultmemory.todayTaskVec);
 
 	for(i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
@@ -347,7 +421,6 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		s_day=defaultmemory.todayTaskVec[i].returnstartdate();
 		s_month=defaultmemory.todayTaskVec[i].returnstartmonth();
 		s_year=defaultmemory.todayTaskVec[i].returnstartyear();
-
 		e_day=defaultmemory.todayTaskVec[i].returnenddate();
 		e_month=defaultmemory.todayTaskVec[i].returnendmonth();
 		e_year=defaultmemory.todayTaskVec[i].returnendyear();
@@ -358,13 +431,8 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
 	}
-	cout <<endl;
 
-
-	//========================================================Tomorrow=================================================================
-	cout << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << 
-		     "============================================================" << endl;
-
+    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
 	function.sortEndTime(defaultmemory.tomorTaskVec);
 
 	for(i = 0; i != defaultmemory.tomorTaskVec.size(); ++i){
@@ -373,7 +441,6 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		s_day=defaultmemory.tomorTaskVec[i].returnstartdate();
 		s_month=defaultmemory.tomorTaskVec[i].returnstartmonth();
 		s_year=defaultmemory.tomorTaskVec[i].returnstartyear();
-
 		e_day=defaultmemory.tomorTaskVec[i].returnenddate();
 		e_month=defaultmemory.tomorTaskVec[i].returnendmonth();
 		e_year=defaultmemory.tomorTaskVec[i].returnendyear();
@@ -383,9 +450,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		} else {
 		cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
-	}
-	cout <<endl;
-
+	}cout <<endl;
 }
 
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
