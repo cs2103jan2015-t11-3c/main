@@ -75,8 +75,8 @@ int parser::convertStringToInteger(const string description) {
 }
 
 string parser::checktype(string description){
-	size_t foundtypeDeadline = description.find("by");
-	size_t foundtypeTimed = description.find("from");
+	size_t foundtypeDeadline = description.find("/by");
+	size_t foundtypeTimed = description.find("/from");
 	if(foundtypeDeadline!=std::string::npos)
 		return "deadline";
 	else if(foundtypeTimed!=std::string::npos)
@@ -95,9 +95,9 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 
 	
 	
-	size_t bypos = description.find("by");
+	size_t bypos = description.find("/by");
 	text = description.substr(0 , bypos-1);//"meeting"
-	description = description.substr(bypos + 3);
+	description = description.substr(bypos + 4);
 	istringstream in(description);// meeting by 1800 31 06 2016
 		in>>e_time;//1800
 
@@ -138,13 +138,13 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	string smonth,emonth;
 	string syear,eyear;
 	
-	size_t bypos = description.find("from");
+	size_t bypos = description.find("/from");
 	text = description.substr(0 , bypos-1);
-	description = description.substr(bypos+5);
+	description = description.substr(bypos+6);
 	istringstream in(description);
 	in>>s_time;//1900
 
-	int spos=description.find("to ");
+	int spos=description.find("/to ");
 
 
 	if(containShortForm(description.substr(0,spos))){
