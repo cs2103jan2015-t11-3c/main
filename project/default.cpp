@@ -148,13 +148,22 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	parser parse;
     logic function;
 	storage *stor=store;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	int e_date, e_month, e_year, e_time;
 
 
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
-						if (system("CLS")) system("clear");
+						printErrorMsgForAddDeadlineTask( datainput,toDoList, store, e_date,  e_month,  e_year,  e_time);
+}
+
+void defaultclass::printErrorMsgForAddDeadlineTask(task datainput, vector<task> &toDoList,storage *store,
+												   int e_date, int e_month, int e_year, int e_time) {
+	string text;
+    logic function;
+	storage *stor=store;
+
+	if (system("CLS")) system("clear");
 						if(!store->isDeadlineDuplicated(datainput, toDoList)){
 							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 								function.printMessage("Date entered is already overdued");
@@ -181,13 +190,25 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 						task datainput(text);
 						datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-						if (system("CLS")) system("clear");
+						printErrorMsgForAddTimedTask(datainput, toDoList, store,e_date,  e_month,  e_year,  
+							                         e_time,  s_date, s_month, s_year,  s_time); 
+						
+}
+
+void defaultclass::printErrorMsgForAddTimedTask(task datainput, vector<task> &toDoList,storage *store,
+												   int e_date, int e_month, int e_year, int e_time, int s_date,int s_month,
+												   int s_year, int s_time) {
+	string text;
+    logic function;
+	storage *stor=store;
+
+	if (system("CLS")) system("clear");
 						if(!store->isTimeClashed(datainput, toDoList)){
 							if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 								function.printMessage("Ending date entered is already overdued");
-							}if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
+							} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
 								function.printMessage("Starting date entered is already overdued");
-							}if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+							}else if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
 								cout << "inValid Start and End Dates, try again" << endl;
 							}else if(!function.isValidDate(s_date,s_month,s_year)) {
 								cout << "inValid Start Date, try again" << endl;
@@ -201,8 +222,9 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 								toDoList.push_back(datainput);
 								function.printMessage(text, "succesfully added");
 							} 
-						} else
+						} else {
 							function.printMessage("timed slot clashes");
+						}
 }
 
 void defaultclass::deleteTask(string description,vector<task> &toDoList,storage *store,vector<undo> &undomemory) {

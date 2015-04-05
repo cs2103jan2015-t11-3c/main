@@ -47,6 +47,9 @@ public:
 	void displayTask(string,vector<task> &);
 	void clearTasks(storage *,vector<task> &, vector<undo> &);
 
+	void printErrorMsgForAddDeadlineTask(task  ,vector<task> &,storage *, int , int , int , int );
+	void printErrorMsgForAddTimedTask (task  ,vector<task> &,storage *, int , int , int , int,int,int,int,int);
+
 };
 
 
