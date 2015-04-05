@@ -25,7 +25,6 @@ int main(int argc, char *argv[]) {
 	logic function;
 	storage *store=new storage;
 
-	getTextFileName(argc, argv);
 	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
 	readinput(toDoList,store);     

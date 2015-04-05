@@ -105,7 +105,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		istringstream in(description);
 		in>>extra>>status;
 		i.editDone(status);
-		cout << i.returnstartdate();
+		
 
 	    getline(textFile,description);
 		_toDoList.push_back(i);
