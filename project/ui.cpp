@@ -80,10 +80,12 @@ void readinput(vector<task> &toDoList, storage *store){
 	vector<undo> undomemory;
 	defaultclass defaultmemory, defaultfunction;
 	undo currentundomemory, undofunction;
+	logic function;
 	
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 	defaultfunction.showDefaultTaskList(toDoList, defaultmemory);
 
+	function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
 	cout << "command: ";
 	cin >> command;
 	getline(cin,description);
