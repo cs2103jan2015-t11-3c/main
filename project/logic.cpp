@@ -1,22 +1,71 @@
 #include "logic.h"
 #include <iostream>
 
-void logic::sortEndTime(vector<task> &toDoList){
-	task temp;
-	unsigned int i , j;
+string logic::displayAll(vector<task> &tempVec) {
+	vector<task> temporary, temp;
+	vector<vector<task>> temps;
+	ostringstream oss;
+	int i = 0;
+	task temp_t;
+	if(tempVec.size()==0) {
+		printMessage(ERROR_LIST_IS_EMPTY);
+	}
+	else {
+		for(unsigned j = 0; j < tempVec.size(); j++){
+			if(tempVec[j].returntype() == "float"){
+				temp.push_back(tempVec[j]);
+				tempVec.erase(tempVec.begin()+j);
+			}
+		}
 
-    for(i = 0; i < toDoList.size(); ++i) {
-		for(j = 1; j < toDoList.size()-i; ++j) {
-			if(toDoList[j-1].returnendtime() > toDoList[j].returnendtime()){
-				temp = toDoList[j-1];
-				toDoList[j-1] = toDoList[j];
-				toDoList[j] = temp;
+		sorttext(temp);
+		oss <<"Float Task: " << endl;
+		for(unsigned j = 0; j < temp.size(); j++){
+			oss << temp[j].displayFloat(i);
+			i++;
+		}
+		if(tempVec.size() != 0){
+			sortdates(tempVec);
+			temporary.push_back(tempVec[0]);
+			for(int j = 0; j < tempVec.size() - 1 ; j++){
+				if((tempVec[j].returnenddate() == tempVec[j+1].returnenddate()) && (tempVec[j].returnendmonth() == tempVec[j+1].returnendmonth()) && 
+					(tempVec[j].returnendyear() == tempVec[j].returnendyear())){
+						temporary.push_back(tempVec[j+1]);
+				}
+				else{
+					sortEndTime(temporary);
+					for( unsigned k = 0; k<temporary.size(); k++)
+						temp.push_back(temporary[k]);
+					temporary.clear();
+					temporary.push_back(tempVec[j+1]);
+				}
+			}
+			sortEndTime(temporary);
+			for( unsigned k = 0; k<temporary.size(); k++)
+				temp.push_back(temporary[k]);
+
+
+			oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
+			if(temp[i].returntype() == "deadline")
+				oss << temp[i].displayDefaultTasks(i) << endl;
+			else if(temp[i].returntype() == "timed")
+				oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
+
+			while(i != temp.size() - 1){
+				if((temp[i].returnenddate() != temp[i+1].returnenddate())||(temp[i].returnendmonth() != temp[i+1].returnendmonth()) || 
+					(temp[i].returnendyear() != temp[i+1].returnendyear()))
+					oss << endl << "Date: " << temp[i+1].returnenddate() << "/" << temp[i+1].returnendmonth() << "/" << temp[i+1].returnendyear() << endl;
+				if(temp[i+1].returntype() == "deadline")
+					oss << temp[i+1].displayDefaultTasks(i+1) << endl;
+				else if(temp[i+1].returntype() == "timed")
+					oss <<  temp[i+1].displayDefaultTasksWithTwoTimes(i+1) << endl;
+				i++;
 			}
 		}
 	}
+	tempVec = temp;
+	return oss.str();
 }
-
-
 
 void logic::deleteItem(const int index, vector<task> &toDoList) {
 		cout << toDoList[index].returntext() ;
@@ -174,6 +223,23 @@ void logic::sorttime(vector<task> &toDoList){
 	}
 }
 
+void logic::sortEndTime(vector<task> &toDoList){
+	task temp;
+	unsigned int i , j;
+
+    for(i = 0; i < toDoList.size(); ++i) {
+		for(j = 1; j < toDoList.size()-i; ++j) {
+			if(toDoList[j-1].returnendtime() > toDoList[j].returnendtime()){
+				temp = toDoList[j-1];
+				toDoList[j-1] = toDoList[j];
+				toDoList[j] = temp;
+			}
+		}
+	}
+}
+
+
+
 void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description) {
 	unsigned int i;
 	task task;
@@ -233,6 +299,8 @@ int logic::convertNumStringToInt(string description) {
     return convertedNum;
 }
 
+
+
 void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
 	int size, day, month, year, count = 0;
 	size = toDoList.size();
@@ -245,7 +313,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			year = toDoList[i].returnendyear();
 			if(day == getSystemDay() && (month == getSystemMonth())&& (year == getSystemYear())){
 				pushback(toDoList, tempVec, i);
-				sorttext(tempVec);
 			}
 		}
 	}
@@ -257,7 +324,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			year = toDoList[i].returnendyear();
 			if((day == (getSystemDay())+1) && (month == getSystemMonth())&& (year == getSystemYear())){
 				pushback(toDoList, tempVec, i);
-				sorttext(tempVec);
 			}
 		}
 	}
@@ -267,8 +333,15 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			bool status = toDoList[i].returnstatus();
 			if(status == false){
 				pushback(toDoList, tempVec, i);
-				sortdates(tempVec);
-				sorttime(tempVec);
+			}
+		}
+	}
+	else if(description == "done"){
+		count++;
+		for(int i=0; i<size; i++){
+			bool status = toDoList[i].returnstatus();
+			if(status == true){
+				pushback(toDoList, tempVec, i);
 			}
 		}
 	}
@@ -278,7 +351,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			string type = toDoList[i].returntype();
 			if(type == "float"){
 				pushback(toDoList, tempVec, i);
-				sorttext(tempVec);
 			}
 		}
 	}
@@ -288,8 +360,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			string type = toDoList[i].returntype();
 			if(type =="deadline"){
 				pushback(toDoList, tempVec, i);
-				sortdates(tempVec);
-				sorttime(tempVec);
 			}
 		}
 	}
@@ -299,11 +369,14 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 			string type = toDoList[i].returntype();
 			if(type =="timed"){
 				pushback(toDoList, tempVec, i);
-				sortdates(tempVec);
-				sorttime(tempVec);
 			}
 		}
 	} 
+	else if(description == "all"){
+		count++;
+		for(int i=0; i<size; i++)
+			pushback(toDoList, tempVec, i);
+	}
 	if(count == 0) {
 		printMessage(MESSAGE_INVALID_DISPLAY_COMMAND);
 	} else {
@@ -311,27 +384,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 }
 
-string logic::displayAll(vector<task> &tempVec) {
-	task temp;
-	ostringstream oss;
-	if(tempVec.size()==0) {
-		printMessage(ERROR_LIST_IS_EMPTY);
-	}
-	else {
-		for(unsigned i = 0; i < tempVec.size(); i++){
-			if(tempVec[i].returntype() == "float") {
-				oss << tempVec[i].displayFloat(i)<< endl;
-			}
-			else if(tempVec[i].returntype() == "deadline") {
-				oss << tempVec[i].displayDefaultTasks(i)<< endl;
-			}
-			else if(tempVec[i].returntype() == "timed") {
-				oss <<  tempVec[i].displayDefaultTasksWithTwoTimes(i) << endl;
-			}
-		}
-	}
-	return oss.str();
-}
 
 int logic::getSystemDay() {
 	time_t t = time(NULL);

@@ -39,10 +39,6 @@ public:
 	void inserttempnum(int index);
 	void edittemp(int index);
 
-	string displayFloat(int index);
-	string displayDeadline(int index);
-	string displayTimed(int index);
-
 	string returntype();
 	bool returnstatus();
 	string returntext();
@@ -57,9 +53,9 @@ public:
 	int returntempnum();
 	int returntemp();
 
-	string displayfloat();
-	string displaydeadline();
-	string displaytimed();
+	string displayFloat(int index);
+	string displayDeadline(int index);
+	string displayTimed(int index);
 	string displayDefaultTasks(int);
 	string displayDefaultTasksWithTwoTimes(int);
 

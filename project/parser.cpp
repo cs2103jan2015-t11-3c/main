@@ -18,7 +18,7 @@ bool parser::isValidCommand(const string command, const string description){
 		    command=="exit"||command=="undo"||command=="search"||command=="default")
 		return true;
 
-	else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"){
+	else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"||command=="done"){
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_INDEX);
 			return false;

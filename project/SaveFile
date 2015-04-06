@@ -1,22 +1,4 @@
-1. iof
-Start: 31/ 5/ 2015	1100
-End: 30/ 5/ 2015	 1200
-Type: timed
-Completed: 0
-
-2. iof
-Start: 30/ 6/ 2015	1100
-End: 30/ 6/ 2015	 1200
-Type: timed
-Completed: 0
-
-3. iof
-Start: 31/ 7/ 2015	1100
-End: 30/ 7/ 2015	 1200
-Type: timed
-Completed: 0
-
-4. iof
+4. alvin
 Start: 31/ 8/ 2015	1100
 End: 30/ 8/ 2015	 1200
 Type: timed
@@ -194,23 +176,21 @@ Completed: 0
 Start: 6/ 4/ 2015	2200
 End: 12/ 5/ 2016	 2200
 Type: timed
-Completed: 0
-
-34. ogir
-Start: 6/ 4/ 2015	2200
-End: 6/ 4/ 2015	 2300
+Completed: 034. ogir
+Start: 9/ 4/ 2015	2200
+End: 9/ 4/ 2015	 2300
 Type: timed
 Completed: 0
 
 35. goijf
 Start: 5/ 4/ 2015	2200
-End: 6/ 4/ 2015	 2300
+End: 8/ 4/ 2015	 2300
 Type: timed
 Completed: 0
 
 36. giojg
 Start: 0/ 0/ 0	0
-End: 5/ 4/ 2015	 1100
+End: 7/ 4/ 2015	 1100
 Type: deadline
 Completed: 0
 
@@ -233,8 +213,8 @@ Type: timed
 Completed: 0
 
 40. og
-Start: 5/ 4/ 2015	2200
-End: 5/ 4/ 2015	 2300
+Start: 6/ 4/ 2015	2200
+End: 6/ 4/ 2015	 2300
 Type: timed
 Completed: 0
 

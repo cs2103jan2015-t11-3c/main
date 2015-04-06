@@ -107,61 +107,6 @@ void task::edittemp(int index){
 	return;
 }
 
-
-string task::displayFloat(int index){
-	ostringstream oss;
-	oss << index+1 << "." << text;
-	return oss.str();
-}
-
-string task::displayDeadline(int index){
-	ostringstream oss;
-	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
-			<< e_month << "/" << e_year;
-	return oss.str();
-}
-
-string task::displayTimed(int index){
-	ostringstream oss;
-	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
-			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
-			<< e_month << "/" << e_year ;
-	return oss.str();
-}
-//===============================================================
-string task::displayfloat() {
-	ostringstream oss;
-	oss << text;
-	return oss.str();
-}
-
-string task::displaydeadline() {
-	ostringstream oss;
-	oss << text <<  " by " << e_time << " on " << e_date<<"/"
-			<< e_month << "/" << e_year;
-	return oss.str();
-}
-
-string task::displaytimed() {
-	ostringstream oss;
-	 oss << text << " from " <<s_time << " on "<<s_date<<"/"
-			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
-			<< e_month << "/" << e_year ;
-
-	return oss.str();
-}
-
-string task::displayDefaultTasks(int index) {
-	ostringstream oss;
-	oss << index+1 << ". " << "[by " << e_time << "] " << text;
-	return oss.str();
-}
-
-string task::displayDefaultTasksWithTwoTimes(int index) {
-	ostringstream oss;
-	oss << index+1 << ". " << "[" << s_time << "-" << e_time << "] " << text;
-	return oss.str();
-}
 //===============================================================
 string task::returntype(){
 	return type;
@@ -213,4 +158,36 @@ int task::returntempnum(){
 
 int task::returntemp(){
 	return temp;
+}
+string task::displayFloat(int index){
+	ostringstream oss;
+	oss << index+1 << "." << text;
+	return oss.str();
+}
+
+string task::displayDeadline(int index){
+	ostringstream oss;
+	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year;
+	return oss.str();
+}
+
+string task::displayTimed(int index){
+	ostringstream oss;
+	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
+			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
+			<< e_month << "/" << e_year ;
+	return oss.str();
+}
+
+string task::displayDefaultTasks(int index) {
+	ostringstream oss;
+	oss << index+1 << ". " << "[by " << e_time << "] " << text;
+	return oss.str();
+}
+
+string task::displayDefaultTasksWithTwoTimes(int index) {
+	ostringstream oss;
+	oss << index+1 << ". " << "[" << s_time << "-" << e_time << "] " << text;
+	return oss.str();
 }

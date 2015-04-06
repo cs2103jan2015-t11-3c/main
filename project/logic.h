@@ -58,9 +58,6 @@ static string fileName = "";
 
 class logic{
 public:
-
-	void sortEndTime(vector<task> &);
-
 	string displayAll(vector<task> &);
 	
 	void deleteItem(const int index, vector<task> &toDoList);
@@ -70,6 +67,7 @@ public:
 	void sorttext(vector<task> &toDoList);
 	void sortdates(vector<task> &);
 	void sorttime(vector<task> &);
+	void sortEndTime(vector<task> &);
 
 	void searchTask(vector<task> &, vector<task> &, string, string);
 	bool isCheckSearchStringDigit(string);

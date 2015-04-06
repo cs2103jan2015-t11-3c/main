@@ -19,17 +19,16 @@ private:
 	vector<task> tomorTaskVec;
 	
 public:
-	void updatedefaultmemory(vector<task> &);
-	void showDefaultTaskList(vector<task> &, defaultclass &);
 	void defaultexecuteCommand(storage *, string &, string &, vector<task> &, vector<undo> &, undo &);
 	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
-	bool checkIfIsToday(int,int,int);
-	bool checkIfIsTomorrow(int,int,int);
+	void updatedefaultmemory(vector<task> &);
+
 	string getRecurruingCommandWord(string);
 	int getStartPosition(string);
 	int getEndPosition(string);
 	int getPosOfBy(string);
 	int getPosOfFrom(string);
+
 	void addRecurringTask(string,string,vector<task> &);
 	void addDeadlineAndTimedRecurringTask(string,string,vector<task> &);
 	void addDeadlineRecurTask(string,string,vector<task> &);
@@ -37,9 +36,14 @@ public:
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
-	void deleteTask(string,vector<task> &,storage *,vector<undo> &);
-	void displayTask(string,vector<task> &);
+	void deleteTask(string,vector<task> &,storage *,vector<undo> &, vector<task> &);
+	void displayTask(string,vector<task> &, vector<task> &);
 	void clearTasks(storage *,vector<task> &, vector<undo> &);
+
+	void showDefaultTaskList(vector<task> &, defaultclass &);
+	bool checkIfIsToday(int,int,int);
+	bool checkIfIsTomorrow(int,int,int);
+
 	void printErrorMsgForAddDeadlineTask(string,task  ,vector<task> &,storage *, int , int , int , int );
 	void printErrorMsgForAddTimedTask (string,task  ,vector<task> &,storage *, int , int , int , int, int, int, int, int);
 };
