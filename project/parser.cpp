@@ -102,15 +102,7 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		in>>e_time;//1800
 
 		if(containShortForm(description)){
-			logic getDate;
-			if(shortForm(description)=="today"){
-			e_date=getDate.getSystemDay();		
-			}
-			if(shortForm(description)=="tomorrow"){
-			e_date=getDate.getSystemDay()+1;
-			}
-			e_month=getDate.getSystemMonth();
-			e_year=getDate.getSystemYear();
+		getInfo(description, e_date, e_month, e_year);
 	}
 		else{
 		in>>temp;//on
@@ -150,15 +142,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	if(containShortForm(description.substr(0,spos))){
 		    in>>temp;
 		
-			logic getDate;
-			if(shortForm(description.substr(0,spos))=="today"){
-			s_date=getDate.getSystemDay();		
-			}
-			if(shortForm(description.substr(0,spos))=="tomorrow"){
-			s_date=getDate.getSystemDay()+1;
-			}
-			s_month=getDate.getSystemMonth();
-			s_year=getDate.getSystemYear();
+			getInfo(description, s_date, s_month, s_year);
 	}
 
 	else{
@@ -185,15 +169,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		 in>>temp;//on
 		if(containShortForm(temp)){
 		
-			logic getDate;
-			if(shortForm(temp)=="today"){
-			e_date=getDate.getSystemDay();		
-			}
-			if(shortForm(temp)=="tomorrow"){
-			e_date=getDate.getSystemDay()+1;
-			}
-			e_month=getDate.getSystemMonth();
-			e_year=getDate.getSystemYear();
+		getInfo(temp, e_date, e_month, e_year);
 	}
 
 		else{
@@ -301,4 +277,16 @@ string parser::shortForm(string description){
 	if(p!=-1)
 		return "tomorrow";
 
+}
+
+void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
+		logic getDate;
+			if(shortForm(description)=="today"){
+			e_date=getDate.getSystemDay();		
+			}
+			if(shortForm(description)=="tomorrow"){
+			e_date=getDate.getSystemDay()+1;
+			}
+			e_month=getDate.getSystemMonth();
+			e_year=getDate.getSystemYear();
 }
