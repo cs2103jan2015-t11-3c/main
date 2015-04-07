@@ -112,12 +112,8 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		int pos=date.find("/");
 		month=date.substr(0,pos);
 		year=date.substr(pos+1);
-		if(isNumerical(month)){
-			e_month=convertStringToInteger(month);
-		}
-		else{
-			e_month=convertAlphabetMonthToInteger(month);
-		}
+		
+		e_month=convertMonth(month);
 		e_year=convertStringToInteger(year);
 
 }
@@ -152,12 +148,8 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	in>>date;
 		int tend=date.find_first_of("/");
 		smonth=date.substr(0,tend);
-        if(isNumerical(smonth)){
-			s_month=convertStringToInteger(smonth);
-		}
-		else{
-			s_month=convertAlphabetMonthToInteger(smonth);
-		}
+
+        s_month=convertMonth(smonth);
         
 		int pos=date.find("to");
 		syear=date.substr(tend+1,pos-tend);
@@ -180,12 +172,8 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		int post=date.find("/");
 		emonth=date.substr(0,post);
 		eyear=date.substr(post+1);
-		if(isNumerical(emonth)){
-			e_month=convertStringToInteger(emonth);
-		}
-		else{
-			e_month=convertAlphabetMonthToInteger(emonth);
-		}		
+
+		e_month=convertMonth(emonth);
 		
 		e_year=convertStringToInteger(eyear);
 		}
@@ -289,4 +277,14 @@ void parser::getInfo(string description, int &e_date, int &e_month, int &e_year)
 			}
 			e_month=getDate.getSystemMonth();
 			e_year=getDate.getSystemYear();
+}
+
+
+int parser::convertMonth(string month){
+	if(isNumerical(month)){
+			return convertStringToInteger(month);
+		}
+		else{
+			return convertAlphabetMonthToInteger(month);
+		}
 }
