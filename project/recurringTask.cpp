@@ -356,9 +356,7 @@ void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int
 		}
 	
 		    moveToNextYear(e_date, e_month, e_year); 
-			cout<<e_year<<endl;
-			cout<<e_month<<endl;
-			cout<<e_date<<endl;
+			
 			if(function.isValidDate(e_date,e_month,e_year)){
 		     addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			}
