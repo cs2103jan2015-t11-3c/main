@@ -79,7 +79,6 @@ void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s
 		else{
 			ChangeWeekDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
 		}
-		  e_date=e_date+7;
 		}
 		if(type=="timed"){
 		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
@@ -153,12 +152,12 @@ void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int 
 		if(type=="deadline"){
 		if (function.isValidDate(e_date,e_month,e_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
-			 
+			
 		}
 		else{
 			ChangeMonthDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
 		}
-		e_month++;
+		 e_month++;
 		}
 
 		if(type=="timed"){
@@ -322,7 +321,7 @@ void recurringTask::moveToNextYear(int &date, int &month, int &year){
 }
 
 
-void recurringTask::ChangeWeekDeadline(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+void recurringTask::ChangeWeekDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	logic function;
 	       moveToNextMonth(e_date, e_month, e_year);                                        
 			if(function.isValidDate(e_date,e_month,e_year)){
@@ -339,7 +338,8 @@ void recurringTask::ChangeWeekDeadline(int e_date,int e_month,int e_year,int s_d
 }
 
 
-void recurringTask::ChangeMonthDeadline(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+
 	logic function;
 	if(!isValidforMoreDays(e_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
 			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)){
@@ -354,13 +354,16 @@ void recurringTask::ChangeMonthDeadline(int e_date,int e_month,int e_year,int s_
 				}
 			}
 		}
-	else{
+	
 		    moveToNextYear(e_date, e_month, e_year); 
+			cout<<e_year<<endl;
+			cout<<e_month<<endl;
+			cout<<e_date<<endl;
 			if(function.isValidDate(e_date,e_month,e_year)){
 		     addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			}
-	}
-			
+	
+		
 }
 
 bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
