@@ -59,7 +59,7 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 			} else if(command=="display") {
 				displayTask(description,toDoList, tempVec);
 			} else if(command=="clear") {
-				clearTasks( store,toDoList,undomemory);
+				clearTasks(store,toDoList,undomemory);
 			} else if(command == "edit") {
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
 					function.editTask(originindex ,description, toDoList);
