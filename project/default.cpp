@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <ctime>
 
-void defaultclass::defaultexecuteCommand(storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
+void defaultclass::defaultexecuteCommand(string fileName,storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
 	string text;
 	parser parse;
     logic function;
@@ -55,11 +55,11 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 			} else if(command=="delete"||command=="-"||command=="remove") {
-				deleteTask(description,toDoList,store,undomemory, tempVec, defaultmemory);
+				deleteTask( fileName,description,toDoList,store,undomemory, tempVec, defaultmemory);
 			} else if(command=="display") {
-				displayTask(description,toDoList, tempVec);
+				displayTask(fileName,description,toDoList, tempVec);
 			} else if(command=="clear") {
-				clearTasks(store,toDoList,undomemory);
+				clearTasks(fileName,store,toDoList,undomemory);
 			} else if(command == "edit") {
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
 					function.editTask(originindex ,description, toDoList);
@@ -88,6 +88,13 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 			} else if(command == "default") {
 				if (system("CLS")) system("clear");
 				showDefaultTaskList(toDoList, defaultmemory);
+			}
+			else if(command == "changeDirectory") {
+				string newpath;
+				cin>>newpath;				
+				store->changeDirectory( newpath,fileName,toDoList);
+				cout<<fileName<<endl;
+					
 			}
 		}
 		function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
@@ -331,7 +338,7 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 }
 
 
-void defaultclass::deleteTask(string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
+void defaultclass::deleteTask(string fileName,string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
     logic function;
 	undo undofunction;
@@ -345,7 +352,7 @@ void defaultclass::deleteTask(string description, vector<task> &toDoList, storag
 	}
 }
 
-void defaultclass::displayTask(string description, vector<task> &toDoList, vector<task> &tempVec) {
+void defaultclass::displayTask(string fileName,string description, vector<task> &toDoList, vector<task> &tempVec) {
 	logic function;
 
 	tempVec.clear();
@@ -353,7 +360,7 @@ void defaultclass::displayTask(string description, vector<task> &toDoList, vecto
     function.display(toDoList, tempVec, fileName, description);
 }
 
-void defaultclass::clearTasks(storage *store,vector<task> &toDoList, vector<undo> &undomemory) {
+void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoList, vector<undo> &undomemory) {
 	logic function;
 	undo undofunction;
 	storage *stor=store;

@@ -15,6 +15,7 @@
 #include <ctime>
 #include <windows.h>
 
+string fileName = "";
 
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
 	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
 	readinput(toDoList,store);     
-	store->saveToSaveFile(getTextFileName(argc, argv),toDoList);
+
 	return 0;
 }
 
@@ -93,7 +94,7 @@ void readinput(vector<task> &toDoList, storage *store){
 	getline(cin,description);
 
 	while(command!="exit"){
-		defaultfunction.defaultexecuteCommand(store,command, description, toDoList, undomemory, currentundomemory);
+		defaultfunction.defaultexecuteCommand(fileName,store,command, description, toDoList, undomemory, currentundomemory);
 	};
 
 	

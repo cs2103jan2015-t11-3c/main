@@ -19,7 +19,7 @@ private:
 	vector<task> tomorTaskVec;
 	
 public:
-	void defaultexecuteCommand(storage *, string &, string &, vector<task> &, vector<undo> &, undo &);
+	void defaultexecuteCommand(string, storage *, string &, string &, vector<task> &, vector<undo> &, undo &);
 	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
 	void updatedefaultmemory(vector<task> &);
 
@@ -36,9 +36,9 @@ public:
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
-	void deleteTask(string,vector<task> &,storage *,vector<undo> &, vector<task> &, defaultclass &);
-	void displayTask(string,vector<task> &, vector<task> &);
-	void clearTasks(storage *,vector<task> &, vector<undo> &);
+	void deleteTask(string,string,vector<task> &,storage *,vector<undo> &, vector<task> &, defaultclass &);
+	void displayTask(string, string,vector<task> &, vector<task> &);
+	void clearTasks(string ,storage *,vector<task> &, vector<undo> &);
 
 	void showDefaultTaskList(vector<task> &, defaultclass &);
 	bool checkIfIsToday(int,int,int);

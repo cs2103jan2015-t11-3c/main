@@ -126,11 +126,13 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	// string URL=newFilePath +  fileName;
 	fstream outFile;
 	outFile.open(getFullFileName(newFilePath,fileName), fstream::out | fstream::app);
+	
 	//outFile.open(URL.c_str(),fstream::out);
 	outFile<< toString(toDoList);
 	outFile.close();
 
 	system("del SaveFile");
+	
 	return true;
 }
  

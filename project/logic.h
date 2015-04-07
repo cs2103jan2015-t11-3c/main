@@ -44,7 +44,7 @@ const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/
 
 
 //Global Variables
-static string fileName = "";
+
 
 //Class has a vector containing all the entries in the to-do list
 //Contains all functions facilitating add, delete, display, clear and save operations
