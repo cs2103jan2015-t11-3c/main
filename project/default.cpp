@@ -90,7 +90,8 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				showDefaultTaskList(toDoList, defaultmemory);
 			}
 		}
-		cout << endl << "command: ";
+		function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
+		cout <<  "command: ";
 		cin >> command;
 		getline(cin,description);
 	}
@@ -339,7 +340,6 @@ void defaultclass::deleteTask(string description, vector<task> &toDoList, storag
 	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 		function.deleteItem(originindex, toDoList);
 		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
-		if (system("CLS")) system("clear");
 		showDefaultTaskList(toDoList, defaultmemory);
 		store->saveToSaveFile(fileName,toDoList);
 	}
@@ -375,12 +375,13 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	defaultmemory.updatedefaultmemory(toDoList);
 
 	function.sorttext(defaultmemory.floatVec);
-	cout << endl << "[Floating]" << endl << endl;
+	cout << endl << "[Floating]" << "===================================================================="<< endl << endl;
 	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
 		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
 
-	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl << endl;
+	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" 
+		<< "============================================================" << endl << endl;
 	function.sortEndTime(defaultmemory.todayTaskVec);
 
 	for(i = 0; i != defaultmemory.todayTaskVec.size(); ++i){

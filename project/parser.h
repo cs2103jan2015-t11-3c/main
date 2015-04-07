@@ -28,6 +28,8 @@ public:
 	void printMessage(const string message);
 	bool containShortForm(string description);
 	string shortForm(string description);
+	void getInfo(string description, int &e_date, int &e_month, int &e_year);
+	int convertMonth(string month);
 
 
 };

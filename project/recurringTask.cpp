@@ -27,11 +27,17 @@ void recurringTask::AddRecurring(string recurType,int e_date,int e_month,int e_y
 	return;
 }
 
+
 void recurringTask::DailyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	int n=30;                                                                   //the default recurring period for daily task is set to be 30 days
 	logic function;
 
 	for(int i=1;i<=n;i++){
+		if(type=="timed"){
+			if(!DayRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+			}
+		}
 		if (function.isValidDate(e_date,e_month,e_year)){
           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		  e_date=e_date+1;
@@ -62,63 +68,104 @@ void recurringTask::DailyRec(int e_date,int e_month,int e_year,int s_date,int s_
 }
 
 void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
-	int n=52;                           //default recurring period for weekly task is 1 year(52)weeks;
+	int n=52;                           //default recurring period for weekly task is half year(26)weeks;
 	logic function;
    
 	for(int i=1;i<=n;i++){
+		if(type=="deadline"){
 		if (function.isValidDate(e_date,e_month,e_year)){
-             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
-
-		  e_date=e_date+7;
-		   s_date=e_date;
-			
+            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		 
 		}
 		else{
-			e_date=e_date-getNumDays(e_month,e_year);                      
-			e_month++;                                                   //move to next month
-	        s_date=e_date;
-			s_month=e_month;
-			if(function.isValidDate(e_date,e_month,e_year)){
-			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			ChangeWeekDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
+		}
+		  e_date=e_date+7;
+		}
+		if(type=="timed"){
+		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+		 }
+		 if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
+		}
+		else{
+			if (!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)){
+			 moveToNextMonth(e_date, e_month, e_year);  //move to next month                             
+			 moveToNextMonth(s_date, s_month, s_year);
 
-			   e_date=e_date+7;
-			    s_date=e_date;
-		
+			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			 addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			   
 			}
 			else{
-				e_year++;                                           //move to the next year
-				e_month=1;
-				e_date-=getNumDays(e_month,e_year); 
-			    s_date=e_date;
-			    s_month=e_month;
-				s_year=e_year;
-				if(function.isValidDate(e_date,e_month,e_year)){
+				moveToNextYear(e_date, e_month, e_year);         //move to the next year
+				moveToNextYear(s_date, s_month, s_year); 		
+				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
 				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+			
+			}
+			}
+			else{
+			if(!function.isValidDate(e_date,e_month,e_year)){
+			     moveToNextMonth(e_date, e_month, e_year); 
+			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			   
+			}
+			else{
+		     	moveToNextYear(e_date, e_month, e_year);   
+				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+		
+				}
+			}
+			}
 
-			       e_date=e_date+7;
-				   s_date=e_date;
+			if(!function.isValidDate(s_date,s_month,s_year)){
+			 moveToNextMonth(s_date, s_month, s_year);
+			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			    
+			}
+			else{
+				moveToNextYear(s_date, s_month, s_year); 	
+				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(e_date,e_month,e_year)){
+				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		
 				}
 			}
 		}
 
-
+			}
+		}  }     e_date=e_date+7;
+		        s_date=s_date+7;
+	
+}        return;
 }
-	return;
-}
-
 
 void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	int n=12;                          //default recurring period is 12 month if user do not specify
 	logic function;
-    
+   
+	
 	for(int i=1;i<=n;i++){
-		if(type=="deadline")
+		if(type=="deadline"){
 		if (function.isValidDate(e_date,e_month,e_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			 
 		}
+		else{
+			ChangeMonthDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
+		}
+		e_month++;
+		}
+
 		if(type=="timed"){
+			if(!MonthRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+			}
+
 		   if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	 
 	    	}
@@ -128,10 +175,11 @@ void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int 
 				if(s_date==e_date&&s_month==e_month)
 		        addTodifferentType(type, e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
 				else
+			    if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date-1,s_month,s_year))
 			    addTodifferentType(type, e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
 			   }
 			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){
-				
+			    if (function.isValidDate(e_date-1,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year))
 			    addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			   }
 			    else if((e_date==31||e_date==30||s_date==31||s_date==30)&&(e_month==2||s_month==2)){                       //special case for Feburary
@@ -260,5 +308,131 @@ int recurringTask::recurPeriod(){
 	int n;
 	cin>>n;
 	return n;
+}
+
+void recurringTask::moveToNextMonth(int &date, int &month, int &year){
+	date=date%getNumDays(month,year);                      
+	month++;             
+}
+
+void recurringTask::moveToNextYear(int &date, int &month, int &year){
+	   year++;                                           //move to the next year
+	   month=1;
+	   date%=getNumDays(month,year); 
+}
+
+
+void recurringTask::ChangeWeekDeadline(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	logic function;
+	       moveToNextMonth(e_date, e_month, e_year);                                        
+			if(function.isValidDate(e_date,e_month,e_year)){
+			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+
+			}
+			else{
+			    moveToNextYear(e_date, e_month, e_year); 
+				if(function.isValidDate(e_date,e_month,e_year)){
+				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);      
+				}
+			}
+			
+}
+
+
+void recurringTask::ChangeMonthDeadline(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	logic function;
+	if(!isValidforMoreDays(e_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
+			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)){
+		        addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			}
+			else if((e_date==31||e_date==30)&&e_month==2){                       //special case for Feburary
+				if(function.isleapyear(e_year)){
+				  addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+				else{
+			     addTodifferentType(type, 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+			}
+		}
+	else{
+		    moveToNextYear(e_date, e_month, e_year); 
+			if(function.isValidDate(e_date,e_month,e_year)){
+		     addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			}
+	}
+			
+}
+
+bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>=1){
+		cout<<"Please enter the recurring task with time interval within 1 day"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool recurringTask::WeekRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>7){
+		cout<<"Please enter the recurring task with time interval within 1 week"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+
+bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>31){
+		cout<<"Please enter the recurring task with time interval within 1 month"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int smonth, int syear){
+	logic function;
+   if(syear == eyear && smonth == emonth)
+     {
+          return  eday - sday;
+    }else if(syear == eyear)
+     {
+         int startday,  endday;
+		 
+         startday = DayInYear(syear, smonth, sday);
+         endday = DayInYear(eyear, emonth, eday);
+         return endday-startday;
+		}else{
+          int d1,d2,d3;
+         if(function.isleapyear(syear))
+             d1 = 366 - DayInYear(syear,smonth, sday);  //remaining days in that year
+         else
+             d1 = 365 - DayInYear(syear,smonth, sday);
+         d2 = DayInYear(eyear,emonth,eday); 
+		 
+		  d3 = 0;
+         for(int year = syear + 1; year < eyear; year++)
+         {
+             if(function.isleapyear(year))
+                 d3 += 366;
+             else
+                 d3 += 365;
+         }
+         return d1 + d2 + d3;
+
+}
+}
+
+int recurringTask::DayInYear(int year, int month, int day){
+    logic function;
+    int DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+    if(function.isleapyear(year))
+        DAY[1] = 29;
+    for(int i=0; i<month - 1; ++i)
+    {
+        day += DAY[i];
+    }
+    return day;
 }
 
