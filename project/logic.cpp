@@ -14,16 +14,19 @@ string logic::displayAll(vector<task> &tempVec) {
 		for(unsigned j = 0; j < tempVec.size(); j++){
 			if(tempVec[j].returntype() == "float"){
 				temp.push_back(tempVec[j]);
-				tempVec.erase(tempVec.begin()+j);
 			}
+			else
+				temporary.push_back(tempVec[j]);
 		}
-
 		sorttext(temp);
 		oss <<"Float Task: " << endl;
 		for(unsigned j = 0; j < temp.size(); j++){
-			oss << temp[j].displayFloat(i);
+			oss << temp[j].displayFloat(i) << endl;
 			i++;
 		}
+
+		tempVec = temporary;
+		temporary.clear();
 		if(tempVec.size() != 0){
 			sortdates(tempVec);
 			temporary.push_back(tempVec[0]);
@@ -43,7 +46,6 @@ string logic::displayAll(vector<task> &tempVec) {
 			sortEndTime(temporary);
 			for( unsigned k = 0; k<temporary.size(); k++)
 				temp.push_back(temporary[k]);
-
 
 			oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
 			if(temp[i].returntype() == "deadline")
@@ -80,7 +82,7 @@ void logic::clearAll(vector<task> &toDoList) {
 }
 
 void logic::editTask(int index, string description, vector<task> &toDoList) {
-	string TextAfterIndex, VariableToChange, PartTochange, temp;
+	string TextAfterIndex, VariableToChange, PartTochange, temp, tempdescription;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	task taskclass;
 	char c;
@@ -123,37 +125,39 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 			PartTochange = description.substr(foundname+6);
 		    toDoList[index].edittext(PartTochange);
 		}
-		else if(foundstart!=std::string::npos){
-			PartTochange = description.substr(foundstart+7);
-			istringstream in(PartTochange);
-			in>>s_time;
-			in>>temp;
-			in>>s_date;
-			in>>c;
-		    in>>s_month;
-			in>>c;
-		    in>>s_year;
+		else{ 
+			if(foundstart!=std::string::npos){
+				PartTochange = description.substr(foundstart+7);
+				istringstream in(PartTochange);
+				in>>s_time;
+				in>>temp;
+				in>>s_date;
+				in>>c;
+				in>>s_month;
+				in>>c;
+				in>>s_year;
 
-			toDoList[index].edits_time(s_time);
-			toDoList[index].edits_date(s_date);
-			toDoList[index].edits_month(s_month);
-			toDoList[index].edits_year(s_year);
-		}
-		else if(foundend!=std::string::npos){
-			PartTochange = description.substr(foundend+5);
-			istringstream in(PartTochange);
-			in>>e_time;
-			in>>temp;
-			in>>e_date;
-			in>>c;
-		    in>>e_month;
-			in>>c;
-		    in>>e_year;
+				toDoList[index].edits_time(s_time);
+				toDoList[index].edits_date(s_date);
+				toDoList[index].edits_month(s_month);
+				toDoList[index].edits_year(s_year);
+			}
+			if(foundend!=std::string::npos){
+				PartTochange = description.substr(foundend+5);
+				istringstream in(PartTochange);
+				in>>e_time;
+				in>>temp;
+				in>>e_date;
+				in>>c;
+				in>>e_month;
+				in>>c;
+				in>>e_year;
 
-			toDoList[index].edite_time(e_time);
-			toDoList[index].edite_date(e_date);
-			toDoList[index].edite_month(e_month);
-			toDoList[index].edite_year(e_year);
+				toDoList[index].edite_time(e_time);
+				toDoList[index].edite_date(e_date);
+				toDoList[index].edite_month(e_month);
+				toDoList[index].edite_year(e_year);
+			}
 		}
 		if (system("CLS")) system("clear");
 		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
@@ -163,7 +167,6 @@ void logic::editTask(int index, string description, vector<task> &toDoList) {
 void logic::markcompleted(int index, vector<task> &toDoList){
 	task temp;
 	int size = toDoList.size();
-	index = index - 1;
 
 	toDoList[index].editDone(true);
 	if (system("CLS")) system("clear");

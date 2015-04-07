@@ -55,7 +55,7 @@ void defaultclass::defaultexecuteCommand(storage *store, string &command, string
 				showDefaultTaskList(toDoList, defaultmemory);
 				store->saveToSaveFile(fileName,toDoList);
 			} else if(command=="delete"||command=="-"||command=="remove") {
-				deleteTask(description,toDoList,store,undomemory, tempVec);
+				deleteTask(description,toDoList,store,undomemory, tempVec, defaultmemory);
 			} else if(command=="display") {
 				displayTask(description,toDoList, tempVec);
 			} else if(command=="clear") {
@@ -330,12 +330,11 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 }
 
 
-void defaultclass::deleteTask(string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec) {
+void defaultclass::deleteTask(string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
     logic function;
 	undo undofunction;
 	storage *stor=store;
-	defaultclass defaultmemory;
 
 	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 		function.deleteItem(originindex, toDoList);

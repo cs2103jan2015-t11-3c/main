@@ -36,7 +36,7 @@ public:
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
-	void deleteTask(string,vector<task> &,storage *,vector<undo> &, vector<task> &);
+	void deleteTask(string,vector<task> &,storage *,vector<undo> &, vector<task> &, defaultclass &);
 	void displayTask(string,vector<task> &, vector<task> &);
 	void clearTasks(storage *,vector<task> &, vector<undo> &);
 
