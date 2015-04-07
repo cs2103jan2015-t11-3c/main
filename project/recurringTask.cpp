@@ -33,6 +33,11 @@ void recurringTask::DailyRec(int e_date,int e_month,int e_year,int s_date,int s_
 	logic function;
 
 	for(int i=1;i<=n;i++){
+		if(type=="timed"){
+			if(!DayRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+			}
+		}
 		if (function.isValidDate(e_date,e_month,e_year)){
           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		  e_date=e_date+1;
@@ -77,6 +82,9 @@ void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s
 		  e_date=e_date+7;
 		}
 		if(type=="timed"){
+		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+		 }
 		 if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
              addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
 		}
@@ -139,7 +147,8 @@ void recurringTask::WeeklyRec(int e_date,int e_month,int e_year,int s_date,int s
 void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	int n=12;                          //default recurring period is 12 month if user do not specify
 	logic function;
-    
+   
+	
 	for(int i=1;i<=n;i++){
 		if(type=="deadline"){
 		if (function.isValidDate(e_date,e_month,e_year)){
@@ -153,6 +162,10 @@ void recurringTask::MonthlyRec(int e_date,int e_month,int e_year,int s_date,int 
 		}
 
 		if(type=="timed"){
+			if(!MonthRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+			}
+
 		   if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	 
 	    	}
@@ -350,4 +363,75 @@ void recurringTask::ChangeMonthDeadline(int e_date,int e_month,int e_year,int s_
 			
 }
 
+bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>=1){
+		cout<<"Please enter the recurring task with time interval within 1 day"<<endl;
+		return false;
+	}
 
+	return true;
+}
+
+bool recurringTask::WeekRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>7){
+		cout<<"Please enter the recurring task with time interval within 1 week"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+
+bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>31){
+		cout<<"Please enter the recurring task with time interval within 1 month"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int smonth, int syear){
+	logic function;
+   if(syear == eyear && smonth == emonth)
+     {
+          return  eday - sday;
+    }else if(syear == eyear)
+     {
+         int startday,  endday;
+		 
+         startday = DayInYear(syear, smonth, sday);
+         endday = DayInYear(eyear, emonth, eday);
+         return endday-startday;
+		}else{
+          int d1,d2,d3;
+         if(function.isleapyear(syear))
+             d1 = 366 - DayInYear(syear,smonth, sday);  //remaining days in that year
+         else
+             d1 = 365 - DayInYear(syear,smonth, sday);
+         d2 = DayInYear(eyear,emonth,eday); 
+		 
+		  d3 = 0;
+         for(int year = syear + 1; year < eyear; year++)
+         {
+             if(function.isleapyear(year))
+                 d3 += 366;
+             else
+                 d3 += 365;
+         }
+         return d1 + d2 + d3;
+
+}
+}
+
+int recurringTask::DayInYear(int year, int month, int day){
+    logic function;
+    int DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+    if(function.isleapyear(year))
+        DAY[1] = 29;
+    for(int i=0; i<month - 1; ++i)
+    {
+        day += DAY[i];
+    }
+    return day;
+}
