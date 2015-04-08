@@ -82,6 +82,13 @@ void logic::clearAll(vector<task> &toDoList) {
 	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
 }
 
+void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
+	task task_;
+	task_ = toDoList[index];
+	task_.inserttempnum(index);
+	tempVec.push_back(task_);
+}
+
 void logic::editTask(int index, string description, vector<task> &toDoList) {
 	string TextAfterIndex, VariableToChange, PartTochange, temp, tempdescription;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
@@ -245,10 +252,6 @@ void logic::sortEndTime(vector<task> &toDoList){
 
 
 void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description) {
-	unsigned int i;
-	task task;
-	logic logic;
-
 	tempVec.clear();
 
 	if(!isCheckSearchStringDigit(description)) {
@@ -427,12 +430,7 @@ int logic::getSystemYear() {
 	return year;
 }
 
-void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
-	task task_;
-	task_ = toDoList[index];
-	task_.inserttempnum(index);
-	tempVec.push_back(task_);
-}
+
 
 //check whether input date is valid function starts here
 bool logic::isleapyear(unsigned short year){
