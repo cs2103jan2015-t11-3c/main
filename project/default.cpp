@@ -285,6 +285,7 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
+
 	if(printErrorMsgForAddDeadlineTask( text,datainput,toDoList, store, e_date,  e_month,  e_year,  e_time)) {
 	} else {
 		toDoList.push_back(datainput);
@@ -302,6 +303,7 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+
 	if(printErrorMsgForAddTimedTask(text,datainput, toDoList, store,e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time)) {
 	} else {
 		toDoList.push_back(datainput);
@@ -341,6 +343,7 @@ void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoL
     store->saveToSaveFile(fileName,toDoList);
 }
 
+
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
 	int index, i;
 	logic function;
@@ -354,15 +357,29 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 
 	function.sorttext(defaultmemory.floatVec);
 	cout << endl << "[Floating]" << "===================================================================="<< endl << endl;
-	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
-		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
-	}
+	defaultFloatDisplay(defaultmemory);
 
 	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" 
 		<< "============================================================" << endl << endl;
 	function.sortEndTime(defaultmemory.todayTaskVec);
+	defaultDeadlineDisplay(defaultmemory);
+	
 
-	for(i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
+    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
+	function.sortEndTime(defaultmemory.tomorTaskVec);
+	defaultTimedDisplay(defaultmemory);
+	
+	cout <<endl;
+}
+
+void defaultclass::defaultFloatDisplay(defaultclass &defaultmemory) {
+	for(int index = 0; index != defaultmemory.floatVec.size(); ++index) {
+		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
+	}
+}
+
+void defaultclass::defaultDeadlineDisplay(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
 		s_day=defaultmemory.todayTaskVec[i].returnstartdate();
@@ -378,11 +395,10 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
 	}
+}
 
-    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
-	function.sortEndTime(defaultmemory.tomorTaskVec);
-
-	for(i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
+void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
 		s_day=defaultmemory.tomorTaskVec[i].returnstartdate();
@@ -398,8 +414,8 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
 	}
-	cout <<endl;
 }
+
 
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	logic logic;
@@ -451,11 +467,6 @@ bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, 
 	} else{
 		return false;
 	}
-	/*else {
-		toDoList.push_back(datainput);
-		function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-	}*/
-	 
 }
 
 //upadte
@@ -511,8 +522,4 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 	} else{
 		return false;
 	}
-	/*else {
-		toDoList.push_back(datainput);
-		function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-	}*/
 }

@@ -49,7 +49,7 @@ const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than
 //Class has a vector containing all the entries in the to-do list
 //Contains all functions facilitating add, delete, display, clear and save operations
 //COntains functions that print the messages when user operations are executed, or fail to execute
-class logic{
+class logic {
 public:
 	string displayAll(vector<task> &);
 	

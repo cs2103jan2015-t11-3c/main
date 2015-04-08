@@ -324,7 +324,6 @@ int logic::convertNumStringToInt(string description) {
 }
 
 
-
 void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
 	int size, day, month, year, count = 0;
 	size = toDoList.size();
