@@ -251,20 +251,37 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fil
 
 	tempVec.clear();
 
-	for(i = 0; i < toDoList.size(); ++i) {
-		if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
+	if(!isCheckSearchStringDigit(description)) {
+		searchWord(toDoList,description,tempVec);
+	} else {
+		searchDigit(toDoList,description,tempVec);
+	}
+
+	if( tempVec.size() == 0) {
+		printMessage(MESSAGE_SEARCH_FAILED);
+	} else {
+	    cout << displayAll(tempVec);
+	}
+}
+
+void logic::searchWord(vector<task> &toDoList, string description, vector<task> &tempVec) {
+	for(int i = 0; i < toDoList.size(); ++i) {
+		//searched word is not a digit-->can only be found in task name
 			unsigned int t = -1;
 			t = (toDoList[i].returntext()).find(description);
 			if(t != -1) {
 				pushback(toDoList, tempVec, i);
 			}
-		} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+	}
+}
+
+void logic::searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec) {
+	for(int i = 0; i < toDoList.size(); ++i) { // searched word is a pure digit-->can only be found in time/date/month/year
 			unsigned int t = -1;
 			t = (toDoList[i].returntext()).find(description);
 			if(t != -1) {
 				pushback(toDoList, tempVec, i);
 			}
-			
 			int convertedInt = convertNumStringToInt(description);
 			if(toDoList[i].returnstarttime() == convertedInt) {
 				pushback(toDoList, tempVec, i);
@@ -283,12 +300,6 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fil
 			} else if (toDoList[i].returnendyear() == convertedInt) {
 				pushback(toDoList, tempVec, i);
 			} else {}
-		}
-	}
-	if( tempVec.size() == 0) {
-		printMessage(MESSAGE_SEARCH_FAILED);
-	} else {
-	cout << displayAll(tempVec);
 	}
 }
 
@@ -300,7 +311,7 @@ bool logic::isCheckSearchStringDigit(string description) {
 			result = false;
 		}
 	}
-return result;
+	return result;
 }
 
 int logic::convertNumStringToInt(string description) {

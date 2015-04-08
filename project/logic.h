@@ -65,6 +65,8 @@ public:
 	void searchTask(vector<task> &, vector<task> &, string, string);
 	bool isCheckSearchStringDigit(string);
 	int convertNumStringToInt(string);
+	void searchWord(vector<task> &, string , vector<task> &);
+	void searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec);
 
 	void display(vector<task> &, vector<task> &, string, string);
 	int getSystemDay();

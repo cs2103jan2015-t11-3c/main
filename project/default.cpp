@@ -309,8 +309,6 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	}
 }
 
-
-
 void defaultclass::deleteTask(string fileName,string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
     logic function;
