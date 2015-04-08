@@ -40,7 +40,7 @@ const string MESSAGE_SEARCH_FAILED = "There is no result found";
 const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display command";
 const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
 const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
-
+const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than the end time";
 
 
 //Global Variables
@@ -81,5 +81,10 @@ public:
 	void printMessage(const string);
 	void printMessage( string, const string);
 	
+
+	bool checkIfStartTimeIsEarlierThanEndTime(int,int,int,int,int,int,int,int);
+	bool checkIsSameDate(int,int);
+	bool checkIsSameMonth(int,int);
+	bool checkIsSameYear(int,int);
 };
 

@@ -474,3 +474,25 @@ void logic::printMessage(const string message) {
 void logic::printMessage( string message1, const string message2) {
 	cout << endl << message1 << " " << message2 << endl;
 }
+
+bool logic::checkIfStartTimeIsEarlierThanEndTime (int s_day,int s_month,int s_year,int s_time,int e_day,int e_month,int e_year,int e_time) {
+	bool result = true;
+	
+	if(checkIsSameDate(e_day,s_day) && checkIsSameMonth(e_month,s_month) && checkIsSameYear(e_year,s_year)) {
+		if(s_time >= e_time) {
+			return result;
+		} else {
+			return !result;
+		}
+	}
+}
+
+bool logic::checkIsSameDate(int e_day,int s_day) {
+	return (e_day == s_day);
+}
+bool logic::checkIsSameMonth(int e_month,int s_month) {
+	return (e_month == s_month);
+}
+bool logic::checkIsSameYear(int e_year,int s_year) {
+	return (e_year == s_year);
+}

@@ -29,10 +29,7 @@ public:
 	int getPosOfBy(string);
 	int getPosOfFrom(string);
 
-	void addRecurringTask(string,string,vector<task> &);
-	void addDeadlineAndTimedRecurringTask(string,string,vector<task> &);
-	void addDeadlineRecurTask(string,string,vector<task> &);
-	void addTimedRecurTask(string,string,vector<task> &);
+	void addRecurringTask(string,string,vector<task> &,storage *);
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
@@ -44,8 +41,9 @@ public:
 	bool checkIfIsToday(int,int,int);
 	bool checkIfIsTomorrow(int,int,int);
 
-	void printErrorMsgForAddDeadlineTask(string,task  ,vector<task> &,storage *, int , int , int , int );
-	void printErrorMsgForAddTimedTask (string,task  ,vector<task> &,storage *, int , int , int , int, int, int, int, int);
+
+	bool printErrorMsgForAddDeadlineTask(string,task  ,vector<task> &,storage *, int , int , int , int );
+	bool printErrorMsgForAddTimedTask (string,task  ,vector<task> &,storage *, int , int , int , int, int, int, int, int);
 };
 
 
