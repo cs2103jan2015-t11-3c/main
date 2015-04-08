@@ -259,6 +259,12 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fil
 				pushback(toDoList, tempVec, i);
 			}
 		} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+			unsigned int t = -1;
+			t = (toDoList[i].returntext()).find(description);
+			if(t != -1) {
+				pushback(toDoList, tempVec, i);
+			}
+			
 			int convertedInt = convertNumStringToInt(description);
 			if(toDoList[i].returnstarttime() == convertedInt) {
 				pushback(toDoList, tempVec, i);
