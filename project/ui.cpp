@@ -19,9 +19,10 @@ string fileName = "";
 
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
-void readinput(vector<task> &toDoList,storage * store);
-void showDefaultTaskList(vector<task> &toDoList, vector<task> &floatVec, vector<task> &deadlineVec, vector<task> &timedVec);
-
+void readinput(vector<task> &,storage * );
+void showDefaultTaskList(vector<task> &, vector<task> &, vector<task> &, vector<task> &);
+void printSpace(int);
+void defaultExecution(string ,storage *,string ,vector<task> &,vector<undo> );
 
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
@@ -51,9 +52,7 @@ void printWelcomeMessage() {
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	cout << endl;
 	int pos2=(int)((80-53)/2);
-	for(int i=0;i<pos2;i++) {
-			cout<<" ";
-	}
+	printSpace(pos2);
 	std::cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
@@ -63,9 +62,7 @@ void printWelcomeMessage() {
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	int pos=(int)((80-39)/2);
-	for(int i=0;i<pos;i++) {
-			cout<<" ";
-	}
+	printSpace(pos);
 	std::cout << "Current Singapore Local Time: ";
     std::cout << (now->tm_year + 1900) << '-' 
          << (now->tm_mon + 1) << '-'
@@ -78,11 +75,17 @@ void printWelcomeMessage() {
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
+void printSpace(int pos) {
+	for(int i=0;i<pos;i++) {
+			cout<<" ";
+	}
+}
+
 void readinput(vector<task> &toDoList, storage *store){
 	string command, description;
 	vector<undo> undomemory;
 	defaultclass defaultmemory, defaultfunction;
-	undo currentundomemory, undofunction;
+	undo undofunction;
 	logic function;
 	
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
@@ -93,9 +96,14 @@ void readinput(vector<task> &toDoList, storage *store){
 	cin >> command;
 	getline(cin,description);
 
-	while(command!="exit"){
-		defaultfunction.defaultexecuteCommand(fileName,store,command, description, toDoList, undomemory, currentundomemory);
-	};
+	defaultExecution(command,store,description,toDoList,undomemory);
+}
 
-	
+void defaultExecution(string command,storage *store,string description,vector<task> &toDoList,vector<undo> undomemory) {
+	defaultclass defaultfunction;
+	undo currentundomemory;
+	while(command!="exit"){
+		defaultfunction.defaultexecuteCommand(fileName,store,command, description, 
+			toDoList, undomemory, currentundomemory);
+	};
 }

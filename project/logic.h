@@ -40,7 +40,8 @@ const string MESSAGE_SEARCH_FAILED = "There is no result found";
 const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display command";
 const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
 const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
-
+const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than the end time";
+const string MESSAGE_INVALID_COMMAND = "Command entered is invalid, please try again";
 
 
 //Global Variables
@@ -49,7 +50,7 @@ const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/
 //Class has a vector containing all the entries in the to-do list
 //Contains all functions facilitating add, delete, display, clear and save operations
 //COntains functions that print the messages when user operations are executed, or fail to execute
-class logic{
+class logic {
 public:
 	string displayAll(vector<task> &);
 	
@@ -65,6 +66,8 @@ public:
 	void searchTask(vector<task> &, vector<task> &, string, string);
 	bool isCheckSearchStringDigit(string);
 	int convertNumStringToInt(string);
+	void searchWord(vector<task> &, string , vector<task> &);
+	void searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec);
 
 	void display(vector<task> &, vector<task> &, string, string);
 	int getSystemDay();
@@ -81,5 +84,10 @@ public:
 	void printMessage(const string);
 	void printMessage( string, const string);
 	
+
+	bool checkIfStartTimeIsEarlierThanEndTime(int,int,int,int,int,int,int,int);
+	bool checkIsSameDate(int,int);
+	bool checkIsSameMonth(int,int);
+	bool checkIsSameYear(int,int);
 };
 

@@ -82,6 +82,13 @@ void logic::clearAll(vector<task> &toDoList) {
 	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
 }
 
+void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
+	task task_;
+	task_ = toDoList[index];
+	task_.inserttempnum(index);
+	tempVec.push_back(task_);
+}
+
 void logic::editTask(int index, string description, vector<task> &toDoList) {
 	string TextAfterIndex, VariableToChange, PartTochange, temp, tempdescription;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
@@ -245,20 +252,39 @@ void logic::sortEndTime(vector<task> &toDoList){
 
 
 void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description) {
-	unsigned int i;
-	task task;
-	logic logic;
-
 	tempVec.clear();
 
-	for(i = 0; i < toDoList.size(); ++i) {
-		if(!isCheckSearchStringDigit(description)) { //searched word is not a digit-->can only be found in task name
+	if(!isCheckSearchStringDigit(description)) {
+		searchWord(toDoList,description,tempVec);
+	} else {
+		searchDigit(toDoList,description,tempVec);
+	}
+
+	if( tempVec.size() == 0) {
+		printMessage(MESSAGE_SEARCH_FAILED);
+	} else {
+	    cout << displayAll(tempVec);
+	}
+}
+
+void logic::searchWord(vector<task> &toDoList, string description, vector<task> &tempVec) {
+	for(int i = 0; i < toDoList.size(); ++i) {
+		//searched word is not a digit-->can only be found in task name
 			unsigned int t = -1;
 			t = (toDoList[i].returntext()).find(description);
 			if(t != -1) {
 				pushback(toDoList, tempVec, i);
 			}
-		} else if(isCheckSearchStringDigit(description)) { // searched word is a pure digit-->can only be found in time/date/month/year
+	}
+}
+
+void logic::searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec) {
+	for(int i = 0; i < toDoList.size(); ++i) { // searched word is a pure digit-->can only be found in time/date/month/year
+			unsigned int t = -1;
+			t = (toDoList[i].returntext()).find(description);
+			if(t != -1) {
+				pushback(toDoList, tempVec, i);
+			}
 			int convertedInt = convertNumStringToInt(description);
 			if(toDoList[i].returnstarttime() == convertedInt) {
 				pushback(toDoList, tempVec, i);
@@ -277,12 +303,6 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string fil
 			} else if (toDoList[i].returnendyear() == convertedInt) {
 				pushback(toDoList, tempVec, i);
 			} else {}
-		}
-	}
-	if( tempVec.size() == 0) {
-		printMessage(MESSAGE_SEARCH_FAILED);
-	} else {
-	cout << displayAll(tempVec);
 	}
 }
 
@@ -294,7 +314,7 @@ bool logic::isCheckSearchStringDigit(string description) {
 			result = false;
 		}
 	}
-return result;
+	return result;
 }
 
 int logic::convertNumStringToInt(string description) {
@@ -302,7 +322,6 @@ int logic::convertNumStringToInt(string description) {
 	convertedNum = atoi(description.c_str());
     return convertedNum;
 }
-
 
 
 void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
@@ -410,12 +429,7 @@ int logic::getSystemYear() {
 	return year;
 }
 
-void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
-	task task_;
-	task_ = toDoList[index];
-	task_.inserttempnum(index);
-	tempVec.push_back(task_);
-}
+
 
 //check whether input date is valid function starts here
 bool logic::isleapyear(unsigned short year){
@@ -473,4 +487,26 @@ void logic::printMessage(const string message) {
 
 void logic::printMessage( string message1, const string message2) {
 	cout << endl << message1 << " " << message2 << endl;
+}
+
+bool logic::checkIfStartTimeIsEarlierThanEndTime (int s_day,int s_month,int s_year,int s_time,int e_day,int e_month,int e_year,int e_time) {
+	bool result = true;
+	
+	if(checkIsSameDate(e_day,s_day) && checkIsSameMonth(e_month,s_month) && checkIsSameYear(e_year,s_year)) {
+		if(s_time >= e_time) {
+			return result;
+		} else {
+			return !result;
+		}
+	}
+}
+
+bool logic::checkIsSameDate(int e_day,int s_day) {
+	return (e_day == s_day);
+}
+bool logic::checkIsSameMonth(int e_month,int s_month) {
+	return (e_month == s_month);
+}
+bool logic::checkIsSameYear(int e_year,int s_year) {
+	return (e_year == s_year);
 }

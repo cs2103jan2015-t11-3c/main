@@ -159,6 +159,7 @@ int task::returntempnum(){
 int task::returntemp(){
 	return temp;
 }
+
 string task::displayFloat(int index){
 	ostringstream oss;
 	oss << index+1 << "." << text;
