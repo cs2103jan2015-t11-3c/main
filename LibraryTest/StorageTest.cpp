@@ -9,10 +9,10 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(TestgetFullFileName)
+		TEST_METHOD(TestgetFileNameAndDirectory)
 		{
 			storage s;
-			string testString=s.getFullFileName("C:", "SaveFile");
+			string testString=s.getFileNameAndDirectory("C:", "SaveFile");
 			string expected="C:\\SaveFile";
 			Assert::AreEqual (expected,testString);
 		}

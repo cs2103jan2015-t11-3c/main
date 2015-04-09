@@ -20,7 +20,7 @@ public:
 	vector<task> readToDoListFromTextFile(string fileName) ;
 
 	bool changeDirectory(string newFilePath,string fileName,vector<task> &toDoList);
-    bool storage::changeFileName(string newfileName,vector<task> &toDoList);
+    bool changeFileName(string newfileName,vector<task> &toDoList);
     bool fileExists(const string& fileName);
 	void setFileName(string newFileName);
 	void setFilePath(string newFilePath);

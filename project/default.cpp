@@ -87,11 +87,13 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				if (system("CLS")) system("clear");
 				showDefaultTaskList(toDoList, defaultmemory);
 			}
-			else if(command == "changeDirectory") {
-				string newpath;
-				cin>>newpath;				
-				store->changeDirectory( newpath,fileName,toDoList);
-				cout<<fileName<<endl;
+			else if(command == "changeDirectory") {		
+				store->changeDirectory( description,fileName,toDoList);
+				
+					
+			} 
+			else if(command == "changeFilename") {		
+				store->changeFileName(description,toDoList);		
 					
 			} else {
 				function.printMessage(MESSAGE_INVALID_COMMAND);

@@ -124,6 +124,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	string newFileNameAndDirectory = newFilePath + "\\" + fileName;
 
 	if(fileExists(newFileNameAndDirectory)) {
+		cout<<"File exists already!"<<endl;
 		return false;
 	}
 	 setFilePath(newFilePath);
@@ -144,6 +145,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	 
     string newFileNameAndDirectory = _filePath + "\\" + newfileName;
 	if(fileExists(newFileNameAndDirectory)) {
+		cout<<"FileName exist already!"<<endl;
 		return false;
 	}
 	 setFileName(newFileNameAndDirectory);
