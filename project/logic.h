@@ -41,6 +41,7 @@ const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display comma
 const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
 const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
 const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than the end time";
+const string MESSAGE_INVALID_COMMAND = "Command entered is invalid, please try again";
 
 
 //Global Variables

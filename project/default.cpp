@@ -23,15 +23,23 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 		if(parse.isValidCommand(command, description)) {
 			if(command == "add" || command =="+") {
 				string recurringCommandWord;
-				int end, posOfBy, posOfFrom;
-
+				int end, posOfBy, posOfFrom, recurPeriod;
+				
+                //5 daily name /bysdklfjklsjf
+				//daily
 				end = getEndPosition(description);
 				posOfBy = getPosOfBy(description);
 			    posOfFrom = getPosOfFrom(description);
+				recurPeriod = getRecurPeriod(description);//5
+				if(recurPeriod != 0) {
+					description = description.substr(end+1);
+				} else {
+					description = description;
+				}
 				recurringCommandWord = getRecurruingCommandWord(description);
 
 				if(recurringCommandWord == "daily" ||recurringCommandWord == "weekly" ||recurringCommandWord == "monthly" ||recurringCommandWord == "yearly") {
-					addRecurringTask(recurringCommandWord,description, toDoList,store);
+					addRecurringTask(recurPeriod,recurringCommandWord,description, toDoList,store);
 				} else {
 					if(parse.checktype(description) == "float") {
 						addFloatTask(description,toDoList,store);
@@ -85,6 +93,8 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				store->changeDirectory( newpath,fileName,toDoList);
 				cout<<fileName<<endl;
 					
+			} else {
+				function.printMessage(MESSAGE_INVALID_COMMAND);
 			}
 		}
 		function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
@@ -94,92 +104,25 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	}
 }
 
-bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
-	string temp;
-	parser parse;
-	logic function;
-	int index, size;
+//weekly
+//10 weekly
 
+int defaultclass::getRecurPeriod(string description) {
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
 
-	istringstream in(description);
-	in>> temp;
-	in>> index;
-	index = index -1;
+	string recurPeriod = description.substr(start, end - start);
 
-	if(temp == "float"){
-		size = defaultmemory.floatVec.size();
-
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.floatVec[index].returntempnum();
-	} else if(temp == "today"){ 
-		size = defaultmemory.todayTaskVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.todayTaskVec[index].returntempnum();
-	} else if(temp == "tomorrow"){
-		size = defaultmemory.tomorTaskVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.tomorTaskVec[index].returntempnum();
-	} else {
-		istringstream intemp(description);
-		intemp >> index;
-		index = index - 1;
-
-		size = tempVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = tempVec[index].returntempnum();
-	}
-	return true;
-}
-
-void defaultclass::updatedefaultmemory(vector<task> &toDoList){
-	vector<task> floatVec_;
-	task temp;
-	int index, i = 0, j = 0, k = 0;
-
-	for(index = 0; index != toDoList.size(); ++index) {
-		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
-			   todayTaskVec.push_back(toDoList[index]);
-			   todayTaskVec[i].inserttempnum(index);
-			   i++;
-		} else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
-			   tomorTaskVec.push_back(toDoList[index]);
-			   tomorTaskVec[j].inserttempnum(index);
-			   j++;
-		} else if(toDoList[index].returntype() =="float"){
-			floatVec_.push_back(toDoList[index]);
-			floatVec_[k].inserttempnum(index);
-			k++;
+	for(int i = 0; i < recurPeriod.size(); ++i) {
+		if(!isdigit(recurPeriod[i])) {
+			return 0;
+		} else {
+			int convertedNum;
+			convertedNum = atoi(recurPeriod.c_str());
+			return convertedNum;
 		}
 	}
-	floatVec = floatVec_;
 }
-
-
-
 
 string defaultclass::getRecurruingCommandWord(string description) {
 	int start = getStartPosition(description);
@@ -222,7 +165,7 @@ int defaultclass::getPosOfFrom(string description) {
 	return posOfFrom;
 }
 
-void defaultclass::addRecurringTask(string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
+void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
 	parser parse;
 	string text;
@@ -243,7 +186,7 @@ void defaultclass::addRecurringTask(string recurringCommandWord, string descript
 		if(printErrorMsgForAddDeadlineTask( text,  datainput, toDoList, store, e_date,  e_month,  e_year,  e_time)) {
 		} else {
 			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-	        recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
+	        recurTask.AddRecurring(recurPeriod,recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 		}
 	} else {
 		text = description.substr(end+1,posOfFrom-1-end);
@@ -253,7 +196,7 @@ void defaultclass::addRecurringTask(string recurringCommandWord, string descript
 		if(printErrorMsgForAddTimedTask( text, datainput,toDoList, store,  e_date, e_month,  e_year,  e_time,  s_date, s_month,  s_year,  s_time)) {
 		} else {
 			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-	        recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
+	        recurTask.AddRecurring(recurPeriod,recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
 		}
 	}
 }
@@ -365,7 +308,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	defaultDeadlineDisplay(defaultmemory);
 	
 
-    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
+    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "===========================================================" << endl;
 	function.sortEndTime(defaultmemory.tomorTaskVec);
 	defaultTimedDisplay(defaultmemory);
 	
@@ -522,4 +465,88 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 	} else{
 		return false;
 	}
+}
+
+bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
+	string temp;
+	parser parse;
+	logic function;
+	int index, size;
+
+
+	istringstream in(description);
+	in>> temp;
+	in>> index;
+	index = index -1;
+
+	if(temp == "float"){
+		size = defaultmemory.floatVec.size();
+
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.floatVec[index].returntempnum();
+	} else if(temp == "today"){ 
+		size = defaultmemory.todayTaskVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.todayTaskVec[index].returntempnum();
+	} else if(temp == "tomorrow"){
+		size = defaultmemory.tomorTaskVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.tomorTaskVec[index].returntempnum();
+	} else {
+		istringstream intemp(description);
+		intemp >> index;
+		index = index - 1;
+
+		size = tempVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = tempVec[index].returntempnum();
+	}
+	return true;
+}
+
+void defaultclass::updatedefaultmemory(vector<task> &toDoList){
+	vector<task> floatVec_;
+	task temp;
+	int index, i = 0, j = 0, k = 0;
+
+	for(index = 0; index != toDoList.size(); ++index) {
+		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
+			   todayTaskVec.push_back(toDoList[index]);
+			   todayTaskVec[i].inserttempnum(index);
+			   i++;
+		} else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
+			   tomorTaskVec.push_back(toDoList[index]);
+			   tomorTaskVec[j].inserttempnum(index);
+			   j++;
+		} else if(toDoList[index].returntype() =="float"){
+			floatVec_.push_back(toDoList[index]);
+			floatVec_[k].inserttempnum(index);
+			k++;
+		}
+	}
+	floatVec = floatVec_;
 }

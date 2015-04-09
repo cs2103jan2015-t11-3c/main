@@ -29,8 +29,9 @@ public:
 	int getPosOfBy(string);
 	int getPosOfFrom(string);
 
+	int getRecurPeriod(string );
 	string getRecurruingCommandWord(string);
-	void addRecurringTask(string,string,vector<task> &,storage *);
+	void addRecurringTask(int,string,string,vector<task> &,storage *);
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
