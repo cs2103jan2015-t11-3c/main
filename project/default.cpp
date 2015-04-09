@@ -30,18 +30,8 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 			    posOfFrom = getPosOfFrom(description);
 				recurringCommandWord = getRecurruingCommandWord(description);
 
-				if(recurringCommandWord=="daily") {
-					recurringCommandWord=="daily";
-					addRecurringTask(recurringCommandWord,description, toDoList);
-				} else if(recurringCommandWord=="weekly") {
-					recurringCommandWord=="weekly";
-					addRecurringTask(recurringCommandWord,description, toDoList);
-				} else if (recurringCommandWord=="monthly") {
-					recurringCommandWord=="monthly";
-					addRecurringTask(recurringCommandWord,description, toDoList);
-				} else if(recurringCommandWord=="yearly") {
-					recurringCommandWord=="yearly";
-					addRecurringTask(recurringCommandWord,description, toDoList);
+				if(recurringCommandWord == "daily" ||recurringCommandWord == "weekly" ||recurringCommandWord == "monthly" ||recurringCommandWord == "yearly") {
+					addRecurringTask(recurringCommandWord,description, toDoList,store);
 				} else {
 					if(parse.checktype(description) == "float") {
 						addFloatTask(description,toDoList,store);
@@ -232,67 +222,40 @@ int defaultclass::getPosOfFrom(string description) {
 	return posOfFrom;
 }
 
-void defaultclass::addRecurringTask(string recurringCommandWord, string description, vector<task> & toDoList) {
+void defaultclass::addRecurringTask(string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
-	
+	parser parse;
+	string text;
+	storage *stor = store;
+	logic function;
+
 	end = getEndPosition(description);
 	posOfBy = getPosOfBy(description);
 	posOfFrom = getPosOfFrom(description);
 
 	description = description.substr(end+1);
 
-	addDeadlineAndTimedRecurringTask(description,recurringCommandWord,toDoList);
-}
-
-void defaultclass::addDeadlineAndTimedRecurringTask(string description,string recurringCommandWord,vector<task> &toDoList) {
-	parser parse;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
-
-	end = getEndPosition(description);
-	posOfBy = getPosOfBy(description);
-	posOfFrom = getPosOfFrom(description);
-	
 	if(parse.checktype(description) == "deadline") {
-		addDeadlineRecurTask(description,recurringCommandWord,toDoList);
+		text = description.substr(end+1,posOfBy-1-end);
+	    parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
+	    recurringTask recurTask(text,0,e_time);
+		task datainput(text);
+		if(printErrorMsgForAddDeadlineTask( text,  datainput, toDoList, store, e_date,  e_month,  e_year,  e_time)) {
+		} else {
+			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
+	        recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
+		}
 	} else {
-		addTimedRecurTask(description,recurringCommandWord,toDoList);
+		text = description.substr(end+1,posOfFrom-1-end);
+	    parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+	    recurringTask recurTask(text,s_time,e_time);
+		task datainput(text);
+		if(printErrorMsgForAddTimedTask( text, datainput,toDoList, store,  e_date, e_month,  e_year,  e_time,  s_date, s_month,  s_year,  s_time)) {
+		} else {
+			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
+	        recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,"timed",toDoList);
+		}
 	}
-}
-
-void defaultclass::addDeadlineRecurTask(string description,string recurringCommandWord, vector<task> &toDoList) {
-	string text;
-	parser parse;
-	int e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
-
-	end = getEndPosition(description);
-	posOfBy = getPosOfBy(description);
-	posOfFrom = getPosOfFrom(description);
-
-	string type;
-	type = "deadline";
-
-    text = description.substr(end+1,posOfBy-1-end);
-	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
-	recurringTask recurTask(text,0,e_time);
-	recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,0,0,0,type,toDoList);
-}
-
-void defaultclass::addTimedRecurTask(string description,string recurringCommandWord, vector<task> &toDoList) {
-	string text;
-	parser parse;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
-
-	end = getEndPosition(description);
-	posOfBy = getPosOfBy(description);
-	posOfFrom = getPosOfFrom(description);
-
-	string type;
-	type = "timed";
-
-	text = description.substr(end+1,posOfFrom-1-end);
-	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-	recurringTask recurTask(text,s_time,e_time);
-	recurTask.AddRecurring(recurringCommandWord,e_date,e_month,e_year,s_date,s_month,s_year,type,toDoList);
 }
 
 void defaultclass::addFloatTask(string description,vector<task> &toDoList,storage *store) {
@@ -315,28 +278,38 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	string text;
 	parser parse;
 	storage *stor = store;
+	logic function;
 	int e_date, e_month, e_year, e_time;
 
 
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
-	printErrorMsgForAddDeadlineTask( text,datainput,toDoList, store, e_date,  e_month,  e_year,  e_time);
-}
 
+	if(printErrorMsgForAddDeadlineTask( text,datainput,toDoList, store, e_date,  e_month,  e_year,  e_time)) {
+	} else {
+		toDoList.push_back(datainput);
+		function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
+	}
+}
 
 void defaultclass::addTimedTask(string description,vector<task> &toDoList,storage *store) {
 	string text;
 	parser parse;
+	logic function;
 	storage *stor = store;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
-	printErrorMsgForAddTimedTask(text,datainput, toDoList, store,e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time); 					
-}
 
+	if(printErrorMsgForAddTimedTask(text,datainput, toDoList, store,e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time)) {
+	} else {
+		toDoList.push_back(datainput);
+		function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
+	}
+}
 
 void defaultclass::deleteTask(string fileName,string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
@@ -370,6 +343,7 @@ void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoL
     store->saveToSaveFile(fileName,toDoList);
 }
 
+
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
 	int index, i;
 	logic function;
@@ -383,15 +357,29 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 
 	function.sorttext(defaultmemory.floatVec);
 	cout << endl << "[Floating]" << "===================================================================="<< endl << endl;
-	for(index = 0; index != defaultmemory.floatVec.size(); ++index) {
-		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
-	}
+	defaultFloatDisplay(defaultmemory);
 
 	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" 
 		<< "============================================================" << endl << endl;
 	function.sortEndTime(defaultmemory.todayTaskVec);
+	defaultDeadlineDisplay(defaultmemory);
+	
 
-	for(i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
+    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
+	function.sortEndTime(defaultmemory.tomorTaskVec);
+	defaultTimedDisplay(defaultmemory);
+	
+	cout <<endl;
+}
+
+void defaultclass::defaultFloatDisplay(defaultclass &defaultmemory) {
+	for(int index = 0; index != defaultmemory.floatVec.size(); ++index) {
+		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
+	}
+}
+
+void defaultclass::defaultDeadlineDisplay(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
 		s_day=defaultmemory.todayTaskVec[i].returnstartdate();
@@ -407,11 +395,10 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
 	}
+}
 
-    cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "============================================================" << endl;
-	function.sortEndTime(defaultmemory.tomorTaskVec);
-
-	for(i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
+void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
 		s_day=defaultmemory.tomorTaskVec[i].returnstartdate();
@@ -427,8 +414,8 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 		cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i)<<endl;
 		}
 	}
-	cout <<endl;
 }
+
 
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	logic logic;
@@ -453,53 +440,86 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 
 
 
-void defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, int e_date, int e_month, int e_year, int e_time) {
+bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, 
+												   int e_date, int e_month, int e_year, int e_time) {
 	
     logic function;
 	storage *stor = store;
+	bool result = true;
 
 	if (system("CLS")) system("clear");
-	if(!store->isDeadlineDuplicated(datainput, toDoList)){
-		if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
-			function.printMessage(MESSAGE_DATE_OVERDUE);
-		} else if(function.isValidDate(e_date,e_month,e_year)&&function.isValidTime(e_time)&&function.isValidTime(e_time)) {
-			toDoList.push_back(datainput);
-			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-		} else if(!function.isValidDate(e_date,e_month,e_year)) {
-			function.printMessage(MESSAGE_DATE_INVALID);
-		} else if(!function.isValidTime(e_time)) {
-			function.printMessage(MESSAGE_TIME_INVALID);
-		} 
-	} else {
+	if(store->isDeadlineDuplicated(datainput, toDoList)) {
 		function.printMessage(MESSAGE_DUPLICATE_DEADLINE_TASK);
+	} else if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !function.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_DATE_OVERDUE);
+		cout << "and";
+		function.printMessage(MESSAGE_TIME_INVALID);
+	} else if(!function.isValidDate(e_date,e_month,e_year) && !function.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_DATE_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_TIME_INVALID);
+	} else if (!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+			function.printMessage(MESSAGE_DATE_OVERDUE);
+	} else if(!function.isValidDate(e_date,e_month,e_year)) {
+			function.printMessage(MESSAGE_DATE_INVALID);
+	} else if (!function.isValidTime(e_time)) {
+			function.printMessage(MESSAGE_TIME_INVALID);
+	} else{
+		return false;
 	}
 }
 
-void defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
+//upadte
+bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, 
+												int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
     logic function;
 	storage *stor = store;
+	bool result = true;
 
 	if (system("CLS")) system("clear");
-	if(!store->isTimeClashed(datainput, toDoList)){
-		if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
-			function.printMessage(MESSAGE_END_DATE_OVERDUE);
-		} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
-			function.printMessage(MESSAGE_START_DATE_OVERDUE);
-		} else if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
-			function.printMessage(MESSAGE_BOTH_DATE_INVALID);
-		} else if(!function.isValidDate(s_date,s_month,s_year)) {
-			function.printMessage(MESSAGE_START_DATE_INVALID);
-		} else if(!function.isValidDate(e_date,e_month,e_year)) {
-			function.printMessage(MESSAGE_END_DATE_INVALID);
-		} else if(!function.isValidTime(s_time)) {
-			function.printMessage(MESSAGE_START_TIME_INVALID);
-		} else if(!function.isValidTime(e_time)) {
-			function.printMessage(MESSAGE_END_TIME_INVALID);
-		} else{
-			toDoList.push_back(datainput);
-			function.printMessage(text, MESSAGE_ITEM_ADDED_SUCCESSFULLY);
-		} 
-	} else {
+	if (function.checkIfStartTimeIsEarlierThanEndTime(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time)) {
+		function.printMessage(MESSAGE_START_AND_END_TIME_ERROR);
+	} else if (store->isTimeClashed(datainput, toDoList)) {
 		function.printMessage(MESSAGE_TIME_SLOT_CLASH);
+	} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !function.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+	} else if(!function.isValidTime(s_time) && !function.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_START_DATE_INVALID);
+	} else if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !function.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if(!function.isValidTime(e_time) && !function.isValidDate(e_date,e_month,e_year)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_INVALID);
+	} else if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_BOTH_DATE_INVALID);
+	} else if(!function.isValidTime(e_time) && !function.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+	} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if(!function.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+	} else if(!function.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+	} else if (!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+	} else if (!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if (!function.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_START_DATE_INVALID);
+	} else if(!function.isValidDate(e_date,e_month,e_year)) {
+		function.printMessage(MESSAGE_END_DATE_INVALID);
+	} else{
+		return false;
 	}
 }
