@@ -23,7 +23,7 @@ namespace UnitTest
 			task NewTask("shopping");
 			vector <task> Itemlist;
 			task Existing("shopping");
-			Existing.addItemtypeone();
+			Existing.addFloatItem();
 			Itemlist.push_back(Existing);
 			bool expected=true;
 			bool duplicated=s.isFloatDuplicated(NewTask,Itemlist);

@@ -206,7 +206,7 @@ void defaultclass::addFloatTask(string description,vector<task> &toDoList,storag
 	logic function;
 
 	task datainput(description);
-	datainput.addItemtypeone();
+	datainput.addFloatItem();
 
 	if (system("CLS")) system("clear");
 	if(!store->isFloatDuplicated(datainput, toDoList)) {
@@ -227,7 +227,7 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	task datainput(text);
-	datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
+	datainput.addDeadlineItem(e_date, e_month, e_year, e_time);
 
 	if(printErrorMsgForAddDeadlineTask( text,datainput,toDoList, store, e_date,  e_month,  e_year,  e_time)) {
 	} else {
@@ -245,7 +245,7 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	task datainput(text);
-	datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+	datainput.addTimedItem(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 
 	if(printErrorMsgForAddTimedTask(text,datainput, toDoList, store,e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time)) {
 	} else {

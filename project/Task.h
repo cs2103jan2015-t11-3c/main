@@ -20,9 +20,9 @@ public:
 	task(void);
 	~task(void);
 	task(string task);
-	void addItemtypeone();
-	void addItemtypetwo(int _e_date, int _e_month, int _e_year, int _e_time);
-	void addItemtypethree(int _s_date, int _s_month, int _s_year, int _s_time, 
+	void addFloatItem();
+	void addDeadlineItem(int _e_date, int _e_month, int _e_year, int _e_time);
+	void addTimedItem(int _s_date, int _s_month, int _s_year, int _s_time, 
 		                  int _e_date, int _e_month, int _e_year, int _e_time);
 
 	void edittext(string PartTochange);

@@ -26,12 +26,12 @@ void task::inserttempnum(int index){
 	tempnum = index;
 };
 
-void task::addItemtypeone(){
+void task::addFloatItem(){
 	type = "float";
 
 }
 
-void task::addItemtypetwo( int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::addDeadlineItem( int _e_date, int _e_month, int _e_year, int _e_time){ 
 
 	e_date= _e_date;
 	e_month= _e_month;
@@ -41,7 +41,7 @@ void task::addItemtypetwo( int _e_date, int _e_month, int _e_year, int _e_time){
 
 }
 
-void task::addItemtypethree( int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
+void task::addTimedItem( int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
 	
 	s_date= _s_date;
 	s_month= _s_month;
