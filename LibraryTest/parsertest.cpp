@@ -10,6 +10,16 @@ namespace LibraryTest
 	{
 	public:
 		
+		TEST_METHOD(TestNoDescription)
+		{
+		    parser p;
+			string testCommand = "add";
+			string testDescription="";
+			int expected = 0;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
 		TEST_METHOD(TestValidCommand)
 		{
 		    parser p;
@@ -21,18 +31,6 @@ namespace LibraryTest
 			int testDone=p.isValidCommand("clear",testDescription);
 			Assert::AreEqual (expected,testDone);
 		
-		}
-
-
-
-		TEST_METHOD(TestNoDescription)
-		{
-		    parser p;
-			string testCommand = "add";
-			string testDescription="";
-			int expected = 0;
-			int test=p.isValidCommand(testCommand,testDescription);
-			Assert::AreEqual (expected,test);
 		}
 
 		TEST_METHOD(TestInValidCommand)
