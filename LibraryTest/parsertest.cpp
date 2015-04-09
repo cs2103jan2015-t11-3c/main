@@ -98,26 +98,7 @@ namespace LibraryTest
 		
 		}
 
-		TEST_METHOD(TesttrimString)
-		{
-		    parser p;
-			string testString="   dec ";
-			p.trimString(testString);
-			string expected ="dec";
-			Assert::AreEqual (testString, expected);
-		
-		}
-
-		TEST_METHOD(TestconvertMonth)
-		{
-		    parser p;
-			int testString = p.convertMonth("dec");
-			int expected =12;
-			Assert::AreEqual (testString, expected);
-		
-		}
-
-		TEST_METHOD(TestsplitinputDeadline)
+			TEST_METHOD(TestsplitinputDeadline)
 		{
 		    parser p;
 			string description="meeting /by 1100 on 23/04/2015";
@@ -136,5 +117,18 @@ namespace LibraryTest
 			Assert::AreEqual (e_time,Expe_time );
 		
 		}
+
+		TEST_METHOD(TesttrimString)
+		{
+		    parser p;
+			string testString="   dec ";
+			p.trimString(testString);
+			string expected ="dec";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+
+	
 	};
 }

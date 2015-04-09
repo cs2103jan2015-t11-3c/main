@@ -29,20 +29,6 @@ string storage::toString(vector<task> &toDoList) {
 	return oss.str();
 }
 
-void storage::displayAll(const string fileName) {
-	ostringstream oss;
-	
-		for(unsigned i=0;i<_toDoList.size();i++)
-			oss << i+1 << ". " <<_toDoList[i].returntext() <<endl
-			<< "Start: "<<_toDoList[i]. returnstartdate()<<"/"<<" "<<_toDoList[i].returnstartmonth()<<"/"<<" "<<_toDoList[i].returnstartyear()<<"\t"<<_toDoList[i].returnstarttime()<<endl
-			<< "End: "<< _toDoList[i].returnenddate()<<"/"<<" "<<_toDoList[i].returnendmonth()<<"/"<<" "<<_toDoList[i].returnendyear()<<"\t "<<_toDoList[i].returnendtime()<<endl
-			<< "Type: "<<_toDoList[i].returntype()<<endl
-			<<"Completed: "<<_toDoList[i].returnstatus()<<endl<<endl;
-
-	cout << oss.str();
-}
-
-
 
 void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	fstream textFile;
