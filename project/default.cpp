@@ -359,7 +359,6 @@ void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
 	}
 }
 
-
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	logic logic;
 	
@@ -379,9 +378,6 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 		return false;
 	}
 }
-
-
-
 
 bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, 
 												   int e_date, int e_month, int e_year, int e_time) {

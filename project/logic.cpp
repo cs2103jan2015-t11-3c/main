@@ -323,14 +323,9 @@ int logic::convertNumStringToInt(string description) {
     return convertedNum;
 }
 
-
-void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
-	int size, day, month, year, count = 0;
-	size = toDoList.size();
-
-	if(description == "today"){
-		count++;
-		for(int i=0; i<size; i++){
+void logic::displayToday(vector<task> &tempVec, vector<task> &toDoList,int size) {
+	int day, month, year;
+	for(int i=0; i<size; i++) {
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
 			year = toDoList[i].returnendyear();
@@ -338,10 +333,11 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "tomorrow" || description == "tmr" || description == "tomor"){
-		count++;
-		for(int i=0; i<size; i++){
+}
+
+void logic::displayTomorrow(vector<task> &tempVec, vector<task> &toDoList,int size) {
+	int day, month, year;
+	for(int i=0; i<size; i++){
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
 			year = toDoList[i].returnendyear();
@@ -349,61 +345,101 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "not done"){
-		count++;
+}
+
+void logic::displayNotDone(int size,vector<task> &toDoList,vector<task> &tempVec) {
 		for(int i=0; i<size; i++){
 			bool status = toDoList[i].returnstatus();
 			if(status == false){
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "done"){
-		count++;
-		for(int i=0; i<size; i++){
+}
+
+void logic::displayDone(int size,vector<task> &toDoList,vector<task> &tempVec) {
+	for(int i=0; i<size; i++){
 			bool status = toDoList[i].returnstatus();
 			if(status == true){
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "float"){
-		count++;
-		for(int i=0; i<size; i++){
+}
+
+void logic::displayFloat(int size,vector<task> &toDoList,vector<task> &tempVec) {
+	for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type == "float"){
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "deadline"){
-		count++;
-		for(int i=0; i<size; i++){
+}
+
+void logic::displayDeadline(int size,vector<task> &toDoList,vector<task> &tempVec) {
+	for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type =="deadline"){
 				pushback(toDoList, tempVec, i);
 			}
 		}
-	}
-	else if(description == "timed"){
-		count++;
-		for(int i=0; i<size; i++){
+}
+
+void logic::displayTimed(int size,vector<task> &toDoList,vector<task> &tempVec) {
+	for(int i=0; i<size; i++){
 			string type = toDoList[i].returntype();
 			if(type =="timed"){
 				pushback(toDoList, tempVec, i);
 			}
 		}
+}
+
+void logic::displayEverything(int size,vector<task> &toDoList,vector<task> &tempVec) {
+	for(int i=0; i<size; i++) {
+			pushback(toDoList, tempVec, i);
+	}
+}
+
+void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
+	int size, day, month, year;
+	int count = 0;
+	size = toDoList.size();
+
+	if(description == "today"){
+		count++;
+		displayToday(tempVec, toDoList, size);
+	}
+	else if(description == "tomorrow" || description == "tmr" || description == "tomor"){
+		count++;
+		displayTomorrow(tempVec, toDoList, size);
+	}
+	else if(description == "not done"){
+		count++;
+		displayNotDone(size,toDoList,tempVec);
+	}
+	else if(description == "done"){
+		count++;
+		displayDone(size,toDoList,tempVec);
+	}
+	else if(description == "float"){
+		count++;
+		displayFloat(size,toDoList,tempVec);
+	}
+	else if(description == "deadline"){
+		count++;
+		displayDeadline(size,toDoList,tempVec);
+	}
+	else if(description == "timed"){
+		count++;
+		displayTimed(size,toDoList,tempVec);
 	} 
 	else if(description == "all"){
 		count++;
-		for(int i=0; i<size; i++)
-			pushback(toDoList, tempVec, i);
+		displayEverything(size,toDoList,tempVec);
 	}
+
 	if(count == 0) {
 		printMessage(MESSAGE_INVALID_DISPLAY_COMMAND);
 	} else {
-	cout << displayAll(tempVec);
+		cout << displayAll(tempVec);
 	}
 }
 
