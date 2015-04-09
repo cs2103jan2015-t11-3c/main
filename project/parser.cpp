@@ -270,15 +270,14 @@ string parser::shortForm(string description){
 }
 
 void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
-		logic getDate;
 			if(shortForm(description)=="today"){
-			e_date=getDate.getSystemDay();		
+			e_date=getSystemDay();		
 			}
 			if(shortForm(description)=="tomorrow"){
-			e_date=getDate.getSystemDay()+1;
+			e_date=getSystemDay()+1;
 			}
-			e_month=getDate.getSystemMonth();
-			e_year=getDate.getSystemYear();
+			e_month=getSystemMonth();
+			e_year=getSystemYear();
 }
 
 
@@ -289,4 +288,25 @@ int parser::convertMonth(string month){
 		else{
 			return convertAlphabetMonthToInteger(month);
 		}
+}
+
+int parser::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+int parser::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+int parser::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
 }

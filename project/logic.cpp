@@ -325,11 +325,12 @@ int logic::convertNumStringToInt(string description) {
 
 void logic::displayToday(vector<task> &tempVec, vector<task> &toDoList,int size) {
 	int day, month, year;
+	parser parse;
 	for(int i=0; i<size; i++) {
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
 			year = toDoList[i].returnendyear();
-			if(day == getSystemDay() && (month == getSystemMonth())&& (year == getSystemYear())){
+			if(day == parse.getSystemDay() && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
 				pushback(toDoList, tempVec, i);
 			}
 		}
@@ -337,11 +338,12 @@ void logic::displayToday(vector<task> &tempVec, vector<task> &toDoList,int size)
 
 void logic::displayTomorrow(vector<task> &tempVec, vector<task> &toDoList,int size) {
 	int day, month, year;
+	parser parse;
 	for(int i=0; i<size; i++){
 			day = toDoList[i].returnenddate();
 			month = toDoList[i].returnendmonth();
 			year = toDoList[i].returnendyear();
-			if((day == (getSystemDay())+1) && (month == getSystemMonth())&& (year == getSystemYear())){
+			if((day == (parse.getSystemDay())+1) && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
 				pushback(toDoList, tempVec, i);
 			}
 		}
@@ -444,26 +446,7 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 }
 
 
-int logic::getSystemDay() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int day = timePtr->tm_mday;
-	return day;
-}
 
-int logic::getSystemMonth() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int month = timePtr->tm_mon + 1;
-	return month;
-}
-
-int logic::getSystemYear() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int year = timePtr->tm_year+1900;
-	return year;
-}
 
 
 

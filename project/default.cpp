@@ -362,9 +362,9 @@ void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
 }
 
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
-	logic logic;
+	parser parse;
 	
-	if(e_day == logic.getSystemDay() && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+	if(e_day == parse.getSystemDay() && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
 		return false;
@@ -372,9 +372,9 @@ bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 }
 
 bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
-	logic logic;
+	parser parse;
 	
-	if(e_day == (logic.getSystemDay()+1) && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+	if(e_day == (parse.getSystemDay()+1) && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
 		return false;

@@ -31,6 +31,10 @@ public:
 	void getInfo(string description, int &e_date, int &e_month, int &e_year);
 	int convertMonth(string month);
 
+	int getSystemDay();
+	int getSystemMonth();
+	int getSystemYear();
+
 
 };
 

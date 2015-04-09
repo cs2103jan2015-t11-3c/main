@@ -72,9 +72,7 @@ public:
 	void display(vector<task> &, vector<task> &, string, string);
 
 
-	int getSystemDay();
-	int getSystemMonth();
-	int getSystemYear();
+	
 
 	void pushback(vector<task>& , vector<task>& , int );
 
