@@ -14,11 +14,11 @@ bool parser::isValidCommand(const string command, const string description){
 		return true;
 	}
 
-	else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||
-		    command=="exit"||command=="undo"||command=="search"||command=="default"|| "changeDirectory")
+	 else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||
+		    command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory")
 		return true;
 
-	else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"||command=="done"){
+	 else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"||command=="done"){
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_INDEX);
 			return false;
@@ -182,7 +182,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 
 
 int parser::convertAlphabetMonthToInteger (string month) {
-	int monthInt;
+	int monthInt=0;
 	if (month == "Jan" || month == "jan") {
 		monthInt = 1;
 	}
@@ -264,6 +264,8 @@ string parser::shortForm(string description){
 	int p=description.find("tmr");
 	if(p!=-1)
 		return "tomorrow";
+
+	//use exception
 
 }
 
