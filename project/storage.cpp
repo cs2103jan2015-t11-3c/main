@@ -7,10 +7,28 @@
 
 storage::storage(void)
 {
+	_filePath="";
+	_fileName="SaveFile";
 }
 
 storage::~storage(void)
 {
+}
+
+void storage::setFileName(string newFileName) {
+	_fileName = newFileName;
+}
+
+void storage::setFilePath(string newFilePath) {
+	_filePath = newFilePath;
+}
+
+string storage::getCurrentFileName() {
+	return _fileName;
+}
+
+string storage::getCurrentFilePath() {
+	return _filePath;
 }
 
 string storage::toString(vector<task> &toDoList) {
@@ -33,7 +51,7 @@ string storage::toString(vector<task> &toDoList) {
 void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	fstream textFile;
 	
-	textFile.open(fileName, fstream::out);
+	textFile.open(getFileNameAndDirectory(_filePath,fileName), fstream::out);
 	textFile << toString(toDoList);
 	textFile.close();
 	
@@ -103,15 +121,15 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 
  bool storage::changeDirectory(string newFilePath, string fileName,vector<task> &toDoList){
 	 
-	string newFullFileName = newFilePath + "\\" + fileName;
+	string newFileNameAndDirectory = newFilePath + "\\" + fileName;
 
-	if(fileExists(newFullFileName)) {
+	if(fileExists(newFileNameAndDirectory)) {
 		return false;
 	}
-
+	 setFilePath(newFilePath);
 	// string URL=newFilePath +  fileName;
 	fstream outFile;
-	outFile.open(getFullFileName(newFilePath,fileName), fstream::out | fstream::app);
+	outFile.open(getFileNameAndDirectory(newFilePath,fileName), fstream::out | fstream::app);
 	
 	//outFile.open(URL.c_str(),fstream::out);
 	outFile<< toString(toDoList);
@@ -121,12 +139,29 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	
 	return true;
 }
- 
+
+ bool storage::changeFileName(string newfileName,vector<task> &toDoList){
+	 
+    string newFileNameAndDirectory = _filePath + "\\" + newfileName;
+	if(fileExists(newFileNameAndDirectory)) {
+		return false;
+	}
+	 setFileName(newFileNameAndDirectory);
+	fstream outFile;
+	outFile.open(getFileNameAndDirectory(_filePath,newfileName), fstream::out | fstream::app);
+	
+	outFile<< toString(toDoList);
+	outFile.close();
+
+	system("del SaveFile");
+	
+	return true;
+}
  bool storage::fileExists(const string& fileName) {
 	return (ifstream(fileName.c_str()));
 }
 
- string storage::getFullFileName(string filePath, string fileName) {
+ string storage::getFileNameAndDirectory(string filePath, string fileName) {
 	if(filePath == "") {
 		return fileName;
 	} else {
