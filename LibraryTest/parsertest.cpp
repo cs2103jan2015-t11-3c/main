@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace LibraryTest
@@ -8,7 +9,7 @@ namespace LibraryTest
 	TEST_CLASS(parsertest)
 	{
 	public:
-		/*
+		
 		TEST_METHOD(TestValidCommand)
 		{
 		    parser p;
@@ -28,6 +29,6 @@ namespace LibraryTest
 			Assert::AreEqual (testString, expected);
 		
 		}
-		*/
+		
 	};
 }
