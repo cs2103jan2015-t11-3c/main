@@ -6,7 +6,7 @@
 //Checks if the description entered is valid for the command entered
 //Prints error messages if either of the aforementioned conditions are not met
 bool parser::isValidCommand(const string command, const string description){
-	if(command=="add"||command=="+") {
+	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
