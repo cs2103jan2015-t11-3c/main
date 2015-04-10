@@ -70,7 +70,7 @@ string logic::displayAll(vector<task> &tempVec) {
 }
 
 void logic::deleteItem(const int index, vector<task> &toDoList) {
-		cout << toDoList[index].returntext() ;
+		//cout << toDoList[index].returntext() ;
 		if (system("CLS")) system("clear");
 		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
 		toDoList.erase(toDoList.begin()+index);

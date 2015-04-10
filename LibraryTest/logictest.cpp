@@ -1,34 +1,49 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <vector>
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace LibraryTest
 {		
-	TEST_CLASS(parsertest)
+	TEST_CLASS(logictest)
 	{
 	public:
 		
-		TEST_METHOD(TestValidCommand)
+		TEST_METHOD(TestDeleteItem)
 		{
-		    parser p;
-			string testCommand = "add";
-			string testDescription="shopping";
-			int expected = 1;
-			int test=p.isValidCommand(testCommand,testDescription);
-			Assert::AreEqual (test, expected);
-		
+			vector<task> toDoList;
+			logic function;
+			int size, actualsize = 9, index = 5;
+			storage store;
+
+			for(int i = 0; i < 10; i++){
+				task datainput("deleteTest");
+				datainput.addItemtypeone();
+				toDoList.push_back(datainput);
+			}
+
+			function.deleteItem(index, toDoList);
+			size = toDoList.size();
+			Assert::AreEqual (actualsize, size);
 		}
 
-		TEST_METHOD(TestconvertAlphabetMonthToInteger)
+		TEST_METHOD(TestClearItem)
 		{
-		     parser p;
-			int testString = p.convertAlphabetMonthToInteger("jan");
-			int expected = 1;
-			Assert::AreEqual (testString, expected);
-		
+			vector<task> toDoList;
+			logic function;
+			int actualsize = 0, size;
+						
+			for(int i = 0; i < 10; i++){
+			task datainput("clearTest");
+			datainput.addItemtypeone();
+			toDoList.push_back(datainput);
+			}
+
+			function.clearAll(toDoList);
+			size = toDoList.size();
+			Assert::AreEqual (actualsize, size);
 		}
-		
 	};
 }

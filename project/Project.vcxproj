@@ -75,9 +75,9 @@
     <ClCompile Include="recurringTask.cpp" />
     <ClCompile Include="storage.cpp" />
     <ClCompile Include="Task.cpp" />
+    <ClCompile Include="ui.cpp" />
     <ClCompile Include="logic.cpp" />
     <ClCompile Include="parser.cpp" />
-    <ClCompile Include="ui.cpp" />
     <ClCompile Include="undo.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
