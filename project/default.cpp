@@ -70,7 +70,7 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				store->saveToSaveFile(fileName,toDoList);
 				return;
 			} else if(command == "done") {
-				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
 				function.markcompleted(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				}
@@ -86,15 +86,10 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 			} else if(command == "default") {
 				if (system("CLS")) system("clear");
 				showDefaultTaskList(toDoList, defaultmemory);
-			}
-			else if(command == "changeDirectory") {		
-				store->changeDirectory( description,fileName,toDoList);
-				
-					
-			} 
-			else if(command == "changeFilename") {		
-				store->changeFileName(description,toDoList);		
-					
+			} else if(command == "changeDirectory") {		
+				store->changeDirectory( description,fileName,toDoList);	
+			} else if(command == "changeFilename") {		
+				store->changeFileName(description,toDoList);			
 			} else {
 				function.printMessage(MESSAGE_INVALID_COMMAND);
 			}
