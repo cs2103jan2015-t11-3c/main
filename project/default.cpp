@@ -70,7 +70,7 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				store->saveToSaveFile(fileName,toDoList);
 				return;
 			} else if(command == "done") {
-				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 				function.markcompleted(originindex, toDoList);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				}
