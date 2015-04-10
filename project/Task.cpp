@@ -192,3 +192,10 @@ string task::displayDefaultTasksWithTwoTimes(int index) {
 	oss << index+1 << ". " << "[" << s_time << "-" << e_time << "] " << text;
 	return oss.str();
 }
+
+string task::displayDefaultTasksOver2days(int index){
+	ostringstream oss;
+	oss << index+1 << ". " << "[" << s_time << " " << s_date << "/" << s_month << "/" << s_year << "-"
+		<< e_time << "]" << text;
+	return oss.str();
+}

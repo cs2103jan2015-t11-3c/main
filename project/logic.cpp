@@ -50,8 +50,12 @@ string logic::displayAll(vector<task> &tempVec) {
 			oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
 			if(temp[i].returntype() == "deadline")
 				oss << temp[i].displayDefaultTasks(i) << endl;
-			else if(temp[i].returntype() == "timed")
+			else if(temp[i].returntype() == "timed"){
+				if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
+					oss << temp[i].displayDefaultTasksOver2days(i) << endl;
+				else
 				oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
+			}
 
 			while(i != temp.size() - 1){
 				if((temp[i].returnenddate() != temp[i+1].returnenddate())||(temp[i].returnendmonth() != temp[i+1].returnendmonth()) || 
@@ -59,8 +63,12 @@ string logic::displayAll(vector<task> &tempVec) {
 					oss << endl << "Date: " << temp[i+1].returnenddate() << "/" << temp[i+1].returnendmonth() << "/" << temp[i+1].returnendyear() << endl;
 				if(temp[i+1].returntype() == "deadline")
 					oss << temp[i+1].displayDefaultTasks(i+1) << endl;
-				else if(temp[i+1].returntype() == "timed")
-					oss <<  temp[i+1].displayDefaultTasksWithTwoTimes(i+1) << endl;
+				else if(temp[i+1].returntype() == "timed"){
+				if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
+					oss << temp[i].displayDefaultTasksOver2days(i) << endl;
+				else
+				oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
+			}
 				i++;
 			}
 		}

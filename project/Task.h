@@ -58,6 +58,7 @@ public:
 	string displayTimed(int index);
 	string displayDefaultTasks(int);
 	string displayDefaultTasksWithTwoTimes(int);
+	string displayDefaultTasksOver2days(int);
 
 };
 
