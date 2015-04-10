@@ -82,17 +82,14 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				showDefaultTaskList(toDoList, defaultmemory);
 			} else if(command == "search") {
 				if (system("CLS")) system("clear");
-				function.searchTask(toDoList, tempVec, fileName, description);
+				function.searchTask(toDoList, tempVec,description);
 			} else if(command == "default") {
 				if (system("CLS")) system("clear");
 				showDefaultTaskList(toDoList, defaultmemory);
-			}
-			else if(command == "changeDirectory") {
-				string newpath;
-				cin>>newpath;				
-				store->changeDirectory( newpath,fileName,toDoList);
-				cout<<fileName<<endl;
-					
+			} else if(command == "changeDirectory") {		
+				store->changeDirectory( description,fileName,toDoList);	
+			} else if(command == "changeFilename") {		
+				store->changeFileName(description,toDoList);			
 			} else {
 				function.printMessage(MESSAGE_INVALID_COMMAND);
 			}
@@ -206,7 +203,7 @@ void defaultclass::addFloatTask(string description,vector<task> &toDoList,storag
 	logic function;
 
 	task datainput(description);
-	datainput.addItemtypeone();
+	datainput.addFloatItem();
 
 	if (system("CLS")) system("clear");
 	if(!store->isFloatDuplicated(datainput, toDoList)) {
@@ -227,7 +224,7 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	task datainput(text);
-	datainput.addItemtypetwo(e_date, e_month, e_year, e_time);
+	datainput.addDeadlineItem(e_date, e_month, e_year, e_time);
 
 	if(printErrorMsgForAddDeadlineTask( text,datainput,toDoList, store, e_date,  e_month,  e_year,  e_time)) {
 	} else {
@@ -245,7 +242,7 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	task datainput(text);
-	datainput.addItemtypethree(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+	datainput.addTimedItem(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 
 	if(printErrorMsgForAddTimedTask(text,datainput, toDoList, store,e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time)) {
 	} else {
@@ -359,11 +356,10 @@ void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
 	}
 }
 
-
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
-	logic logic;
+	parser parse;
 	
-	if(e_day == logic.getSystemDay() && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+	if(e_day == parse.getSystemDay() && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
 		return false;
@@ -371,17 +367,14 @@ bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 }
 
 bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
-	logic logic;
+	parser parse;
 	
-	if(e_day == (logic.getSystemDay()+1) && e_month == logic.getSystemMonth() && e_year == logic.getSystemYear()) {
+	if(e_day == (parse.getSystemDay()+1) && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
 		return false;
 	}
 }
-
-
-
 
 bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, 
 												   int e_date, int e_month, int e_year, int e_time) {

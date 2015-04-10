@@ -54,27 +54,23 @@ class logic {
 public:
 	string displayAll(vector<task> &);
 	
-	void deleteItem(const int index, vector<task> &toDoList);
-	void clearAll(vector<task> &toDoList);
-	void editTask(int index, string description, vector<task> &toDoList);
-	void markcompleted(int index, vector<task> &toDoList);
-	void sorttext(vector<task> &toDoList);
+	void deleteItem(const int , vector<task> &);
+	void clearAll(vector<task> &);
+	void editTask(int , string , vector<task> &);
+	void markcompleted(int , vector<task> &);
+	void sorttext(vector<task> &);
 	void sortdates(vector<task> &);
-	void sorttime(vector<task> &);
 	void sortEndTime(vector<task> &);
 
-	void searchTask(vector<task> &, vector<task> &, string, string);
+	void searchTask(vector<task> &, vector<task> &, string);
 	bool isCheckSearchStringDigit(string);
 	int convertNumStringToInt(string);
 	void searchWord(vector<task> &, string , vector<task> &);
-	void searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec);
+	void searchDigit(vector<task> &, string , vector<task> &);
 
 	void display(vector<task> &, vector<task> &, string, string);
-	int getSystemDay();
-	int getSystemMonth();
-	int getSystemYear();
 
-	void pushback(vector<task>& toDoList, vector<task>& tempVec, int index);
+	void pushback(vector<task>& , vector<task>& , int );
 
 	bool isleapyear(unsigned short);
 	bool isValidDate(unsigned short,unsigned short,unsigned short);
@@ -89,5 +85,14 @@ public:
 	bool checkIsSameDate(int,int);
 	bool checkIsSameMonth(int,int);
 	bool checkIsSameYear(int,int);
+
+	void displayToday(vector<task> &, vector<task> &,int);
+	void displayTomorrow(vector<task> &, vector<task> &,int);
+	void displayNotDone(int ,vector<task> &,vector<task> &);
+	void displayDone(int ,vector<task> &,vector<task> &);
+	void displayFloat(int ,vector<task> &,vector<task> &);
+	void displayDeadline(int ,vector<task> &,vector<task> &);
+	void displayTimed(int ,vector<task> &,vector<task> &);
+	void displayEverything(int ,vector<task> &,vector<task> &);
 };
 

@@ -93,6 +93,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="parsertest.cpp" />
+    <ClCompile Include="StorageTest.cpp" />
+    <ClCompile Include="undotest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Project\Project.vcxproj">

@@ -47,12 +47,16 @@ void printWelcomeMessage() {
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-	std::cout << "*************************************************************************" << endl;
+	std::cout << "*******************************************************************************" << endl;
+	cout<<">>(^_^)>>                                                            << (^_^)<<";
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 	cout << endl;
 	int pos2=(int)((80-53)/2);
 	printSpace(pos2);
+	
+	SetConsoleTextAttribute
+    (hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 	std::cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use" << endl;
 	SetConsoleTextAttribute
     (hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
