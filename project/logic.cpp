@@ -95,26 +95,6 @@ string logic::printOthers(vector<task> & temp, int i){
 	return oss.str();
 }
 
-void logic::deleteItem(const int index, vector<task> &toDoList) {
-		//cout << toDoList[index].returntext() ;
-		if (system("CLS")) system("clear");
-		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
-		toDoList.erase(toDoList.begin()+index);
-}
-
-void logic::clearAll(vector<task> &toDoList) {
-	toDoList.clear();
-	if (system("CLS")) system("clear");
-	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
-}
-
-void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
-	task task_;
-	task_ = toDoList[index];
-	task_.inserttempnum(index);
-	tempVec.push_back(task_);
-}
-
 void logic::editTask(int index, string description, vector<task> &toDoList) {
 
 	if(toDoList[index].returntype() == "float") {
@@ -213,6 +193,25 @@ void logic::editTimedClass(vector<task> & toDoList, string description, int inde
 	}
 	if (system("CLS")) system("clear");
 	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+}
+
+void logic::deleteItem(const int index, vector<task> &toDoList) {
+		if (system("CLS")) system("clear");
+		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
+		toDoList.erase(toDoList.begin()+index);
+}
+
+void logic::clearAll(vector<task> &toDoList) {
+	toDoList.clear();
+	if (system("CLS")) system("clear");
+	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
+}
+
+void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
+	task task_;
+	task_ = toDoList[index];
+	task_.inserttempnum(index);
+	tempVec.push_back(task_);
 }
 
 void logic::markcompleted(int index, vector<task> &toDoList){
@@ -469,11 +468,6 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 }
 
-
-
-
-
-
 //check whether input date is valid function starts here
 bool logic::isleapyear(unsigned short year){
 	return (!(year%4) && (year%100) || !(year%400));
@@ -500,23 +494,23 @@ bool logic::isValidTime(int time) {
 
 bool logic::checkIsDateOverdue(int day, int month, int year,int timing) {
 	bool result = true;
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int systemDay, systemMonth, systemYear, systemHr, systemMin, systemTiming;
-	systemDay = timePtr->tm_mday;
-	systemMonth = timePtr->tm_mon + 1;
-	systemYear = timePtr->tm_year+1900;
-	systemHr = timePtr->tm_hour;
-	systemMin = timePtr->tm_min;
-	systemTiming = systemHr*100 + systemMin;
+	parser p;
+	int sysDay, sysMonth, sysYear, sysHr, sysMin, sysTime;
+	
+	sysDay = p.getSystemDay();
+	sysMonth = p.getSystemMonth();
+	sysYear = p.getSystemYear();
+	sysHr = p.getSystemHour();
+	sysMin = p.getSystemMinute();
+	sysTime = sysHr * 100 + sysMin;
 
-	if(year < systemYear) {
+	if(year < sysYear) {
 		return false;
-	} else if(year == systemYear && month < systemMonth) {
+	} else if(year == sysYear && month < sysMonth) {
 		return  false;
-	} else if(year == systemYear && month == systemMonth && day < systemDay) {
+	} else if(year == sysYear && month == sysMonth && day < sysDay) {
 		return false;
-	} else if(year == systemYear && month == systemMonth && day == systemDay && timing < systemTiming) {
+	} else if(year == sysYear && month == sysMonth && day == sysDay && timing < sysTime) {
 		return false;
 	}
 	return result;

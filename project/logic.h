@@ -158,7 +158,7 @@ public:
 
 	void printMessage(const string);
 	void printMessage( string, const string);
-	
+
 	//check whether start time is earlier than end time
 	//pre: input s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time
 	//post: return false if end time is earlier than start time

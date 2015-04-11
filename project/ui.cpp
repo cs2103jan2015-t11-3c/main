@@ -27,8 +27,8 @@ void defaultExecution(string ,storage *,string ,vector<task> &,vector<undo> );
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
 	logic function;
-	storage *store=new storage;
-
+	storage *store=storage::getInstance();
+	
 	toDoList = store->readToDoListFromTextFile(getTextFileName(argc, argv));
 	printWelcomeMessage();
 	readinput(toDoList,store);     

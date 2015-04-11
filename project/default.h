@@ -26,8 +26,6 @@ public:
 	
 	int getStartPosition(string);
 	int getEndPosition(string);
-	int getPosOfBy(string);
-	int getPosOfFrom(string);
 
 	int getRecurPeriod(string );
 	string getRecurruingCommandWord(string);
