@@ -33,6 +33,36 @@ namespace LibraryTest
 		
 		}
 
+		TEST_METHOD(TestClearCommand)
+		{
+		    parser p;
+			string testCommand = "clear";
+			string testDescription="";
+			int expected = 1;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestEditCommand)
+		{
+		    parser p;
+			string testCommand = "edit";
+			string testDescription="1";
+			int expected = 1;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestDoneCommand)
+		{
+		    parser p;
+			string testCommand = "done";
+			string testDescription="";
+			int expected = 0;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
 		TEST_METHOD(TestInValidCommand)
 		{
 		    parser p;
@@ -61,11 +91,38 @@ namespace LibraryTest
 		
 		}
 
-		TEST_METHOD(Testchecktype)
+		TEST_METHOD(TestconvertStringToInteger)
+		{
+		    parser p;
+			int testString = p.convertStringToInteger("20");
+			int expected = 20;
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypefloat)
+		{
+		    parser p;
+			string testString = p.checktype("add homework ");
+			string expected ="float";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypedeadline)
 		{
 		    parser p;
 			string testString = p.checktype("add homework /by 1100 tmr");
 			string expected ="deadline";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypetimed)
+		{
+		    parser p;
+			string testString = p.checktype("add homework /from 1100 tmr /to 1200 tmr");
+			string expected ="timed";
 			Assert::AreEqual (testString, expected);
 		
 		}
@@ -96,7 +153,7 @@ namespace LibraryTest
 		
 		}
 
-			TEST_METHOD(TestsplitinputDeadline)
+		TEST_METHOD(TestsplitinputDeadline)
 		{
 		    parser p;
 			string description="meeting /by 1100 on 23/04/2015";
@@ -113,6 +170,34 @@ namespace LibraryTest
 			Assert::AreEqual (e_month,Expe_month );
 			Assert::AreEqual (e_year,Expe_year );
 			Assert::AreEqual (e_time,Expe_time );
+		
+		}
+
+		TEST_METHOD(TestsplitinputTimed)
+		{
+		    parser p;
+			string description="meeting /from 1000 on 22/04/2015 /to 1100 on 23/05/2015";
+			string text;
+			int e_date, e_month, e_year, e_time,s_date, s_month, s_year, s_time;
+			p.splitinputTimed(description, text,s_date,s_month,s_year,s_time, e_date, e_month, e_year, e_time);	
+			string Exptext="meeting";
+			int Exps_date=22;
+			int Exps_month=04;
+			int Exps_year=2015;
+			int Exps_time=1000;
+			int Expe_date=23;
+			int Expe_month=05;
+			int Expe_year=2015;
+			int Expe_time=1100;
+			Assert::AreEqual (text,Exptext );
+			Assert::AreEqual (e_date,Expe_date );
+			Assert::AreEqual (e_month,Expe_month );
+			Assert::AreEqual (e_year,Expe_year );
+			Assert::AreEqual (e_time,Expe_time );
+			Assert::AreEqual (s_date,Exps_date );
+			Assert::AreEqual (s_month,Exps_month );
+			Assert::AreEqual (s_year,Exps_year );
+			Assert::AreEqual (s_time,Exps_time );
 		
 		}
 

@@ -15,7 +15,7 @@ namespace LibraryTest
 			vector<task> toDoList;
 			logic function;
 			int size, actualsize = 9, index = 5;
-			storage store;
+			storage *store=storage::getInstance();
 
 			for(int i = 0; i < 10; i++){
 				task datainput("deleteTest");

@@ -4,13 +4,22 @@
 #include <assert.h>
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 //Check if the command entered by the user is valid 
 //precondition : user input a command
 //postcondition : return true if command is valid; error message is shown to user if command entered is invalid
 //and false is returned
 bool parser::isValidCommand(const string command, const string description){
+<<<<<<< HEAD
 	assert(command.length() != 0);
 	assert(description.length() != 0);
+=======
+	try{
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_DESCRIPTION);
@@ -23,17 +32,33 @@ bool parser::isValidCommand(const string command, const string description){
 		    command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
 		return true;
 
-	 else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"||command=="done"){
+	 else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_INDEX);
 			return false;
 	}  
 		return true;
 	}
+	 else if(command=="edit"||command=="modify"||command=="change"){
+		 if(description.size()==0) {
+			printMessage(ERROR_MISSING_INDEX);
+			return false;
+	}    
+		 if(!canFindPartoChange(description)){
+			printMessage(ERROR_MISSING_CHANGINGPART);
+			return false;
+	}    
+		return true;
+	}
 
 	printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
+	}
+
+	catch(const string ERROR_MESSAGE){
+		printMessage(ERROR_MESSAGE);
+	}
 }
 
 //Remove leading and following whitespaces of a string
@@ -112,17 +137,27 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 	string month;
 	string year;
 
+<<<<<<< HEAD
 	assert(description.length() != 0);
 	
+=======
+
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 	size_t bypos = description.find("/by");
 	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos + 4);
+<<<<<<< HEAD
 	istringstream in(description);
 		in>>e_time;
+=======
+	istringstream in(description);// meeting by 1800 31 06 2016
+	in>>e_time;//1800
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 
-		if(containShortForm(description)){
-		getInfo(description, e_date, e_month, e_year);
+	if(containShortForm(description)){
+	getInfo(description, e_date, e_month, e_year);
 	}
+<<<<<<< HEAD
 		else{
 		in>>temp;
 		in>>e_date;
@@ -132,10 +167,24 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		month=date.substr(0,pos);
 		year=date.substr(pos+1);
 		
+=======
+	else{
+		in>>temp;//on
+		in>>e_date;//31
+		in>>c;//"/"
+		int s=description.find("/",bypos);
+		int pos=description.find("/",s+1);
+
+		month=description.substr(s+1,pos-s-1);
+    	trimString(month);
+	
+		year=description.substr(pos+1);
+     	trimString(year);
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 		e_month=convertMonth(month);
 		e_year=convertStringToInteger(year);
 
-}
+       }
 }
 
 //split the input task string into its starting date, month, year, timing
@@ -167,15 +216,13 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	in>>s_time;
 
 	int spos=description.find("/to ");
-
-
 	if(containShortForm(description.substr(0,spos))){
 		    in>>temp;
 		
 			getInfo(description, s_date, s_month, s_year);
 	}
-
 	else{
+<<<<<<< HEAD
 	in>>temp;
 	in>>s_date;
 	in>>c;
@@ -184,12 +231,24 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		smonth=date.substr(0,tend);
 
         s_month=convertMonth(smonth);
+=======
+	     in>>temp;//on
+	     in>>s_date;//28
+	     in>>c;//"/"
+	     in>>date;
+		 int tend=date.find_first_of("/");
+		 smonth=date.substr(0,tend);
+		 trimString(smonth);
+         s_month=convertMonth(smonth);
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
         
-		int pos=date.find("to");
-		syear=date.substr(tend+1,pos-tend);
-		s_year=convertStringToInteger(syear);
-	}
+		 int pos=date.find("to");
+		 syear=date.substr(tend+1,pos-tend);
+		 trimString(syear);
+		 s_year=convertStringToInteger(syear);
+   }
 		
+<<<<<<< HEAD
 	    in>>temp;
 	    in>>e_time;
 		 in>>temp;
@@ -202,13 +261,25 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	   
 	    in>>e_date;
 	    in>>c;
+=======
+	     in>>temp;//to
+	     in>>e_time;//2000
+		 in>>temp;//on
+		 if(containShortForm(temp)){		
+		 getInfo(temp, e_date, e_month, e_year);
+	    }
+		else{	   
+	    in>>e_date;//29
+	    in>>c;//"/"
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 		in>>date;
 		int post=date.find("/");
 		emonth=date.substr(0,post);
+		trimString(emonth);
 		eyear=date.substr(post+1);
+		trimString(eyear);
 
 		e_month=convertMonth(emonth);
-		
 		e_year=convertStringToInteger(eyear);
 		}
 }
@@ -255,6 +326,9 @@ int parser::convertAlphabetMonthToInteger (string month) {
 	}
 	else if (month == "Dec" || month == "dec") {
 		monthInt = 12;
+	}
+	else{
+		throw ERROR_MESSAGE_INVALIDMONTH;
 	}
 	return monthInt;
 }
@@ -319,6 +393,7 @@ string parser::shortForm(string description){
 //precondition : user input date is "today" or "tomorrow" instead of numerical date
 //postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
 void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
+<<<<<<< HEAD
 	assert(description.length() != 0);
 	assert(e_date <= 31);
 	assert(e_month <= 12);
@@ -331,6 +406,16 @@ void parser::getInfo(string description, int &e_date, int &e_month, int &e_year)
 	}
 	e_month=getSystemMonth();
 	e_year=getSystemYear();
+=======
+		if(shortForm(description)=="today"){
+		e_date=getSystemDay();		
+		}
+		if(shortForm(description)=="tomorrow"){
+		e_date=getSystemDay()+1;
+		}
+		e_month=getSystemMonth();
+		e_year=getSystemYear();
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 }
 
 //Convert alphabetic month into integer
@@ -346,6 +431,49 @@ int parser::convertMonth(string month){
 		}
 }
 
+<<<<<<< HEAD
+=======
+
+bool parser::canFindPartoChange(string description){
+	if(description.find_first_of("-name")!=-1){
+		int n=description.find_first_of("-name");
+		description=description.substr(n+5);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	else if(description.find_first_of("-due")!=-1){
+		int n=description.find_first_of("-due");
+		description=description.substr(n+4);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+		
+	else if(description.find_first_of("-start")!=-1){
+		int n=description.find_first_of("-start");
+		description=description.substr(n+6);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	
+	else if(description.find_first_of("-end")!=-1){
+		int n=description.find_first_of("-end");
+		description=description.substr(n+5);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+
+   return false;
+}
+
+>>>>>>> 4636e99ada11de1306825ef5a2c1e4df9a25a9b0
 //Get the current local day on the system the program is running
 //precondition : none
 //postcondition : system day is returned
