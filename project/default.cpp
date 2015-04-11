@@ -97,9 +97,6 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	}
 }
 
-//weekly
-//10 weekly
-
 int defaultclass::getRecurPeriod(string description) {
 	int start = getStartPosition(description);
 	int end = getEndPosition(description);
@@ -143,7 +140,7 @@ int defaultclass::getEndPosition(string description) {
 }
 
 void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end;
 	parser parse;
 	string text;
 	storage *stor = store;
@@ -154,7 +151,6 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 	description = description.substr(end+1);
 
 	if(parse.checktype(description) == "deadline") {
-		text = description.substr(end+1,posOfBy-1-end);
 	    parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	    recurringTask recurTask(text,0,e_time);
 		task datainput(text);
@@ -164,7 +160,6 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 	        recurTask.AddRecurring(recurPeriod,recurringCommandWord,e_date,e_month,e_year,0,0,0,"deadline",toDoList);
 		}
 	} else {
-		text = description.substr(end+1,posOfFrom-1-end);
 	    parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	    recurringTask recurTask(text,s_time,e_time);
 		task datainput(text);
@@ -261,7 +256,6 @@ void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoL
     store->saveToSaveFile(fileName,toDoList);
 }
 
-
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
 	int index, i;
 	logic function;
@@ -354,8 +348,7 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 	}
 }
 
-bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, 
-												   int e_date, int e_month, int e_year, int e_time) {
+bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, int e_date, int e_month, int e_year, int e_time) {
 	
     logic function;
 	storage *stor = store;
@@ -383,9 +376,7 @@ bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, 
 	}
 }
 
-//upadte
-bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, 
-												int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
+bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
     logic function;
 	storage *stor = store;
 	bool result = true;

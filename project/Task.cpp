@@ -59,35 +59,43 @@ void task::edittext(string PartTochange){
 	text=PartTochange;
 	return;
 }
+
 void task::edits_time(int PartTochange){
 	s_time=PartTochange;
 	return;
 
 }
+
 void task::edits_date(int PartTochange){
 	s_date=PartTochange;
 	return;
 }
+
 void task::edits_month(int PartTochange){
 	s_month=PartTochange;
 	return;
 }
+
 void task::edits_year(int PartTochange){
 	s_year=PartTochange;
 	return;
 }
+
 void task::edite_time(int PartTochange){
 	e_time=PartTochange;
 	return;
 }
+
 void task::edite_date(int PartTochange){
 	e_date=PartTochange;
 	return;
 }
+
 void task::edite_month(int PartTochange){
 	e_month=PartTochange;
 	return;
 }
+
 void task::edite_year(int PartTochange){
 	e_year=PartTochange;
 	return;
@@ -97,6 +105,7 @@ void task::editType(string PartTochange){
 	type=PartTochange;
 	return;
 }
+
 void task::editDone(bool PartTochange){
 	complete=PartTochange;
 	return;
@@ -107,7 +116,6 @@ void task::edittemp(int index){
 	return;
 }
 
-//===============================================================
 string task::returntype(){
 	return type;
 }
