@@ -2,9 +2,10 @@
 #include <sstream>
 #include "logic.h"
 
-//Checks if the command entered is a recognised valid user command
-//Checks if the description entered is valid for the command entered
-//Prints error messages if either of the aforementioned conditions are not met
+//Check if the command entered by the user is valid 
+//precondition : user input a command
+//postcondition : return true if command is valid; error message is shown to user if command entered is invalid
+//and false is returned
 bool parser::isValidCommand(const string command, const string description){
 	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
@@ -31,8 +32,9 @@ bool parser::isValidCommand(const string command, const string description){
 	return false;
 }
 
-
 //Remove leading and following whitespaces of a string
+//precondition : user input a description
+//postcondition : input string description is updated
 void parser::trimString(string &description) {
 	size_t lineStart=0, lineEnd=0;
 	
@@ -48,6 +50,8 @@ void parser::trimString(string &description) {
 //Converts a number in string format to integer format
 //Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
 //String must not contain leading or following whitespaces, or function will fail
+//precondition : pass in the description entered by user
+//postcondition : converted index is returned
 int parser::convertStringToIntegerIndex(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
@@ -61,6 +65,11 @@ int parser::convertStringToIntegerIndex(const string description) {
 	return output-1;
 }
 
+//Converts a number in string format to integer format
+//Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
+//String must not contain leading or following whitespaces, or function will fail
+//precondition : pass in the description entered by user
+//postcondition : converted index is returned
 int parser::convertStringToInteger(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
@@ -74,6 +83,9 @@ int parser::convertStringToInteger(const string description) {
 	return output;
 }
 
+//
+//precondition :
+//
 string parser::checktype(string description){
 	size_t foundtypeDeadline = description.find("/by");
 	size_t foundtypeTimed = description.find("/from");
