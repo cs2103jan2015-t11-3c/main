@@ -403,8 +403,6 @@ void defaultclass::DisplayTaskFinishByTmr(defaultclass &defaultmemory) {
 //postcondition : return true if the date mathces today's system date, else return falase
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	parser parse;
-	assert(e_day <= 31);
-	assert(e_month <= 12);
 	if(e_day == parse.getSystemDay() && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
@@ -417,8 +415,6 @@ bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 //postcondition : return true if the date mathces tomorrow's system date, else return falase
 bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 	parser parse;
-	assert(e_day <= 31);
-	assert(e_month <= 12);
 	if(e_day == (parse.getSystemDay()+1) && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
@@ -436,11 +432,6 @@ bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, 
 	
     logic function;
 	storage *stor = store;
-	bool result = true;
-	assert(e_date <= 31);
-	assert(e_month <= 12);
-	assert(e_time <=2400);
-	assert(e_year <= 9999);
 	if (system("CLS")) system("clear");
 	if(store->isDeadlineDuplicated(datainput, toDoList)) {
 		function.printMessage(MESSAGE_DUPLICATE_DEADLINE_TASK);
@@ -473,14 +464,6 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
     logic function;
 	storage *stor = store;
 	bool result = true;
-	assert(e_date <= 31);
-	assert(e_month <= 12);
-	assert(e_time <=2400);
-	assert(e_year <= 9999);
-	assert(s_date <= 31);
-	assert(s_month <= 12);
-	assert(s_time <=2400);
-	assert(s_year <= 9999);
 	if (system("CLS")) system("clear");
 	if (function.checkIfStartTimeIsEarlierThanEndTime(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time)) {
 		function.printMessage(MESSAGE_START_AND_END_TIME_ERROR);
