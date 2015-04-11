@@ -22,3 +22,21 @@ End: 0/ 0/ 0	 0
 Type: float
 Completed: 0
 
+5. a
+Start: 0/ 0/ 0	0
+End: 12/ 4/ 2015	 1100
+Type: deadline
+Completed: 0
+
+6. a
+Start: 0/ 0/ 0	0
+End: 0/ 0/ 0	 0
+Type: float
+Completed: 0
+
+7. hgie
+Start: 0/ 0/ 0	0
+End: 12/ 4/ 2015	 1100
+Type: deadline
+Completed: 0
+

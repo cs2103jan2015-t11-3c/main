@@ -202,7 +202,7 @@ bool storage:: isTimeClashed(task newTask, vector<task> &toDoList){
 				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate())
 				&&(newTask.returnstartyear())==(toDoList[i-1].returnstartyear())&&(newTask.returnstartmonth())==(toDoList[i-1].returnstartmonth())
 				&&(newTask.returnstartdate())==(toDoList[i-1].returnstartdate()))
-			if ((newTask.returnendtime())>=(toDoList[i-1].returnstarttime())
+			if ((newTask.returnendtime())>(toDoList[i-1].returnstarttime())
 				&& (newTask.returnstarttime())<(toDoList[i-1].returnendtime())) 
 				return true;
 			}
