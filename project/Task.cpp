@@ -3,12 +3,14 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include <assert.h>
 
 task::task(void) {}
 
 task::~task(void) {}
 
 task::task(string task){
+	assert(task.length() !=0);
 	text=task;
 	s_date=0;
 	s_date=0;
@@ -32,7 +34,10 @@ void task::addFloatItem(){
 }
 
 void task::addDeadlineItem( int _e_date, int _e_month, int _e_year, int _e_time){ 
-
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_time <= 2400);
+	assert(e_year <= 9999);
 	e_date= _e_date;
 	e_month= _e_month;
 	e_year= _e_year;
@@ -42,7 +47,14 @@ void task::addDeadlineItem( int _e_date, int _e_month, int _e_year, int _e_time)
 }
 
 void task::addTimedItem( int _s_date, int _s_month, int _s_year, int _s_time, int _e_date, int _e_month, int _e_year, int _e_time){ 
-	
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_time <=2400);
+	assert(e_year <= 9999);
+	assert(s_date <= 31);
+	assert(s_month <= 12);
+	assert(s_time <=2400);
+	assert(s_year <= 9999);
 	s_date= _s_date;
 	s_month= _s_month;
 	s_year= _s_year;
@@ -169,12 +181,14 @@ int task::returntemp(){
 }
 
 string task::displayFloat(int index){
+	assert(index >=0);
 	ostringstream oss;
 	oss << index+1 << "." << text;
 	return oss.str();
 }
 
 string task::displayDeadline(int index){
+	assert(index >=0);
 	ostringstream oss;
 	oss << index+1 << "." << text <<  " by " << e_time << " on " << e_date<<"/"
 			<< e_month << "/" << e_year;
@@ -182,6 +196,7 @@ string task::displayDeadline(int index){
 }
 
 string task::displayTimed(int index){
+	assert(index >=0);
 	ostringstream oss;
 	 oss << index+1 << "." << text << " from " <<s_time << " on "<<s_date<<"/"
 			<< s_month << "/" << s_year << " to " << e_time << " on " << e_date<<"/"
@@ -190,18 +205,21 @@ string task::displayTimed(int index){
 }
 
 string task::displayDefaultTasks(int index) {
+	assert(index >=0);
 	ostringstream oss;
 	oss << index+1 << ". " << "[by " << e_time << "] " << text;
 	return oss.str();
 }
 
 string task::displayDefaultTasksWithTwoTimes(int index) {
+	assert(index >=0);
 	ostringstream oss;
 	oss << index+1 << ". " << "[" << s_time << "-" << e_time << "] " << text;
 	return oss.str();
 }
 
 string task::displayDefaultTasksOver2days(int index){
+	assert(index >=0);
 	ostringstream oss;
 	oss << index+1 << ". " << "[" << s_time << " " << s_date << "/" << s_month << "/" << s_year << "-"
 		<< e_time << "]" << text;
