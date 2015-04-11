@@ -34,6 +34,8 @@ public:
 	int getSystemDay();
 	int getSystemMonth();
 	int getSystemYear();
+	int getSystemHour();
+	int getSystemMinute();
 
 
 };
