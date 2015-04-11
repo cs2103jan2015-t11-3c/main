@@ -80,7 +80,6 @@ public:
 	void printMessage(const string);
 	void printMessage( string, const string);
 	
-
 	bool checkIfStartTimeIsEarlierThanEndTime(int,int,int,int,int,int,int,int);
 	bool checkIsSameDate(int,int);
 	bool checkIsSameMonth(int,int);

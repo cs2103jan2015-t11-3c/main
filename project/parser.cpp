@@ -310,3 +310,17 @@ int parser::getSystemYear() {
 	int year = timePtr->tm_year+1900;
 	return year;
 }
+
+int parser::getSystemHour() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int hour = timePtr->tm_hour;
+	return hour;
+}
+
+int parser::getSystemMinute() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int minute = timePtr->tm_min;
+	return minute;
+}
