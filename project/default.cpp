@@ -23,13 +23,9 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 		if(parse.isValidCommand(command, description)) {
 			if(command == "add" || command =="+") {
 				string recurringCommandWord;
-				int end, posOfBy, posOfFrom, recurPeriod;
+				int end, recurPeriod;
 				
-                //5 daily name /bysdklfjklsjf
-				//daily
 				end = getEndPosition(description);
-				posOfBy = getPosOfBy(description);
-			    posOfFrom = getPosOfFrom(description);
 				recurPeriod = getRecurPeriod(description);//5
 				if(recurPeriod != 0) {
 					description = description.substr(end+1);
@@ -146,22 +142,6 @@ int defaultclass::getEndPosition(string description) {
 	return end;
 }
 
-int defaultclass::getPosOfBy(string description) {
-    int posOfBy;
-
-	posOfBy = description.find("by");
-
-	return posOfBy;
-}
-
-int defaultclass::getPosOfFrom(string description) {
-	int posOfFrom;
-
-	posOfFrom = description.find("from");
-
-	return posOfFrom;
-}
-
 void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end, posOfFrom, posOfBy;
 	parser parse;
@@ -170,8 +150,6 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 	logic function;
 
 	end = getEndPosition(description);
-	posOfBy = getPosOfBy(description);
-	posOfFrom = getPosOfFrom(description);
 
 	description = description.substr(end+1);
 
