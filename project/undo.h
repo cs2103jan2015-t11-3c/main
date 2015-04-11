@@ -16,8 +16,19 @@ public:
 	undo(void);
 	~undo(void);
 
+	//convert toDoList to undo class
+	//pre: undomemory vecotr, main vector
+	//post: none
 	undo converttoundoclass(vector<undo> &undomemory, vector<task> toDoList);
+
+	// return vector<task>
+	//pre: none
+	//post: none
 	vector<task> returnmemory();
+
+	// return num
+	//pre: none
+	//Post: none
 	int returnnum();
 };
 

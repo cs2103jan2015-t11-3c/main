@@ -2,162 +2,197 @@
 #include <iostream>
 
 string logic::displayAll(vector<task> &tempVec) {
-	vector<task> temporary, temp;
+	vector<task> temp, other;
 	vector<vector<task>> temps;
 	ostringstream oss;
 	int i = 0;
 	task temp_t;
-	if(tempVec.size()==0) {
+	if(tempVec.size()==0)
 		printMessage(ERROR_LIST_IS_EMPTY);
-	}
 	else {
-		for(unsigned j = 0; j < tempVec.size(); j++){
-			if(tempVec[j].returntype() == "float"){
-				temp.push_back(tempVec[j]);
-			}
-			else
-				temporary.push_back(tempVec[j]);
-		}
+		separateFloatAndOthers(tempVec, temp, other);
+
 		sorttext(temp);
-		oss <<"Float Task: " << endl;
-		for(unsigned j = 0; j < temp.size(); j++){
-			oss << temp[j].displayFloat(i) << endl;
-			i++;
-		}
+		oss <<"Float Task: " << endl << printFloatTasks(temp, i);
 
-		tempVec = temporary;
-		temporary.clear();
-		if(tempVec.size() != 0){
-			sortdates(tempVec);
-			temporary.push_back(tempVec[0]);
-			for(int j = 0; j < tempVec.size() - 1 ; j++){
-				if((tempVec[j].returnenddate() == tempVec[j+1].returnenddate()) && (tempVec[j].returnendmonth() == tempVec[j+1].returnendmonth()) && 
-					(tempVec[j].returnendyear() == tempVec[j].returnendyear())){
-						temporary.push_back(tempVec[j+1]);
-				}
-				else{
-					sortEndTime(temporary);
-					for( unsigned k = 0; k<temporary.size(); k++)
-						temp.push_back(temporary[k]);
-					temporary.clear();
-					temporary.push_back(tempVec[j+1]);
-				}
-			}
-			sortEndTime(temporary);
-			for( unsigned k = 0; k<temporary.size(); k++)
-				temp.push_back(temporary[k]);
-
-			oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
-			if(temp[i].returntype() == "deadline")
-				oss << temp[i].displayDefaultTasks(i) << endl;
-			else if(temp[i].returntype() == "timed"){
-				if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
-					oss << temp[i].displayDefaultTasksOver2days(i) << endl;
-				else
-				oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
-			}
-
-			while(i != temp.size() - 1){
-				if((temp[i].returnenddate() != temp[i+1].returnenddate())||(temp[i].returnendmonth() != temp[i+1].returnendmonth()) || 
-					(temp[i].returnendyear() != temp[i+1].returnendyear()))
-					oss << endl << "Date: " << temp[i+1].returnenddate() << "/" << temp[i+1].returnendmonth() << "/" << temp[i+1].returnendyear() << endl;
-				if(temp[i+1].returntype() == "deadline")
-					oss << temp[i+1].displayDefaultTasks(i+1) << endl;
-				else if(temp[i+1].returntype() == "timed"){
-				if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
-					oss << temp[i].displayDefaultTasksOver2days(i) << endl;
-				else
-				oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
-			}
-				i++;
-			}
+		if(other.size() != 0){
+			sortdates(other);
+			sortOthers(other, temp);
+			oss << printOthers(temp, i);
 		}
 	}
 	tempVec = temp;
 	return oss.str();
 }
 
+void logic::separateFloatAndOthers(vector<task> & tempVec, vector<task> & floattemp, vector<task> & other){
+	for(unsigned j = 0; j < tempVec.size(); j++){
+			if(tempVec[j].returntype() == "float"){
+				floattemp.push_back(tempVec[j]);
+			}
+			else
+				other.push_back(tempVec[j]);
+		}
+}
+
+string logic::printFloatTasks(vector<task> & floattemp, int i){
+	ostringstream oss;
+	for(unsigned j = 0; j < floattemp.size(); j++){
+			oss << floattemp[j].displayFloat(i) << endl;
+			i++;
+		}
+	return oss.str();
+}
+
+void logic::sortOthers(vector<task> & other, vector<task> & temp){
+	vector<task> temporary;
+	temporary.push_back(other[0]);
+	for(int j = 0; j < other.size() - 1 ; j++){
+		if((other[j].returnenddate() == other[j+1].returnenddate()) && (other[j].returnendmonth() == other[j+1].returnendmonth()) && 
+			(other[j].returnendyear() == other[j].returnendyear())){
+				temporary.push_back(other[j+1]);
+		}
+		else{
+			sortEndTime(temporary);
+			for( unsigned k = 0; k<temporary.size(); k++)
+				temp.push_back(temporary[k]);
+			temporary.clear();
+			temporary.push_back(other[j+1]);
+		}
+	}
+	sortEndTime(temporary);
+	for( unsigned k = 0; k<temporary.size(); k++)
+		temp.push_back(temporary[k]);
+}
+
+string logic::printOthers(vector<task> & temp, int i){
+	ostringstream oss;
+	i++;
+	oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
+	if(temp[i].returntype() == "deadline")
+		oss << temp[i].displayDefaultTasks(i) << endl;
+	else if(temp[i].returntype() == "timed"){
+		if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
+			oss << temp[i].displayDefaultTasksOver2days(i) << endl;
+		else
+			oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
+	}
+
+	while(i != temp.size() - 1){
+		if((temp[i].returnenddate() != temp[i+1].returnenddate())||(temp[i].returnendmonth() != temp[i+1].returnendmonth()) || 
+			(temp[i].returnendyear() != temp[i+1].returnendyear()))
+			oss << endl << "Date: " << temp[i+1].returnenddate() << "/" << temp[i+1].returnendmonth() << "/" << temp[i+1].returnendyear() << endl;
+		if(temp[i+1].returntype() == "deadline")
+			oss << temp[i+1].displayDefaultTasks(i+1) << endl;
+		else if(temp[i+1].returntype() == "timed"){
+			if((temp[i+1].returnenddate() != temp[i+1].returnstartdate())||(temp[i+1].returnendmonth() != temp[i+1].returnstartmonth()))
+				oss << temp[i+1].displayDefaultTasksOver2days(i+1) << endl;
+			else
+				oss <<  temp[i+1].displayDefaultTasksWithTwoTimes(i+1) << endl;
+		}
+		i++;
+	}
+	return oss.str();
+}
+
 void logic::editTask(int index, string description, vector<task> &toDoList) {
-	string TextAfterIndex, VariableToChange, PartTochange, temp, tempdescription;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
-	task taskclass;
-	char c;
 
 	if(toDoList[index].returntype() == "float") {
-		size_t pos = description.find("-name");
-		PartTochange = description.substr(pos+6);
-		toDoList[index].edittext(PartTochange);
-		if (system("CLS")) system("clear");
-		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+		editFloatClass(toDoList, description, index);
 	} else if(toDoList[index].returntype() == "deadline"){
-		size_t foundname = description.find("-name");
-		size_t founddue = description.find("-due");
-		if(foundname!=std::string::npos){
-			PartTochange = description.substr(foundname+6);
+		editDeadlineClass(toDoList, description, index);
+	}
+	else if(toDoList[index].returntype() == "timed"){
+		editTimedClass(toDoList, description, index);
+	}
+}
+
+void logic::editFloatClass(vector<task> & toDoList, string description, int index){
+	string PartToChange;
+	size_t pos = description.find("-name");
+	PartToChange = description.substr(pos+6);
+	toDoList[index].edittext(PartToChange);
+	if (system("CLS")) system("clear");
+	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+}
+
+void logic::editDeadlineClass(vector<task> & toDoList, string description, int index){
+	string PartTochange, temp;
+	char c;
+	int e_date, e_month, e_year, e_time;
+
+	size_t foundname = description.find("-name");
+	size_t founddue = description.find("-due");
+	if(foundname!=std::string::npos){
+		PartTochange = description.substr(foundname+6);
 		toDoList[index].edittext(PartTochange);
-		} else if(founddue!=std::string::npos){
-			PartTochange = description.substr(founddue+5);
+	} else if(founddue!=std::string::npos){
+		PartTochange = description.substr(founddue+5);
+		istringstream in(PartTochange);
+		in>>e_time;;
+		in>>temp;
+		in>>e_date;
+		in>>c;
+		in>>e_month;
+		in>>c;
+		in>>e_year;
+
+		toDoList[index].edite_time(e_time);
+		toDoList[index].edite_date(e_date);
+		toDoList[index].edite_month(e_month);
+		toDoList[index].edite_year(e_year);
+	}
+	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+}
+
+void logic::editTimedClass(vector<task> & toDoList, string description, int index){
+	string PartTochange, temp;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	char c;
+
+	size_t foundname = description.find("-name");
+	size_t foundstart = description.find("-start");
+	size_t foundend = description.find("-end");
+	if(foundname!=std::string::npos){
+		PartTochange = description.substr(foundname+6);
+		toDoList[index].edittext(PartTochange);
+	}
+	else{ 
+		if(foundstart!=std::string::npos){
+			PartTochange = description.substr(foundstart+7);
 			istringstream in(PartTochange);
-			in>>e_time;;
+			in>>s_time;
+			in>>temp;
+			in>>s_date;
+			in>>c;
+			in>>s_month;
+			in>>c;
+			in>>s_year;
+
+			toDoList[index].edits_time(s_time);
+			toDoList[index].edits_date(s_date);
+			toDoList[index].edits_month(s_month);
+			toDoList[index].edits_year(s_year);
+		}
+		if(foundend!=std::string::npos){
+			PartTochange = description.substr(foundend+5);
+			istringstream in(PartTochange);
+			in>>e_time;
 			in>>temp;
 			in>>e_date;
 			in>>c;
-		    in>>e_month;
+			in>>e_month;
 			in>>c;
-		    in>>e_year;
+			in>>e_year;
 
 			toDoList[index].edite_time(e_time);
 			toDoList[index].edite_date(e_date);
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
 		}
-		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	}
-	else if(toDoList[index].returntype() == "timed"){
-		size_t foundname = description.find("-name");
-		size_t foundstart = description.find("-start");
-		size_t foundend = description.find("-end");
-		if(foundname!=std::string::npos){
-			PartTochange = description.substr(foundname+6);
-		    toDoList[index].edittext(PartTochange);
-		}
-		else{ 
-			if(foundstart!=std::string::npos){
-				PartTochange = description.substr(foundstart+7);
-				istringstream in(PartTochange);
-				in>>s_time;
-				in>>temp;
-				in>>s_date;
-				in>>c;
-				in>>s_month;
-				in>>c;
-				in>>s_year;
-
-				toDoList[index].edits_time(s_time);
-				toDoList[index].edits_date(s_date);
-				toDoList[index].edits_month(s_month);
-				toDoList[index].edits_year(s_year);
-			}
-			if(foundend!=std::string::npos){
-				PartTochange = description.substr(foundend+5);
-				istringstream in(PartTochange);
-				in>>e_time;
-				in>>temp;
-				in>>e_date;
-				in>>c;
-				in>>e_month;
-				in>>c;
-				in>>e_year;
-
-				toDoList[index].edite_time(e_time);
-				toDoList[index].edite_date(e_date);
-				toDoList[index].edite_month(e_month);
-				toDoList[index].edite_year(e_year);
-			}
-		}
-		if (system("CLS")) system("clear");
-		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
-	}
+	if (system("CLS")) system("clear");
+	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 }
 
 void logic::deleteItem(const int index, vector<task> &toDoList) {
