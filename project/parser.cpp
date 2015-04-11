@@ -1,11 +1,16 @@
 #include "parser.h"
-#include <sstream>
 #include "logic.h"
+#include <sstream>
+#include <assert.h>
 
-//Checks if the command entered is a recognised valid user command
-//Checks if the description entered is valid for the command entered
-//Prints error messages if either of the aforementioned conditions are not met
+
+//Check if the command entered by the user is valid 
+//precondition : user input a command
+//postcondition : return true if command is valid; error message is shown to user if command entered is invalid
+//and false is returned
 bool parser::isValidCommand(const string command, const string description){
+	assert(command.length() != 0);
+	assert(description.length() != 0);
 	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_DESCRIPTION);
@@ -31,11 +36,12 @@ bool parser::isValidCommand(const string command, const string description){
 	return false;
 }
 
-
 //Remove leading and following whitespaces of a string
+//precondition : user input a description
+//postcondition : input string description is updated
 void parser::trimString(string &description) {
 	size_t lineStart=0, lineEnd=0;
-	
+	assert(description.length() != 0);
 	lineStart=description.find_first_not_of(DELIMITERS);
 	lineEnd=description.find_last_not_of(DELIMITERS);
 	
@@ -48,10 +54,12 @@ void parser::trimString(string &description) {
 //Converts a number in string format to integer format
 //Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
 //String must not contain leading or following whitespaces, or function will fail
+//precondition : pass in the description entered by user
+//postcondition : converted index is returned
 int parser::convertStringToIntegerIndex(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
-
+	assert(description.length() != 0);
 	while(t_start!=t_end) {
 		output*=10;
 		output+=description[t_start]-'0';
@@ -61,10 +69,15 @@ int parser::convertStringToIntegerIndex(const string description) {
 	return output-1;
 }
 
+//Converts a number in string format to integer format
+//Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
+//String must not contain leading or following whitespaces, or function will fail
+//precondition : pass in the description entered by user
+//postcondition : converted index is returned
 int parser::convertStringToInteger(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
-
+	assert(description.length() != 0);
 	while(t_start!=t_end) {
 		output*=10;
 		output+=description[t_start]-'0';
@@ -74,7 +87,11 @@ int parser::convertStringToInteger(const string description) {
 	return output;
 }
 
+//check the type of the task input by the user
+//precondition : user input a new task
+//postcondition : type of the task is returned
 string parser::checktype(string description){
+	assert(description.length() != 0);
 	size_t foundtypeDeadline = description.find("/by");
 	size_t foundtypeTimed = description.find("/from");
 	if(foundtypeDeadline!=std::string::npos)
@@ -85,7 +102,9 @@ string parser::checktype(string description){
 		return "float";
 }
 
-		
+//split the input task string into its ending date, month, year, timing and task name(text)
+//precondition : task entered is a deadline task
+//postcondition : string is splited into different portions using istringstream
 void parser::splitinputDeadline(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 	char c;
@@ -93,21 +112,21 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 	string month;
 	string year;
 
-	
+	assert(description.length() != 0);
 	
 	size_t bypos = description.find("/by");
-	text = description.substr(0 , bypos-1);//"meeting"
+	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos + 4);
-	istringstream in(description);// meeting by 1800 31 06 2016
-		in>>e_time;//1800
+	istringstream in(description);
+		in>>e_time;
 
 		if(containShortForm(description)){
 		getInfo(description, e_date, e_month, e_year);
 	}
 		else{
-		in>>temp;//on
-		in>>e_date;//31
-		in>>c;//"/"
+		in>>temp;
+		in>>e_date;
+		in>>c;
 		in>>date;
 		int pos=date.find("/");
 		month=date.substr(0,pos);
@@ -119,6 +138,10 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 }
 }
 
+//split the input task string into its starting date, month, year, timing
+//and into ending date, month, year, timing and task name(text)
+//precondition : task entered is a timed task
+//postcondition : string is splited into different portions using istringstream
 void parser::splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
 	string temp;
 	char c;
@@ -126,11 +149,22 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	string smonth,emonth;
 	string syear,eyear;
 	
+	assert(description.length() != 0);
+	assert(text.length() != 0);
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_time <=2400);
+	assert(e_year <= 9999);
+	assert(s_date <= 31);
+	assert(s_month <= 12);
+	assert(s_time <=2400);
+	assert(s_year <= 9999);
+
 	size_t bypos = description.find("/from");
 	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos+6);
 	istringstream in(description);
-	in>>s_time;//1900
+	in>>s_time;
 
 	int spos=description.find("/to ");
 
@@ -142,9 +176,9 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	}
 
 	else{
-	in>>temp;//on
-	in>>s_date;//28
-	in>>c;//"/"
+	in>>temp;
+	in>>s_date;
+	in>>c;
 	in>>date;
 		int tend=date.find_first_of("/");
 		smonth=date.substr(0,tend);
@@ -156,9 +190,9 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		s_year=convertStringToInteger(syear);
 	}
 		
-	    in>>temp;//to
-	    in>>e_time;//2000
-		 in>>temp;//on
+	    in>>temp;
+	    in>>e_time;
+		 in>>temp;
 		if(containShortForm(temp)){
 		
 		getInfo(temp, e_date, e_month, e_year);
@@ -166,8 +200,8 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 
 		else{
 	   
-	    in>>e_date;//29
-	    in>>c;//"/"
+	    in>>e_date;
+	    in>>c;
 		in>>date;
 		int post=date.find("/");
 		emonth=date.substr(0,post);
@@ -179,9 +213,12 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		}
 }
 
-
-
+//Convert alphabet month into corresponding integer. 
+//i.e: Jan - Dec correspons to 1 - 12
+//precondition : month input by user is in alphabetic form
+//postcondition : converted integer month is returned
 int parser::convertAlphabetMonthToInteger (string month) {
+	assert(month.length() != 0);
 	int monthInt=0;
 	if (month == "Jan" || month == "jan") {
 		monthInt = 1;
@@ -222,7 +259,11 @@ int parser::convertAlphabetMonthToInteger (string month) {
 	return monthInt;
 }
 
+//Determine if month is in numerical form or not
+//precondition : string month is get from user input
+//postcondition : return true if month is numerical and false if not
 bool parser::isNumerical(string month){
+	assert(month.length() != 0);
     for(int i=0;i<month.length();i++)
     {
      char a=month[i];
@@ -238,8 +279,11 @@ void parser::printMessage(const string message) {
 	cout << endl << message << endl;
 }
 
-
+//Determine if today/tomorrow/tmr exists in user input
+//precondition : user input a new task 
+//postcondition : return true if either today/tomorrow/tmr is found, return false otherwise
 bool parser::containShortForm(string description){
+	assert(description.length() != 0);
 	int n=description.find("today");
 	if(n!=-1)
 		return true;
@@ -253,8 +297,12 @@ bool parser::containShortForm(string description){
 	return false;
 }
 
-
+//Determine if today/tomorrow/tmr exists in user input
+//precondition : user input a new task 
+//postcondition : return today if "today" is found,
+//return tomorrow if "tomorrow" or "tmr" is found
 string parser::shortForm(string description){
+	assert(description.length() != 0);
 	int n=description.find("today");
 	if(n!=-1)
 		return "today";
@@ -265,23 +313,31 @@ string parser::shortForm(string description){
 	if(p!=-1)
 		return "tomorrow";
 
-	//use exception
-
 }
 
+//Get the corresponding numeric day, month and year if the date entered by user is "today" or "tomorrow"
+//precondition : user input date is "today" or "tomorrow" instead of numerical date
+//postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
 void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
-			if(shortForm(description)=="today"){
-			e_date=getSystemDay();		
-			}
-			if(shortForm(description)=="tomorrow"){
-			e_date=getSystemDay()+1;
-			}
-			e_month=getSystemMonth();
-			e_year=getSystemYear();
+	assert(description.length() != 0);
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_year <= 9999);
+	if(shortForm(description)=="today"){
+		e_date=getSystemDay();		
+	}
+	if(shortForm(description)=="tomorrow"){
+		e_date=getSystemDay()+1;
+	}
+	e_month=getSystemMonth();
+	e_year=getSystemYear();
 }
 
-
+//Convert alphabetic month into integer
+//precondition : month entered by user is a alphabet
+//postcondition : return the corresponding integer month
 int parser::convertMonth(string month){
+	assert(month.length() != 0);
 	if(isNumerical(month)){
 			return convertStringToInteger(month);
 		}
@@ -290,6 +346,9 @@ int parser::convertMonth(string month){
 		}
 }
 
+//Get the current local day on the system the program is running
+//precondition : none
+//postcondition : system day is returned
 int parser::getSystemDay() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
@@ -297,6 +356,9 @@ int parser::getSystemDay() {
 	return day;
 }
 
+//Get the current local month on the system the program is running
+//precondition : none
+//postcondition : system month is returned
 int parser::getSystemMonth() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
@@ -304,6 +366,9 @@ int parser::getSystemMonth() {
 	return month;
 }
 
+//Get the current local year on the system the program is running
+//precondition : none
+//postcondition : system year is returned
 int parser::getSystemYear() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
@@ -311,6 +376,9 @@ int parser::getSystemYear() {
 	return year;
 }
 
+//Get the current local hour on the system the program is running
+//precondition : none
+//postcondition : system hour is returned
 int parser::getSystemHour() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);
@@ -318,6 +386,9 @@ int parser::getSystemHour() {
 	return hour;
 }
 
+//Get the current local minute on the system the program is running
+//precondition : none
+//postcondition : system minute is returned
 int parser::getSystemMinute() {
 	time_t t = time(NULL);
 	tm* timePtr = localtime(&t);

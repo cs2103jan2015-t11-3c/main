@@ -6,7 +6,15 @@
 #include <windows.h>
 #include <ctime>
 
-void defaultclass::defaultexecuteCommand(string fileName,storage *store, string &command, string &description, vector<task> &toDoList, vector<undo> &undomemory, undo &currentundomemory) {
+
+//execute different types of command entered by user
+//i.e. add TASK /by 1000 today
+//command includes: add,edit,display,delete,clear,undo,search,default and exit
+//error message will be shown to user if command entered is invalid
+//success message will be shown to user if user input is successfully processed
+//precondition : user enter the command and its relating description
+//postcondition : command of different types is processed
+void defaultclass::defaultexecuteCommand(string fileName,storage *store, string &command,string &description, vector<task> &toDoList, vector<undo> &undomemory,undo &currentundomemory) {
 	string text;
 	parser parse;
     logic function;
@@ -17,7 +25,7 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
 
 	defaultmemory.updatedefaultmemory(toDoList);
-	
+	assert(description.length() != 0);
 	while(command != "exit"){
 		parse.trimString(description);
 		if(parse.isValidCommand(command, description)) {
@@ -97,7 +105,12 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	}
 }
 
+
+//Determine the recurring period the user want to do a recurring task
+//precondition : user enter a recurring task
+//postcondition : return the recurring period, if not specified by user, default period is zero
 int defaultclass::getRecurPeriod(string description) {
+	assert(description.length() != 0);
 	int start = getStartPosition(description);
 	int end = getEndPosition(description);
 
@@ -114,7 +127,11 @@ int defaultclass::getRecurPeriod(string description) {
 	}
 }
 
+//Determine if the user want to do a task daily/weekly/monthly/yearly
+//precondition : user input a recurring tas
+//postcondition : return the recurring command word
 string defaultclass::getRecurruingCommandWord(string description) {
+	assert(description.length() != 0);
 	int start = getStartPosition(description);
 	int end = getEndPosition(description);
 
@@ -123,7 +140,12 @@ string defaultclass::getRecurruingCommandWord(string description) {
 	return recurringCommandWord;
 }
 
+
+//Determine the position of the start of the description
+//precondition : take in the description entered by user
+//postcondition : return the start position
 int defaultclass::getStartPosition(string description) {
+	assert(description.length() != 0);
 	int start;
 	
 	start = description.find_first_not_of(" ");
@@ -131,7 +153,11 @@ int defaultclass::getStartPosition(string description) {
 	return start;
 }
 
+//Determine the position of the end of the first word
+//precondition : take in the description entered by user
+//postcondition : return the end position
 int defaultclass::getEndPosition(string description) {
+	assert(description.length() != 0);
 	int end;
 
 	end = description.find_first_of(" ");
@@ -139,12 +165,17 @@ int defaultclass::getEndPosition(string description) {
 	return end;
 }
 
+//Add the recurring task entered by the user to the vector toDoList by categorise them into deadline and timed tasks
+//precondition : user key in a recurring task of type deadline or timed task
+//postcondition : recurring task is added to the toDoList
 void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord, string description, vector<task> & toDoList,storage *store ) {
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, end;
 	parser parse;
 	string text;
 	storage *stor = store;
 	logic function;
+
+	assert(description.length() != 0);
 
 	end = getEndPosition(description);
 
@@ -171,10 +202,16 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 	}
 }
 
+
+//Add the task to the toDoList if it has a floating type
+//Successful added message is shown to user if the task is added successfully
+//Failure added message is shown to user if the task already existed
+//precondition : user added a floating type
+//postcondition : add float task to toDoList if the task is not duplicated
 void defaultclass::addFloatTask(string description,vector<task> &toDoList,storage *store) {
 	storage *stor = store;
 	logic function;
-
+	assert(description.length() != 0);
 	task datainput(description);
 	datainput.addFloatItem();
 
@@ -187,6 +224,11 @@ void defaultclass::addFloatTask(string description,vector<task> &toDoList,storag
 	}
 }
 
+//Add the task to the toDoList if it has a deadline type
+//Successful added message is shown to user if the task is added successfully
+//Failure added message is shown to user if the task already existed or there are errors in the user inputs
+//precondition : user added a deadline type
+//postcondition : add deadline task to toDoList if the task entered has no errors
 void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,storage *store) {
 	string text;
 	parser parse;
@@ -194,7 +236,7 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	logic function;
 	int e_date, e_month, e_year, e_time;
 
-
+	assert(description.length() != 0);
 	parse.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addDeadlineItem(e_date, e_month, e_year, e_time);
@@ -206,13 +248,18 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	}
 }
 
+//Add the task to the toDoList if it has a timed type
+//Successful added message is shown to user if the task is added successfully
+//Failure added message is shown to user if the task already existed or there are errors in the user inputs
+//precondition : user added a timed type
+//postcondition : add timed task to toDoList if the task entered has no errors
 void defaultclass::addTimedTask(string description,vector<task> &toDoList,storage *store) {
 	string text;
 	parser parse;
 	logic function;
 	storage *stor = store;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
-
+	assert(description.length() != 0);
 	parse.splitinputTimed(description, text, s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
 	task datainput(text);
 	datainput.addTimedItem(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
@@ -224,12 +271,16 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	}
 }
 
+//User can delete an unwanted task by key in delete <index>
+//This can be done in the default page or after the user has operate the search or display command
+//precondition : the index of the unwanted task is read in
+//postcondition : delete the unwanted task according to its index shown on the console
 void defaultclass::deleteTask(string fileName,string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
     logic function;
 	undo undofunction;
 	storage *stor=store;
-
+	assert(description.length() != 0);
 	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 		function.deleteItem(originindex, toDoList);
 		undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
@@ -238,14 +289,18 @@ void defaultclass::deleteTask(string fileName,string description, vector<task> &
 	}
 }
 
+
 void defaultclass::displayTask(string fileName,string description, vector<task> &toDoList, vector<task> &tempVec) {
 	logic function;
-
+	assert(description.length() != 0);
 	tempVec.clear();
 	if (system("CLS")) system("clear");
     function.display(toDoList, tempVec, fileName, description);
 }
 
+//clear all content in the toDoList
+//precondition : clear command is entered
+//postcondition : vector toDoList is cleared
 void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoList, vector<undo> &undomemory) {
 	logic function;
 	undo undofunction;
@@ -256,6 +311,12 @@ void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoL
     store->saveToSaveFile(fileName,toDoList);
 }
 
+//Three types of tasks are shown every time the user key in the command "default"
+//floating tasks, tasks for today and tasks for tomorrow
+//Floating tasks are sorted based on alphabetical order
+//today and tomorrow task are sorted based on the ending time
+//precondition : default command is entered
+//postcondition : float task, task to be done today and tomorrow are shown
 void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &defaultmemory) {
 	int index, i;
 	logic function;
@@ -274,23 +335,29 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" 
 		<< "============================================================" << endl << endl;
 	function.sortEndTime(defaultmemory.todayTaskVec);
-	defaultDeadlineDisplay(defaultmemory);
+	DisplayTaskFinishByToday(defaultmemory);
 	
 
     cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "===========================================================" << endl;
 	function.sortEndTime(defaultmemory.tomorTaskVec);
-	defaultTimedDisplay(defaultmemory);
+	DisplayTaskFinishByTmr(defaultmemory);
 	
 	cout <<endl;
 }
 
+//Display all floating task in the default page
+//precondition : none
+//postcondition : floating task displayed in alphabetical order
 void defaultclass::defaultFloatDisplay(defaultclass &defaultmemory) {
 	for(int index = 0; index != defaultmemory.floatVec.size(); ++index) {
 		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
 	}
 }
 
-void defaultclass::defaultDeadlineDisplay(defaultclass &defaultmemory) {
+//Display all task to be finished by today in the default page
+//precondition : none
+//postcondition : today's tasks are displayed according to the end timing
+void defaultclass::DisplayTaskFinishByToday(defaultclass &defaultmemory) {
 	for(int i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
@@ -309,7 +376,10 @@ void defaultclass::defaultDeadlineDisplay(defaultclass &defaultmemory) {
 	}
 }
 
-void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
+//Display all task to be finished by tomorow in the default page
+//precondition : none
+//postcondition : tomorrow's tasks are displayed according to the end timing
+void defaultclass::DisplayTaskFinishByTmr(defaultclass &defaultmemory) {
 	for(int i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
 		int s_day,s_month,s_year,e_day,e_month,e_year;
 
@@ -328,9 +398,13 @@ void defaultclass::defaultTimedDisplay(defaultclass &defaultmemory) {
 	}
 }
 
+//Check if the day, month, year correspond to today's system timing
+//precondition : take in the day, month and year parameters
+//postcondition : return true if the date mathces today's system date, else return falase
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	parser parse;
-	
+	assert(e_day <= 31);
+	assert(e_month <= 12);
 	if(e_day == parse.getSystemDay() && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
@@ -338,9 +412,13 @@ bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	}
 }
 
+//Check if the day, month, year correspond to tomorrow's system timing
+//precondition : take in the day, month and year parameters
+//postcondition : return true if the date mathces tomorrow's system date, else return falase
 bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 	parser parse;
-	
+	assert(e_day <= 31);
+	assert(e_month <= 12);
 	if(e_day == (parse.getSystemDay()+1) && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
 		return true;
 	} else {
@@ -348,12 +426,21 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 	}
 }
 
+
+//If the deadline task entered by the user has errors, false will be returned
+//The errors include: task inputed is already existed; date entered is already overdued;
+//The time entered is not within 24 hours; date entered does not exist(i.e. 30/2/2015)
+//precondition : task take in is a deadline task
+//postcondition : return true if no errors found, false otherwise
 bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, int e_date, int e_month, int e_year, int e_time) {
 	
     logic function;
 	storage *stor = store;
 	bool result = true;
-
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_time <=2400);
+	assert(e_year <= 9999);
 	if (system("CLS")) system("clear");
 	if(store->isDeadlineDuplicated(datainput, toDoList)) {
 		function.printMessage(MESSAGE_DUPLICATE_DEADLINE_TASK);
@@ -376,11 +463,24 @@ bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, 
 	}
 }
 
+//If the timed task entered by the user has errors, false will be returned
+//The errors include: task inputed is already existed; start or end date entered is already overdued;
+//start or end timing entered is not within 24 hours; start or end date entered does not exist(i.e. 30/2/2015)
+//Start time is later than the end time if task happends on the same day.
+//precondition : task take in is a deadline task
+//postcondition : return true if no errors found, false otherwise
 bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
     logic function;
 	storage *stor = store;
 	bool result = true;
-
+	assert(e_date <= 31);
+	assert(e_month <= 12);
+	assert(e_time <=2400);
+	assert(e_year <= 9999);
+	assert(s_date <= 31);
+	assert(s_month <= 12);
+	assert(s_time <=2400);
+	assert(s_year <= 9999);
 	if (system("CLS")) system("clear");
 	if (function.checkIfStartTimeIsEarlierThanEndTime(s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time)) {
 		function.printMessage(MESSAGE_START_AND_END_TIME_ERROR);
@@ -429,13 +529,21 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 	}
 }
 
+
+//check the original index of the task for float task, task due today and task due tomorrow in the float vector, today's task vector 
+//and tomorrow's task vector
+//on default page, tasks are shown in consecutive indices, i.e. 1,2,3,4...., 
+//instead of float task(1,2,3...), task due today(1,2,3...), task due tomorrow(1,2,3...)
+//therefore there is a need to check for each task's original index when execute commands such ad edit <index> and delete <index>
+//precondition : nont
+//postcondition : return the original index of a task
 bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
 	string temp;
 	parser parse;
 	logic function;
 	int index, size;
 
-
+	assert(description.length() != 0);
 	istringstream in(description);
 	in>> temp;
 	in>> index;
@@ -453,7 +561,7 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 		}
 		originindex = defaultmemory.floatVec[index].returntempnum();
 	} else if(temp == "today"){ 
-		size = defaultmemory.todayTaskVec.size();
+		   size = defaultmemory.todayTaskVec.size();
 		if(size==0){
 			function.printMessage(ERROR_LIST_IS_EMPTY);
 			return false;
@@ -490,6 +598,11 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 	return true;
 }
 
+//function updates the defaultmemory 
+//The task will be pushed back into today's task vector, tomorrow's task vector and float task vector respectively if task
+//is due today, tomorrow or has a floating type
+//precondition : toDoList is read in
+//postcondition : tasks are being categorised and pushed into respective vectors
 void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 	vector<task> floatVec_;
 	task temp;

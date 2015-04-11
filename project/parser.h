@@ -36,7 +36,5 @@ public:
 	int getSystemYear();
 	int getSystemHour();
 	int getSystemMinute();
-
-
 };
 
