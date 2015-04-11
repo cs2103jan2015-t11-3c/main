@@ -63,8 +63,9 @@ void parser::trimString(string &description) {
 	
 	if(lineStart==string::npos||lineEnd==string::npos)
 		description="";
-	else
+	else{
 		description=description.substr(lineStart,lineEnd-lineStart+1);
+	}
 }
 
 //Converts a number in string format to integer format
@@ -115,6 +116,7 @@ string parser::checktype(string description){
 		return "timed";
 	else
 		return "float";
+	
 }
 
 //split the input task string into its ending date, month, year, timing and task name(text)
@@ -378,7 +380,9 @@ bool parser::canFindPartoChange(string description){
 		}
 		return true;
 	}
-
+	else{
+		throw ERROR_MESSAGE_INVALIDEDITFORMAT;
+	}
    return false;
 }
 
