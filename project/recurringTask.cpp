@@ -15,7 +15,7 @@ recurringTask::~recurringTask(void)
 }
 
 void recurringTask::AddRecurring(int n,string recurType,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
-	
+	try{
 	if(recurType=="daily")
 		DailyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
 	if(recurType=="weekly")
@@ -24,6 +24,11 @@ void recurringTask::AddRecurring(int n,string recurType,int e_date,int e_month,i
 		MonthlyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
 	if(recurType=="yearly")
 		YearlyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
+	}
+	catch(const string ERROR_MESSAGE){
+		parser par;
+		par.printMessage(ERROR_MESSAGE);
+	}
 	return;
 }
 
@@ -313,12 +318,6 @@ void recurringTask::addTodifferentType(string type, int e_date,int e_month,int e
 	return;
 }
 
-int recurringTask::recurPeriod(){
-	cout<<"Enter Recurring period: "<<endl;
-	int n;
-	cin>>n;
-	return n;
-}
 
 void recurringTask::moveToNextMonth(int &date, int &month, int &year){
 	date=date%getNumDays(month,year);                      

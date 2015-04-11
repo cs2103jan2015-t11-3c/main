@@ -182,16 +182,20 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 
 
 bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
-	for (int i=1;i<=toDoList.size();i++) {
+	try{
+		for (int i=1;i<=toDoList.size();i++) {
 		if(( toDoList[i-1].returntype() == "float")&&(newTask.returntext()==toDoList[i-1].returntext()))
 				return true;
 		}
-	return false;
+	}
+	catch(const string ERROR_MESSAGE){
+	   throw ERROR_MESSAGE_DUPLICATED;	 
+	}
+	 return false;
 }
 
 
 bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
-
 	for (int i=1;i<=toDoList.size();i++) {
 		if(toDoList[i-1].returntype() == "deadline"){
 		if ((newTask.returntext())==(toDoList[i-1].returntext())) {
@@ -201,7 +205,9 @@ bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
 		}
 		}
 	}
+	
 	return false;
+
 }
 
 

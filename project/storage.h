@@ -2,6 +2,7 @@
 #include "task.h"
 
 using namespace std;
+const string ERROR_MESSAGE_DUPLICATED="Duplicated Task Entered!";
 
 class storage
 {

@@ -42,7 +42,6 @@ public:
 	bool DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year);
 
 
-	int recurPeriod();
 
 
 };
