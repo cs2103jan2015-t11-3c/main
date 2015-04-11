@@ -2,11 +2,14 @@
 #include <sstream>
 #include "logic.h"
 
+
+
 //Check if the command entered by the user is valid 
 //precondition : user input a command
 //postcondition : return true if command is valid; error message is shown to user if command entered is invalid
 //and false is returned
 bool parser::isValidCommand(const string command, const string description){
+	try{
 	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_DESCRIPTION);
@@ -41,7 +44,13 @@ bool parser::isValidCommand(const string command, const string description){
 	printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
+	}
+
+	catch(const string ERROR_MESSAGE){
+		printMessage(ERROR_MESSAGE);
+	}
 }
+
 
 //Remove leading and following whitespaces of a string
 //precondition : user input a description
@@ -247,6 +256,9 @@ int parser::convertAlphabetMonthToInteger (string month) {
 	}
 	else if (month == "Dec" || month == "dec") {
 		monthInt = 12;
+	}
+	else{
+		throw ERROR_MESSAGE_INVALIDMONTH;
 	}
 	return monthInt;
 }
