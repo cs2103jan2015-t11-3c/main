@@ -9,9 +9,11 @@ private:
 	vector<task> _toDoList;
 	string _filePath;
 	string _fileName;
+	static storage* theOne;
+	storage(void);
 
 public:
-	storage(void);
+	static storage* getInstance();
 	~storage(void);
 	
 	string toString(vector<task> &toDoList);

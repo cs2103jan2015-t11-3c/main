@@ -15,6 +15,15 @@ storage::~storage(void)
 {
 }
 
+storage*storage::theOne=nullptr;
+
+storage* storage::getInstance() {
+	if(theOne==nullptr) {
+		theOne = new storage();
+		return theOne;
+	}
+}
+
 void storage::setFileName(string newFileName) {
 	_fileName = newFileName;
 }

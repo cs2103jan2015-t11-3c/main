@@ -11,50 +11,60 @@ namespace UnitTest
 		
 		TEST_METHOD(TestgetFileNameAndDirectory)
 		{
-			storage s;
-			string testString=s.getFileNameAndDirectory("C:", "SaveFile");
+			storage *s=storage::getInstance();
+			string testString=s->getFileNameAndDirectory("C:", "SaveFile");
 			string expected="C:\\SaveFile";
 			Assert::AreEqual (expected,testString);
 		}
-
+		/*
 		TEST_METHOD(TestgetFileName)
 		{
-			storage s;
-			string testString=s.getCurrentFileName();
+			storage *s=storage::getInstance();
+			string testString=s->getCurrentFileName();
+			
 			string expected="SaveFile";
 			Assert::AreEqual (expected,testString);
 		}
-
+		
+		TEST_METHOD(TestchangeFileName)
+		{
+			storage *s=storage::getInstance();
+			s->setFileName("Save");
+			string testString=s->getCurrentFileName();
+			string expected="Save";
+			Assert::AreEqual (expected,testString);
+		}
+        */
 		TEST_METHOD(TestFloatDuplicated)
 		{
-			storage s;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 			task Existing("shopping");
 			Existing.addFloatItem();
 			Itemlist.push_back(Existing);
 			bool expected=true;
-			bool duplicated=s.isFloatDuplicated(NewTask,Itemlist);
+			bool duplicated=s->isFloatDuplicated(NewTask,Itemlist);
 			Assert::AreEqual (expected,duplicated);
 		}
 
 		TEST_METHOD(TestFloatnotDuplicated)
 		{
-			storage s;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 			task Existing("sh");
 			Existing.addFloatItem();
 			Itemlist.push_back(Existing);
 			bool expected=false;
-			bool duplicated=s.isFloatDuplicated(NewTask,Itemlist);
+			bool duplicated=s->isFloatDuplicated(NewTask,Itemlist);
 			Assert::AreEqual (expected,duplicated);
 		}
 
 
 		TEST_METHOD(TestisDeadlineDuplicated)
 		{
-			storage *s=new storage;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 		    NewTask.addDeadlineItem(27,04,2015,1000);
@@ -69,7 +79,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestisDeadlinenotDuplicated)
 		{
-			storage *s=new storage;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 		    NewTask.addDeadlineItem(27,04,2015,1000);
@@ -83,7 +93,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestIsTimeClashed)
 		{
-			storage *s=new storage;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 		    NewTask.addTimedItem(27,04,2015,900,27,04,2015,1100);
@@ -98,7 +108,7 @@ namespace UnitTest
 
 		TEST_METHOD(TestIsTimenotClashed)
 		{
-			storage *s=new storage;
+			storage *s=storage::getInstance();
 			task NewTask("shopping");
 			vector <task> Itemlist;
 		    NewTask.addTimedItem(27,04,2015,900,27,04,2015,1100);
@@ -114,12 +124,13 @@ namespace UnitTest
 
 		TEST_METHOD(TestfileExistance)
 		{
-			storage s;
-			bool exist=s.fileExists("hellofile");
+			storage *s=storage::getInstance();
+			bool exist=s->fileExists("hellofile");
 			bool expected=false;	
 			Assert::AreEqual (expected,exist);
 		}
 
 	
 	};
+	
 }
