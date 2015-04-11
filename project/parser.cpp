@@ -19,11 +19,22 @@ bool parser::isValidCommand(const string command, const string description){
 		    command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
 		return true;
 
-	 else if (command=="edit"||command=="modify"||command=="change"||command=="delete"||command=="-"||command=="remove"||command=="done"){
+	 else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
 		if(description.size()==0) {
 			printMessage(ERROR_MISSING_INDEX);
 			return false;
 	}  
+		return true;
+	}
+	 else if(command=="edit"||command=="modify"||command=="change"){
+		 if(description.size()==0) {
+			printMessage(ERROR_MISSING_INDEX);
+			return false;
+	}    
+		 if(!canFindPartoChange(description)){
+			printMessage(ERROR_MISSING_CHANGINGPART);
+			return false;
+	}    
 		return true;
 	}
 
@@ -107,30 +118,32 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 	string month;
 	string year;
 
-	
-	
-	size_t bypos = description.find("/by");
-	text = description.substr(0 , bypos-1);
-	description = description.substr(bypos + 4);
-	istringstream in(description);
-		in>>e_time;
 
-		if(containShortForm(description)){
-		getInfo(description, e_date, e_month, e_year);
+	size_t bypos = description.find("/by");
+	text = description.substr(0 , bypos-1);//"meeting"
+	description = description.substr(bypos + 4);
+	istringstream in(description);// meeting by 1800 31 06 2016
+	in>>e_time;//1800
+
+	if(containShortForm(description)){
+	getInfo(description, e_date, e_month, e_year);
 	}
-		else{
-		in>>temp;
-		in>>e_date;
-		in>>c;
-		in>>date;
-		int pos=date.find("/");
-		month=date.substr(0,pos);
-		year=date.substr(pos+1);
-		
+	else{
+		in>>temp;//on
+		in>>e_date;//31
+		in>>c;//"/"
+		int s=description.find("/",bypos);
+		int pos=description.find("/",s+1);
+
+		month=description.substr(s+1,pos-s-1);
+    	trimString(month);
+	
+		year=description.substr(pos+1);
+     	trimString(year);
 		e_month=convertMonth(month);
 		e_year=convertStringToInteger(year);
 
-}
+       }
 }
 
 //split the input task string into its starting date, month, year, timing
@@ -148,51 +161,47 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos+6);
 	istringstream in(description);
-	in>>s_time;
+	in>>s_time;//1900
 
 	int spos=description.find("/to ");
-
-
 	if(containShortForm(description.substr(0,spos))){
 		    in>>temp;
 		
 			getInfo(description, s_date, s_month, s_year);
 	}
-
 	else{
-	in>>temp;
-	in>>s_date;
-	in>>c;
-	in>>date;
-		int tend=date.find_first_of("/");
-		smonth=date.substr(0,tend);
-
-        s_month=convertMonth(smonth);
+	     in>>temp;//on
+	     in>>s_date;//28
+	     in>>c;//"/"
+	     in>>date;
+		 int tend=date.find_first_of("/");
+		 smonth=date.substr(0,tend);
+		 trimString(smonth);
+         s_month=convertMonth(smonth);
         
-		int pos=date.find("to");
-		syear=date.substr(tend+1,pos-tend);
-		s_year=convertStringToInteger(syear);
-	}
+		 int pos=date.find("to");
+		 syear=date.substr(tend+1,pos-tend);
+		 trimString(syear);
+		 s_year=convertStringToInteger(syear);
+   }
 		
-	    in>>temp;
-	    in>>e_time;
-		 in>>temp;
-		if(containShortForm(temp)){
-		
-		getInfo(temp, e_date, e_month, e_year);
-	}
-
-		else{
-	   
-	    in>>e_date;
-	    in>>c;
+	     in>>temp;//to
+	     in>>e_time;//2000
+		 in>>temp;//on
+		 if(containShortForm(temp)){		
+		 getInfo(temp, e_date, e_month, e_year);
+	    }
+		else{	   
+	    in>>e_date;//29
+	    in>>c;//"/"
 		in>>date;
 		int post=date.find("/");
 		emonth=date.substr(0,post);
+		trimString(emonth);
 		eyear=date.substr(post+1);
+		trimString(eyear);
 
 		e_month=convertMonth(emonth);
-		
 		e_year=convertStringToInteger(eyear);
 		}
 }
@@ -299,14 +308,14 @@ string parser::shortForm(string description){
 //precondition : user input date is "today" or "tomorrow" instead of numerical date
 //postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
 void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
-			if(shortForm(description)=="today"){
-			e_date=getSystemDay();		
-			}
-			if(shortForm(description)=="tomorrow"){
-			e_date=getSystemDay()+1;
-			}
-			e_month=getSystemMonth();
-			e_year=getSystemYear();
+		if(shortForm(description)=="today"){
+		e_date=getSystemDay();		
+		}
+		if(shortForm(description)=="tomorrow"){
+		e_date=getSystemDay()+1;
+		}
+		e_month=getSystemMonth();
+		e_year=getSystemYear();
 }
 
 //Convert alphabetic month into integer
@@ -319,6 +328,46 @@ int parser::convertMonth(string month){
 		else{
 			return convertAlphabetMonthToInteger(month);
 		}
+}
+
+
+bool parser::canFindPartoChange(string description){
+	if(description.find_first_of("-name")!=-1){
+		int n=description.find_first_of("-name");
+		description=description.substr(n+5);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	else if(description.find_first_of("-due")!=-1){
+		int n=description.find_first_of("-due");
+		description=description.substr(n+4);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+		
+	else if(description.find_first_of("-start")!=-1){
+		int n=description.find_first_of("-start");
+		description=description.substr(n+6);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	
+	else if(description.find_first_of("-end")!=-1){
+		int n=description.find_first_of("-end");
+		description=description.substr(n+5);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+
+   return false;
 }
 
 //Get the current local day on the system the program is running

@@ -10,6 +10,7 @@ const string DELIMITERS = " \n\t\v";
 const string ERROR_MISSING_DESCRIPTION = "no description entered";
 const string ERROR_INVALID_COMMAND = "invalid command";
 const string ERROR_MISSING_INDEX="missing index";
+const string ERROR_MISSING_CHANGINGPART="using the correct format to change";
 
 class parser{
 public:
@@ -30,6 +31,7 @@ public:
 	string shortForm(string description);
 	void getInfo(string description, int &e_date, int &e_month, int &e_year);
 	int convertMonth(string month);
+	bool canFindPartoChange(string description);
 
 	int getSystemDay();
 	int getSystemMonth();
