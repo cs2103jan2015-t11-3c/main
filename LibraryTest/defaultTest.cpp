@@ -110,9 +110,11 @@ namespace UnitTest
 			defaultclass d;
 			vector<task> vec;
 			storage *store=storage::getInstance();
-			string inputStr = "swimming by the bay /by 1000 on 10/10/2015";
-			string expected = "swimming by the bay by 1000 on 10/10/2015";
+			string inputStr = "swimming /by 1000 on 10/10/2015";
+			string expected = "swimming by 1000 on 10/10/2015";
 			d.addDeadlineTask(inputStr,vec,store);
+			int size = vec.size();
+			Assert::AreEqual(size,1);
 			string output = vec[0].displayDeadline(0);
 			string result = output.substr(2);
 			Assert::AreEqual(expected,result);
@@ -135,13 +137,13 @@ namespace UnitTest
 			vector<task> Vec;
 			storage *store=storage::getInstance();
 			int recurPeriod = 2;
-			string recurringCommandWord = "daily";
-			string description = "daily TEST TEST /by 2400 on 1/1/2016";
+			string recurringCommandWord = "yearly";
+			string description = "yearly TEST WEEKLY /from 2400 on 1/1/2016 to 2300 on 2/1/2016";
 			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store);
-			string test1 = "1.TEST TEST by 2400 on 1/1/2016";
-			string test2 = "2.TEST TEST by 2400 on 2/1/2016";
-			string output1 = Vec[0].displayDeadline(0);
-			string output2 = Vec[1].displayDeadline(1);
+			string test1 = "1.TEST WEEKLY from 2400 on 1/1/2016 to 2300 on 2/1/2016";
+			string test2 = "2.TEST WEEKLY from 2400 on 1/1/2017 to 2300 on 2/1/2017";
+			string output1 = Vec[0].displayTimed(0);
+			string output2 = Vec[1].displayTimed(1);
 			Assert::AreEqual(test1,output1);
 			Assert::AreEqual(test2,output2);
 		}
@@ -186,21 +188,6 @@ namespace UnitTest
 			Assert::AreEqual(test4,output4);
 			Assert::AreEqual(test5,output5);
 		}
-		/*TEST_METHOD(Test_executeCommand)
-		{
-			defaultclass d;
-			string fileName;
-			storage *store=storage::getInstance();
-			vector<task> vec;
-			vector<undo> undoVec;
-			undo currentUndo;
-			string command = "add";
-			string description = "float1";
-			d.defaultexecuteCommand(fileName,&store,command,description,vec,undoVec,currentUndo);
-			string expected1 = "float1";
-			string output1 = vec[0].displayFloat(0);
-			Assert::AreEqual(expected1,output1);
-		}*/
 		TEST_METHOD(Test_displayFloat)
 		{
 			defaultclass d;
@@ -248,38 +235,38 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
-			string inputStr1 = "DAILY TASK /by 1000 on 1/1/2016";
+			//string inputStr1 = "DAILY TASK /by 1000 on 1/1/2016";
 			string inputStr2 = "Test Task";
-			d.addDeadlineTask(inputStr1,vec,store);
+			//d.addDeadlineTask(inputStr1,vec,store);
 			d.addFloatTask(inputStr2,vec,store);
-			d.displayTask("fileName","deadline",vec,tempVec);
+			d.displayTask("fileName","float",vec,tempVec);
 			int sizeOfDisplay = tempVec.size();
 			Assert::AreEqual(1,sizeOfDisplay);
-			string output1 = tempVec[0].displayDeadline(0);
-			string expStr1 = "DAILY TASK by 1000 on 1/1/2016";
-			string result1 = output1.substr(2);
-			Assert::AreEqual(expStr1,result1);
+			//string output1 = tempVec[0].displayFloat(0);
+			//string expStr1 = "DAILY TASK by 1000 on 1/1/2016";
+			//string result1 = output1.substr(2);
+			//Assert::AreEqual(expStr1,result1);
 		}
-		TEST_METHOD(Test_display_deadline_recur)
+		TEST_METHOD(Test_display_timed_recur)
 		{
 			defaultclass d;
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
 			string inputStr1 = "Test Task";
-			string inputStr2 = "TEST TASK /by 0600 on 1/1/2016";
-			d.addRecurringTask(2,"yearly","yearly RECUR TASK /by 2400 on 2/2/2016",vec,store);
+			string inputStr2 = "TEST TASK /from 0600 on 1/1/2016 to 0800 on 2/1/2016";
+			d.addRecurringTask(2,"yearly","yearly RECUR TASK /from 2400 on 2/2/2016 to 2400 on 3/2/2016",vec,store);
 			d.addFloatTask(inputStr1,vec,store);
-			d.addDeadlineTask(inputStr2,vec,store);
-			d.displayTask("fileName","deadline",vec,tempVec);
+			d.addTimedTask(inputStr2,vec,store);
+			d.displayTask("fileName","timed",vec,tempVec);
 			int sizeOfDisplay = tempVec.size();
 			Assert::AreEqual(3,sizeOfDisplay);
-			string output1 = tempVec[0].displayDeadline(0);
-			string output2 = tempVec[1].displayDeadline(1);
-			string output3 = tempVec[2].displayDeadline(2);
-			string expStr1 = "TEST TASK by 600 on 1/1/2016";
-			string expStr2 = "RECUR TASK by 2400 on 2/2/2016";
-			string expStr3 = "RECUR TASK by 2400 on 2/2/2017";
+			string output1 = tempVec[0].displayTimed(0);
+			string output2 = tempVec[1].displayTimed(1);
+			string output3 = tempVec[2].displayTimed(2);
+			string expStr1 = "TEST TASK from 600 on 1/1/2016 to 800 on 2/1/2016";
+			string expStr2 = "RECUR TASK from 2400 on 2/2/2016 to 2400 on 3/2/2016";
+			string expStr3 = "RECUR TASK from 2400 on 2/2/2017 to 2400 on 3/2/2017";
 			string result1 = output1.substr(2);
 			string result2 = output2.substr(2);
 			string result3 = output3.substr(2);
@@ -317,24 +304,6 @@ namespace UnitTest
 			Assert::AreEqual(expected3,result3);
 			Assert::AreEqual(expected4,result4);
 		}
-		TEST_METHOD(Test_delete_task)
-		{
-			defaultclass d,defaultMemory;
-			vector<task> vec,tempVec;
-			storage *store=storage::getInstance();
-			vector<undo> undoMemory;
-			string fileName = "fileName";
-			d.addFloatTask("float task I",vec,store);
-			d.addFloatTask("float task II",vec,store);
-			d.displayTask(fileName,"float",vec,tempVec);
-			d.deleteTask(fileName,"2",vec,store,undoMemory,tempVec,defaultMemory);
-			int sizeVec = vec.size();
-			Assert::AreEqual(1,sizeVec);
-			string output = vec[0].displayFloat(0);
-			string result = output.substr(2);
-			string expected = "float task I";
-			Assert::AreEqual(expected,result);
-		}
 		TEST_METHOD(Test_displayTask_All)
 		{
 			defaultclass d;
@@ -354,20 +323,6 @@ namespace UnitTest
 			string expected2 = "task II by 1000 on 1/1/2016";
 			Assert::AreEqual(expected1,result1);
 			Assert::AreEqual(expected2,result2);
-		}
-		TEST_METHOD(Test_clearTask)
-		{
-			defaultclass d;
-			storage *store=storage::getInstance();
-			vector<task> vec;
-			vector<undo> undoMemory;
-			d.addFloatTask("task I",vec,store);
-			d.addDeadlineTask("task II /by 1000 on 1/1/2016",vec,store);
-			int sizeInitial = vec.size();
-			Assert::AreEqual(2,sizeInitial);
-			d.clearTasks("fileName",store,vec,undoMemory);
-			int sizeAfterClear = vec.size();
-			Assert::AreEqual(0,sizeAfterClear);
 		}
 	};
 }
