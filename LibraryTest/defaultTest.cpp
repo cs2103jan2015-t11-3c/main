@@ -194,17 +194,11 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
-			//string inputStr1 = "DAILY TASK /by 1000 on 1/1/2016";
 			string inputStr2 = "Test Task";
-			//d.addDeadlineTask(inputStr1,vec,store);
 			d.addFloatTask(inputStr2,vec,store);
 			d.displayTask("fileName","float",vec,tempVec);
 			int sizeOfDisplay = tempVec.size();
 			Assert::AreEqual(1,sizeOfDisplay);
-			//string output1 = tempVec[0].displayFloat(0);
-			//string expStr1 = "DAILY TASK by 1000 on 1/1/2016";
-			//string result1 = output1.substr(2);
-			//Assert::AreEqual(expStr1,result1);
 		}
 		TEST_METHOD(Test_display_timed_recur)
 		{
