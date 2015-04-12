@@ -90,6 +90,8 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				store->changeDirectory( description,fileName,toDoList);	
 			} else if(command == "changeFilename") {		
 				store->changeFileName(description,toDoList);			
+			} else if (command == "help") {
+				showHelpManual();
 			} else {
 				function.printMessage(MESSAGE_INVALID_COMMAND);
 			}
@@ -99,6 +101,10 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 		cin >> command;
 		getline(cin,description);
 	}
+}
+
+void defaultclass::showHelpManual() {
+	cout << "help manual" << endl;
 }
 
 //check the original index of the task for float task, task due today and task due tomorrow in the float vector, today's task vector 
