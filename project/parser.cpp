@@ -326,56 +326,6 @@ string parser::shortForm(string description){
 
 }
 
-//Get the current local day on the system the program is running
-//precondition : none
-//postcondition : system day is returned
-int parser::getSystemDay() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int day = timePtr->tm_mday;
-	return day;
-}
-
-//Get the current local month on the system the program is running
-//precondition : none
-//postcondition : system month is returned
-int parser::getSystemMonth() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int month = timePtr->tm_mon + 1;
-	return month;
-}
-
-//Get the current local year on the system the program is running
-//precondition : none
-//postcondition : system year is returned
-int parser::getSystemYear() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int year = timePtr->tm_year+1900;
-	return year;
-}
-
-//Get the current local hour on the system the program is running
-//precondition : none
-//postcondition : system hour is returned
-int parser::getSystemHour() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int hour = timePtr->tm_hour;
-	return hour;
-}
-
-//Get the current local minute on the system the program is running
-//precondition : none
-//postcondition : system minute is returned
-int parser::getSystemMinute() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int minute = timePtr->tm_min;
-	return minute;
-}
-
 //Get the corresponding numeric day, month and year if the date entered by user is "today" or "tomorrow"
 //precondition : user input date is "today" or "tomorrow" instead of numerical date
 //postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
@@ -434,6 +384,44 @@ bool parser::canFindPartoChange(string description){
 
 
 //@author A0113745
+
+//Get the current local day on the system the program is running
+//precondition : none
+//postcondition : system day is returned
+int parser::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+int parser::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+int parser::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
+}
+
+int parser::getSystemHour() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int hour = timePtr->tm_hour;
+	return hour;
+}
+
+int parser::getSystemMinute() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int minute = timePtr->tm_min;
+	return minute;
+}
 
 //Check whether there is any integer in the keyword
 //Precondition: keyword
