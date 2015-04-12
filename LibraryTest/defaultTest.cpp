@@ -9,48 +9,7 @@ namespace UnitTest
 	{
 	public:
 		
-		TEST_METHOD(Test_getRecurPeriod)
-		{
-			defaultclass d;
-			int expected = 3;
-			string testStr = "3 daily swimming /by 1000 today";
-			int testResult = d.getRecurPeriod(testStr);
-			Assert::AreEqual(expected,testResult);
-		}
-		TEST_METHOD(Test_default_getRecurPeriod)
-		{
-			defaultclass d;
-			int expected = 0;
-			string testStr = "daily swimming /by 1000 tmr";
-			int testResult = d.getRecurPeriod(testStr);
-			Assert::AreEqual(expected,testResult);
-		}
-		TEST_METHOD(Test_getStartPos)
-		{
-			defaultclass d;
-			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
-			int result = d.getStartPosition(testStr);
-			int expected = 0;
-			Assert::AreEqual(expected,result);
-		}
-		TEST_METHOD(Test_getEndPos)
-		{
-			defaultclass d;
-			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
-			int result = d.getEndPosition(testStr);
-			int expected = 6;
-			Assert::AreEqual(expected,result);
-		}
-		TEST_METHOD(Test_getRecurWord)
-		{
-			defaultclass d;
-			string expectedStr = "yearly";
-			string str = "5 yearly swimming /by 1000 tmr";
-			int endPos = d.getEndPosition(str);
-			string testStr = str.substr(endPos+1);
-			string testResult = d.getRecurruingCommandWord(testStr);
-			Assert::AreEqual(expectedStr,testResult);
-		}
+		
 		TEST_METHOD(TEST_checkIfIsToday)
 		{
 			defaultclass d;

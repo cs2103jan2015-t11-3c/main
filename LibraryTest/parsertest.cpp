@@ -9,7 +9,49 @@ namespace LibraryTest
 	TEST_CLASS(parsertest)
 	{
 	public:
-		
+		TEST_METHOD(Test_getRecurPeriod)
+		{
+			parser parse;
+			int expected = 3;
+			string testStr = "3 daily swimming /by 1000 today";
+			int testResult = parse.getRecurPeriod(testStr);
+			Assert::AreEqual(expected,testResult);
+		}
+		TEST_METHOD(Test_default_getRecurPeriod)
+		{
+			parser parse;
+			int expected = 0;
+			string testStr = "daily swimming /by 1000 tmr";
+			int testResult = parse.getRecurPeriod(testStr);
+			Assert::AreEqual(expected,testResult);
+		}
+		TEST_METHOD(Test_getStartPos)
+		{
+			parser parse;
+			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
+			int result = parse.getStartPosition(testStr);
+			int expected = 0;
+			Assert::AreEqual(expected,result);
+		}
+		TEST_METHOD(Test_getEndPos)
+		{
+			parser parse;
+			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
+			int result = parse.getEndPosition(testStr);
+			int expected = 6;
+			Assert::AreEqual(expected,result);
+		}
+		TEST_METHOD(Test_getRecurWord)
+		{
+			parser parse;
+			string expectedStr = "yearly";
+			string str = "5 yearly swimming /by 1000 tmr";
+			int endPos = parse.getEndPosition(str);
+			string testStr = str.substr(endPos+1);
+			string testResult = parse.getRecurruingCommandWord(testStr);
+			Assert::AreEqual(expectedStr,testResult);
+		}
+
 		TEST_METHOD(TestNoDescription)
 		{
 		    parser p;
