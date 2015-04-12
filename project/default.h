@@ -24,15 +24,13 @@ public:
 	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
 	void updatedefaultmemory(vector<task> &);
 
-	int getStartPosition(string);
-	int getEndPosition(string);
-
-	int getRecurPeriod(string);
-	string getRecurruingCommandWord(string);
 	void addRecurringTask(int,string,string,vector<task> &,storage *);
 	void addFloatTask(string,vector<task> &,storage *);
 	void addDeadlineTask(string,vector<task> &,storage *);
 	void addTimedTask(string,vector<task> &,storage *);
+	bool printErrorMsgForAddDeadlineTask(string,task  ,vector<task> &,storage *, int , int , int , int );
+	bool printErrorMsgForAddTimedTask (string,task  ,vector<task> &,storage *, int , int , int , int, int, int, int, int);
+
 	void deleteTask(string,string,vector<task> &,storage *,vector<undo> &, vector<task> &, defaultclass &);
 	void displayTask(string, string,vector<task> &, vector<task> &);
 	void clearTasks(string ,storage *,vector<task> &, vector<undo> &);
@@ -44,6 +42,4 @@ public:
 	void DisplayTaskFinishByToday(defaultclass &);
 	void DisplayTaskFinishByTmr(defaultclass &);
 
-	bool printErrorMsgForAddDeadlineTask(string,task  ,vector<task> &,storage *, int , int , int , int );
-	bool printErrorMsgForAddTimedTask (string,task  ,vector<task> &,storage *, int , int , int , int, int, int, int, int);
 };

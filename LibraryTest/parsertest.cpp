@@ -211,6 +211,68 @@ namespace LibraryTest
 		
 		}
 
+		TEST_METHOD(testchecksearchstringdigit){
+			string testone = "meeting", testtwo = "25", testthree = "14haha";
+			parser parse;
+			bool result;
+
+			result = parse.isCheckSearchStringDigit(testone);
+			Assert::AreEqual(false, result);
+
+			result = parse.isCheckSearchStringDigit(testtwo);
+			Assert::AreEqual(true, result);
+
+			result = parse.isCheckSearchStringDigit(testthree);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testCovertNumtoString){
+			string testone = "14", testtwo = "100";
+			int result;
+			parser parse;
+
+			result = parse.convertNumStringToInt(testone);
+			Assert::AreEqual(14, result);
+
+			result = parse.convertNumStringToInt(testtwo);
+			Assert::AreEqual(100, result);
+		}
+
+		TEST_METHOD(testLeapYear){
+			int testone = 2016, testtwo = 2014;
+			bool result;
+			parser parse;
+
+			result = parse.isleapyear(testone);
+			Assert::AreEqual(true, result);
+			
+			result = parse.isleapyear(testtwo);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testValidDate){
+			parser parse;
+			bool result;
+
+			result = parse.isValidDate(5, 11, 2014);
+			Assert::AreEqual(true, result);
+
+			result = parse.isValidDate(32, 13, 2014);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testCheckIsDateOverdue){
+			logic function;
+			bool result;
+			parser parse;
+
+			result = parse.checkIsDateOverdue(19, 12, 2016, 1400);
+			Assert::AreEqual(true, result);
+
+			result = parse.checkIsDateOverdue(1, 4, 2015, 1400);
+			Assert::AreEqual(false, result);
+		}
+
 
 	
 	};

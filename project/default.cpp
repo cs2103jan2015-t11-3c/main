@@ -33,14 +33,14 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				string recurringCommandWord;
 				int end, recurPeriod;
 				
-				end = getEndPosition(description);
-				recurPeriod = getRecurPeriod(description);//5
+				end = parse.getEndPosition(description);
+				recurPeriod = parse.getRecurPeriod(description);//5
 				if(recurPeriod != 0) {
 					description = description.substr(end+1);
 				} else {
 					description = description;
 				}
-				recurringCommandWord = getRecurruingCommandWord(description);
+				recurringCommandWord = parse.getRecurruingCommandWord(description);
 
 				if(recurringCommandWord == "daily" ||recurringCommandWord == "weekly" ||recurringCommandWord == "monthly" ||recurringCommandWord == "yearly") {
 					addRecurringTask(recurPeriod,recurringCommandWord,description, toDoList,store);
@@ -105,65 +105,102 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	}
 }
 
+//check the original index of the task for float task, task due today and task due tomorrow in the float vector, today's task vector 
+//and tomorrow's task vector
+//on default page, tasks are shown in consecutive indices, i.e. 1,2,3,4...., 
+//instead of float task(1,2,3...), task due today(1,2,3...), task due tomorrow(1,2,3...)
+//therefore there is a need to check for each task's original index when execute commands such ad edit <index> and delete <index>
+//precondition : nont
+//postcondition : return the original index of a task
+bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
+	string temp;
+	parser parse;
+	logic function;
+	int index, size;
 
-//Determine the recurring period the user want to do a recurring task
-//precondition : user enter a recurring task
-//postcondition : return the recurring period, if not specified by user, default period is zero
-int defaultclass::getRecurPeriod(string description) {
 	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
+	istringstream in(description);
+	in>> temp;
+	in>> index;
+	index = index -1;
 
-	string recurPeriod = description.substr(start, end - start);
+	if(temp == "float"){
+		size = defaultmemory.floatVec.size();
 
-	for(int i = 0; i < recurPeriod.size(); ++i) {
-		if(!isdigit(recurPeriod[i])) {
-			return 0;
-		} else {
-			int convertedNum;
-			convertedNum = atoi(recurPeriod.c_str());
-			return convertedNum;
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.floatVec[index].returntempnum();
+	} else if(temp == "today"){ 
+		   size = defaultmemory.todayTaskVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.todayTaskVec[index].returntempnum();
+	} else if(temp == "tomorrow"){
+		size = defaultmemory.tomorTaskVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = defaultmemory.tomorTaskVec[index].returntempnum();
+	} else {
+		istringstream intemp(description);
+		intemp >> index;
+		index = index - 1;
+
+		size = tempVec.size();
+		if(size==0){
+			function.printMessage(ERROR_LIST_IS_EMPTY);
+			return false;
+		} else if((index >= size)||(index < 0)){
+			function.printMessage(INVALID_INDEX);
+			return false;
+		}
+		originindex = tempVec[index].returntempnum();
+	}
+	return true;
+}
+
+//function updates the defaultmemory 
+//The task will be pushed back into today's task vector, tomorrow's task vector and float task vector respectively if task
+//is due today, tomorrow or has a floating type
+//precondition : toDoList is read in
+//postcondition : tasks are being categorised and pushed into respective vectors
+void defaultclass::updatedefaultmemory(vector<task> &toDoList){
+	vector<task> floatVec_;
+	task temp;
+	int index, i = 0, j = 0, k = 0;
+
+	for(index = 0; index != toDoList.size(); ++index) {
+		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
+			   todayTaskVec.push_back(toDoList[index]);
+			   todayTaskVec[i].inserttempnum(index);
+			   i++;
+		} else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
+			   tomorTaskVec.push_back(toDoList[index]);
+			   tomorTaskVec[j].inserttempnum(index);
+			   j++;
+		} else if(toDoList[index].returntype() =="float"){
+			floatVec_.push_back(toDoList[index]);
+			floatVec_[k].inserttempnum(index);
+			k++;
 		}
 	}
+	floatVec = floatVec_;
 }
 
-//Determine if the user want to do a task daily/weekly/monthly/yearly
-//precondition : user input a recurring tas
-//postcondition : return the recurring command word
-string defaultclass::getRecurruingCommandWord(string description) {
-	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
-
-	string recurringCommandWord = description.substr(start, end - start);	
-
-	return recurringCommandWord;
-}
-
-
-//Determine the position of the start of the description
-//precondition : take in the description entered by user
-//postcondition : return the start position
-int defaultclass::getStartPosition(string description) {
-	assert(description.length() != 0);
-	int start;
-	
-	start = description.find_first_not_of(" ");
-	
-	return start;
-}
-
-//Determine the position of the end of the first word
-//precondition : take in the description entered by user
-//postcondition : return the end position
-int defaultclass::getEndPosition(string description) {
-	assert(description.length() != 0);
-	int end;
-
-	end = description.find_first_of(" ");
-
-	return end;
-}
 
 //Add the recurring task entered by the user to the vector toDoList by categorise them into deadline and timed tasks
 //precondition : user key in a recurring task of type deadline or timed task
@@ -177,7 +214,7 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 
 	assert(description.length() != 0);
 
-	end = getEndPosition(description);
+	end = parse.getEndPosition(description);
 
 	description = description.substr(end+1);
 
@@ -431,23 +468,24 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, vector<task> &toDoList, storage *store, int e_date, int e_month, int e_year, int e_time) {
 	
     logic function;
+	parser parse;
 	storage *stor = store;
 	if (system("CLS")) system("clear");
 	if(store->isDeadlineDuplicated(datainput, toDoList)) {
 		function.printMessage(MESSAGE_DUPLICATE_DEADLINE_TASK);
-	} else if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !function.isValidTime(e_time)) {
+	} else if(!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !parse.isValidTime(e_time)) {
 		function.printMessage(MESSAGE_DATE_OVERDUE);
 		cout << "and";
 		function.printMessage(MESSAGE_TIME_INVALID);
-	} else if(!function.isValidDate(e_date,e_month,e_year) && !function.isValidTime(e_time)) {
+	} else if(!parse.isValidDate(e_date,e_month,e_year) && !parse.isValidTime(e_time)) {
 		function.printMessage(MESSAGE_DATE_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_TIME_INVALID);
-	} else if (!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+	} else if (!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 			function.printMessage(MESSAGE_DATE_OVERDUE);
-	} else if(!function.isValidDate(e_date,e_month,e_year)) {
+	} else if(!parse.isValidDate(e_date,e_month,e_year)) {
 			function.printMessage(MESSAGE_DATE_INVALID);
-	} else if (!function.isValidTime(e_time)) {
+	} else if (!parse.isValidTime(e_time)) {
 			function.printMessage(MESSAGE_TIME_INVALID);
 	} else{
 		return false;
@@ -462,6 +500,7 @@ bool defaultclass::printErrorMsgForAddDeadlineTask(string text, task datainput, 
 //postcondition : return true if no errors found, false otherwise
 bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vector<task> &toDoList,storage *store, int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time) {
     logic function;
+	parser parse;
 	storage *stor = store;
 	bool result = true;
 	if (system("CLS")) system("clear");
@@ -469,43 +508,43 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 		function.printMessage(MESSAGE_START_AND_END_TIME_ERROR);
 	} else if (store->isTimeClashed(datainput, toDoList)) {
 		function.printMessage(MESSAGE_TIME_SLOT_CLASH);
-	} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !function.isValidTime(s_time)) {
+	} else if(!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !parse.isValidTime(s_time)) {
 		function.printMessage(MESSAGE_START_TIME_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_START_DATE_OVERDUE);
-	} else if(!function.isValidTime(s_time) && !function.isValidDate(s_date,s_month,s_year)) {
+	} else if(!parse.isValidTime(s_time) && !parse.isValidDate(s_date,s_month,s_year)) {
 		function.printMessage(MESSAGE_START_TIME_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_START_DATE_INVALID);
-	} else if(!function.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !function.isValidTime(e_time)) {
+	} else if(!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !parse.isValidTime(e_time)) {
 		function.printMessage(MESSAGE_END_TIME_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_END_DATE_OVERDUE);
-	} else if(!function.isValidTime(e_time) && !function.isValidDate(e_date,e_month,e_year)) {
+	} else if(!parse.isValidTime(e_time) && !parse.isValidDate(e_date,e_month,e_year)) {
 		function.printMessage(MESSAGE_END_TIME_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_END_DATE_INVALID);
-	} else if(!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)) {
+	} else if(!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)) {
 		function.printMessage(MESSAGE_BOTH_DATE_INVALID);
-	} else if(!function.isValidTime(e_time) && !function.isValidTime(s_time)) {
+	} else if(!parse.isValidTime(e_time) && !parse.isValidTime(s_time)) {
 		function.printMessage(MESSAGE_START_TIME_INVALID);
 		cout << "and";
 		function.printMessage(MESSAGE_END_TIME_INVALID);
-	} else if(!function.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+	} else if(!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 		function.printMessage(MESSAGE_START_DATE_OVERDUE);
 		cout << "and";
 		function.printMessage(MESSAGE_END_DATE_OVERDUE);
-	} else if(!function.isValidTime(s_time)) {
+	} else if(!parse.isValidTime(s_time)) {
 		function.printMessage(MESSAGE_START_TIME_INVALID);
-	} else if(!function.isValidTime(e_time)) {
+	} else if(!parse.isValidTime(e_time)) {
 		function.printMessage(MESSAGE_END_TIME_INVALID);
-	} else if (!function.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
+	} else if (!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
 		function.printMessage(MESSAGE_START_DATE_OVERDUE);
-	} else if (!function.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+	} else if (!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
 		function.printMessage(MESSAGE_END_DATE_OVERDUE);
-	} else if (!function.isValidDate(s_date,s_month,s_year)) {
+	} else if (!parse.isValidDate(s_date,s_month,s_year)) {
 		function.printMessage(MESSAGE_START_DATE_INVALID);
-	} else if(!function.isValidDate(e_date,e_month,e_year)) {
+	} else if(!parse.isValidDate(e_date,e_month,e_year)) {
 		function.printMessage(MESSAGE_END_DATE_INVALID);
 	} else{
 		return false;
@@ -513,98 +552,3 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 }
 
 
-//check the original index of the task for float task, task due today and task due tomorrow in the float vector, today's task vector 
-//and tomorrow's task vector
-//on default page, tasks are shown in consecutive indices, i.e. 1,2,3,4...., 
-//instead of float task(1,2,3...), task due today(1,2,3...), task due tomorrow(1,2,3...)
-//therefore there is a need to check for each task's original index when execute commands such ad edit <index> and delete <index>
-//precondition : nont
-//postcondition : return the original index of a task
-bool defaultclass::checkfororiginalindex(string description, defaultclass defaultmemory, vector<task> &tempVec, int &originindex){
-	string temp;
-	parser parse;
-	logic function;
-	int index, size;
-
-	assert(description.length() != 0);
-	istringstream in(description);
-	in>> temp;
-	in>> index;
-	index = index -1;
-
-	if(temp == "float"){
-		size = defaultmemory.floatVec.size();
-
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.floatVec[index].returntempnum();
-	} else if(temp == "today"){ 
-		   size = defaultmemory.todayTaskVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.todayTaskVec[index].returntempnum();
-	} else if(temp == "tomorrow"){
-		size = defaultmemory.tomorTaskVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = defaultmemory.tomorTaskVec[index].returntempnum();
-	} else {
-		istringstream intemp(description);
-		intemp >> index;
-		index = index - 1;
-
-		size = tempVec.size();
-		if(size==0){
-			function.printMessage(ERROR_LIST_IS_EMPTY);
-			return false;
-		} else if((index >= size)||(index < 0)){
-			function.printMessage(INVALID_INDEX);
-			return false;
-		}
-		originindex = tempVec[index].returntempnum();
-	}
-	return true;
-}
-
-//function updates the defaultmemory 
-//The task will be pushed back into today's task vector, tomorrow's task vector and float task vector respectively if task
-//is due today, tomorrow or has a floating type
-//precondition : toDoList is read in
-//postcondition : tasks are being categorised and pushed into respective vectors
-void defaultclass::updatedefaultmemory(vector<task> &toDoList){
-	vector<task> floatVec_;
-	task temp;
-	int index, i = 0, j = 0, k = 0;
-
-	for(index = 0; index != toDoList.size(); ++index) {
-		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
-			   todayTaskVec.push_back(toDoList[index]);
-			   todayTaskVec[i].inserttempnum(index);
-			   i++;
-		} else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
-			   tomorTaskVec.push_back(toDoList[index]);
-			   tomorTaskVec[j].inserttempnum(index);
-			   j++;
-		} else if(toDoList[index].returntype() =="float"){
-			floatVec_.push_back(toDoList[index]);
-			floatVec_[k].inserttempnum(index);
-			k++;
-		}
-	}
-	floatVec = floatVec_;
-}

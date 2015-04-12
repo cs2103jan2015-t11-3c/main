@@ -6,6 +6,7 @@
     <ClCompile Include="parsertest.cpp" />
     <ClCompile Include="StorageTest.cpp" />
     <ClCompile Include="undotest.cpp" />
+    <ClCompile Include="defaultTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />

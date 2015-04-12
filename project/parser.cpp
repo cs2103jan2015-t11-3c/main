@@ -9,10 +9,11 @@
 //postcondition : return true if command is valid; error message is shown to user if command entered is invalid
 //and false is returned
 bool parser::isValidCommand(const string command, const string description){
+	logic function;
 	try{
 	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 		if(description.size()==0) {
-			printMessage(ERROR_MISSING_DESCRIPTION);
+			function.printMessage(ERROR_MISSING_DESCRIPTION);
 			return false;
 		}
 		return true;
@@ -24,30 +25,30 @@ bool parser::isValidCommand(const string command, const string description){
 
 	 else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
 		if(description.size()==0) {
-			printMessage(ERROR_MISSING_INDEX);
+			function.printMessage(ERROR_MISSING_INDEX);
 			return false;
 	}  
 		return true;
 	}
 	 else if(command=="edit"||command=="modify"||command=="change"){
 		 if(description.size()==0) {
-			printMessage(ERROR_MISSING_INDEX);
+			function.printMessage(ERROR_MISSING_INDEX);
 			return false;
 	}    
 		 if(!canFindPartoChange(description)){
-			printMessage(ERROR_MISSING_CHANGINGPART);
+			function.printMessage(ERROR_MISSING_CHANGINGPART);
 			return false;
 	}    
 		return true;
 	}
 
-	printMessage(ERROR_INVALID_COMMAND);
+	function.printMessage(ERROR_INVALID_COMMAND);
 
 	return false;
 	}
 
 	catch(const string ERROR_MESSAGE){
-		printMessage(ERROR_MESSAGE);
+		function.printMessage(ERROR_MESSAGE);
 	}
 }
 
@@ -217,6 +218,65 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 		}
 }
 
+//Determine the recurring period the user want to do a recurring task
+//precondition : user enter a recurring task
+//postcondition : return the recurring period, if not specified by user, default period is zero
+int parser::getRecurPeriod(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurPeriod = description.substr(start, end - start);
+
+	for(int i = 0; i < recurPeriod.size(); ++i) {
+		if(!isdigit(recurPeriod[i])) {
+			return 0;
+		} else {
+			int convertedNum;
+			convertedNum = atoi(recurPeriod.c_str());
+			return convertedNum;
+		}
+	}
+}
+
+//Determine if the user want to do a task daily/weekly/monthly/yearly
+//precondition : user input a recurring tas
+//postcondition : return the recurring command word
+string parser::getRecurruingCommandWord(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurringCommandWord = description.substr(start, end - start);	
+
+	return recurringCommandWord;
+}
+
+
+//Determine the position of the start of the description
+//precondition : take in the description entered by user
+//postcondition : return the start position
+int parser::getStartPosition(string description) {
+	assert(description.length() != 0);
+	int start;
+	
+	start = description.find_first_not_of(" ");
+	
+	return start;
+}
+
+//Determine the position of the end of the first word
+//precondition : take in the description entered by user
+//postcondition : return the end position
+int parser::getEndPosition(string description) {
+	assert(description.length() != 0);
+	int end;
+
+	end = description.find_first_of(" ");
+
+	return end;
+}
+
 //Convert alphabet month into corresponding integer. 
 //i.e: Jan - Dec correspons to 1 - 12
 //precondition : month input by user is in alphabetic form
@@ -280,9 +340,18 @@ bool parser::isNumerical(string month){
 
 }
 
-void parser::printMessage(const string message) {
-	cout << endl << message << endl;
+//Convert alphabetic month into integer
+//precondition : month entered by user is a alphabet
+//postcondition : return the corresponding integer month
+int parser::convertMonth(string month){
+	if(isNumerical(month)){
+			return convertStringToInteger(month);
+		}
+		else{
+			return convertAlphabetMonthToInteger(month);
+		}
 }
+
 
 //Determine if today/tomorrow/tmr exists in user input
 //precondition : user input a new task 
@@ -332,18 +401,6 @@ void parser::getInfo(string description, int &e_date, int &e_month, int &e_year)
 		e_year=getSystemYear();
 }
 
-//Convert alphabetic month into integer
-//precondition : month entered by user is a alphabet
-//postcondition : return the corresponding integer month
-int parser::convertMonth(string month){
-	if(isNumerical(month)){
-			return convertStringToInteger(month);
-		}
-		else{
-			return convertAlphabetMonthToInteger(month);
-		}
-}
-
 
 bool parser::canFindPartoChange(string description){
 	if(description.find_first_of("-name")!=-1){
@@ -384,6 +441,89 @@ bool parser::canFindPartoChange(string description){
 		throw ERROR_MESSAGE_INVALIDEDITFORMAT;
 	}
    return false;
+}
+
+//Check whether there is any integer in the keyword
+//Precondition: keyword
+//Postcondition: return false if integer if found, else return true
+bool parser::isCheckSearchStringDigit(string description) {
+	unsigned int i;
+	bool result = true;
+	for(i = 0; i < description.size(); ++i) {
+		if(!isdigit(description[i])) {
+			result = false;
+		}
+	}
+	return result;
+}
+
+//covert string digit to integer digit
+//precondition: string digit
+//postcondition: int digit
+int parser::convertNumStringToInt(string description) {
+	int convertedNum;
+	convertedNum = atoi(description.c_str());
+    return convertedNum;
+}
+
+//check if it's leap year
+//precondition: input year
+//postcondition: return true if it's leap year
+bool parser::isleapyear(unsigned short year){
+	return (!(year%4) && (year%100) || !(year%400));
+}
+
+
+//check whether date is valid
+//precondition: input date, month, year
+//post: return true if date is valid
+bool parser::isValidDate(unsigned short day,unsigned short month,unsigned short year){
+	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
+	if (!year || !month || !day || month>12 || year > 2030)
+		return 0;
+	if (isleapyear(year) && month==2)
+		monthlen[1]++;
+	if (day>monthlen[month-1])
+		return 0;
+	return 1;
+}
+
+//check whether input time is valid
+//precondition: input time
+//postcondition: return true if time is valid
+bool parser::isValidTime(int time) {
+	if((time>=0)&&(time<=2400)) {
+		return 1;
+	} else {
+		return 0;
+	}
+}
+
+//check whether input date is overdue
+//precondition: input date, month, year, time
+//postcondition: return true if date is not overdue
+bool parser::checkIsDateOverdue(int day, int month, int year,int timing) {
+	bool result = true;
+	parser p;
+	int sysDay, sysMonth, sysYear, sysHr, sysMin, sysTime;
+	
+	sysDay = p.getSystemDay();
+	sysMonth = p.getSystemMonth();
+	sysYear = p.getSystemYear();
+	sysHr = p.getSystemHour();
+	sysMin = p.getSystemMinute();
+	sysTime = sysHr * 100 + sysMin;
+
+	if(year < sysYear) {
+		return false;
+	} else if(year == sysYear && month < sysMonth) {
+		return  false;
+	} else if(year == sysYear && month == sysMonth && day < sysDay) {
+		return false;
+	} else if(year == sysYear && month == sysMonth && day == sysDay && timing < sysTime) {
+		return false;
+	}
+	return result;
 }
 
 //Get the current local day on the system the program is running

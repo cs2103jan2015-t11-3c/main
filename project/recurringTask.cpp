@@ -26,8 +26,8 @@ void recurringTask::AddRecurring(int n,string recurType,int e_date,int e_month,i
 		YearlyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
 	}
 	catch(const string ERROR_MESSAGE){
-		parser par;
-		par.printMessage(ERROR_MESSAGE);
+		logic function;
+		function.printMessage(ERROR_MESSAGE);
 	}
 	return;
 }
@@ -36,6 +36,7 @@ void recurringTask::AddRecurring(int n,string recurType,int e_date,int e_month,i
 void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
                                                          
 	logic function;
+	parser parse;
 
 	if(n==0){
 		n=30;   //the default recurring period for daily task is set to be 30 days
@@ -47,7 +48,7 @@ void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date
 				return;
 			}
 		}
-		if (function.isValidDate(e_date,e_month,e_year)){
+		if (parse.isValidDate(e_date,e_month,e_year)){
           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		  e_date=e_date+1;
 		  s_date=s_date+1;
@@ -57,7 +58,7 @@ void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date
 			e_month++;
 		    s_date=e_date;
 			s_month=e_month;
-		 if (function.isValidDate(e_date,e_month,e_year)){
+		 if (parse.isValidDate(e_date,e_month,e_year)){
               addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	    
 		}
 		 else{
@@ -67,7 +68,7 @@ void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date
 			 s_date=e_date;
 			 s_month=e_month;
 		     s_year=e_year;
-			 if(function.isValidDate(e_date,e_month,e_year))
+			 if(parse.isValidDate(e_date,e_month,e_year))
 			  addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		 }
 		     e_date=e_date+1;
@@ -78,13 +79,14 @@ void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date
 
 void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	logic function;                         
+	parser parse;
 
 	if(n==0){
 		n=52;                      //default recurring period for weekly task is half year(26)weeks;
 	}
 	for(int i=1;i<=n;i++){
 		if(type=="deadline"){
-		if (function.isValidDate(e_date,e_month,e_year)){
+		if (parse.isValidDate(e_date,e_month,e_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		 
 		}
 		else{
@@ -95,52 +97,52 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
 				return;
 		 }
-		 if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+		 if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
              addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
 		}
 		else{
-			if (!function.isValidDate(e_date,e_month,e_year)&&!function.isValidDate(s_date,s_month,s_year)){
+			if (!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)){
 			 moveToNextMonth(e_date, e_month, e_year);  //move to next month                             
 			 moveToNextMonth(s_date, s_month, s_year);
 
-			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 			 addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			   
 			}
 			else{
 				moveToNextYear(e_date, e_month, e_year);         //move to the next year
 				moveToNextYear(s_date, s_month, s_year); 		
-				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 			
 			}
 			}
 			else{
-			if(!function.isValidDate(e_date,e_month,e_year)){
+			if(!parse.isValidDate(e_date,e_month,e_year)){
 			     moveToNextMonth(e_date, e_month, e_year); 
-			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			   
 			}
 			else{
 		     	moveToNextYear(e_date, e_month, e_year);   
-				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		
 				}
 			}
 			}
 
-			if(!function.isValidDate(s_date,s_month,s_year)){
+			if(!parse.isValidDate(s_date,s_month,s_year)){
 			 moveToNextMonth(s_date, s_month, s_year);
-			if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			    
 			}
 			else{
 				moveToNextYear(s_date, s_month, s_year); 	
-				if(function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(e_date,e_month,e_year)){
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(e_date,e_month,e_year)){
 				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 		
 				}
@@ -156,13 +158,14 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 
 void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){	
 	logic function;
+	parser parse;
     if(n==0){
       n=12;                          //default recurring period is 12 month if user do not specify
     }
 	
 	for(int i=1;i<=n;i++){
 		if(type=="deadline"){
-		if (function.isValidDate(e_date,e_month,e_year)){
+		if (parse.isValidDate(e_date,e_month,e_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			
 		}
@@ -177,53 +180,53 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 				return;
 			}
 
-		   if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year)){
+		   if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	 
 	    	}
 		
 		else if(!isValidforMoreDays(e_month)||!isValidforMoreDays(s_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
-			 if(s_date==31&&function.isValidDate(s_date-1,s_month,s_year)){
+			 if(s_date==31&&parse.isValidDate(s_date-1,s_month,s_year)){
 				if(s_date==e_date&&s_month==e_month)
 		        addTodifferentType(type, e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
 				else
-			    if (function.isValidDate(e_date,e_month,e_year)&&function.isValidDate(s_date-1,s_month,s_year))
+			    if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date-1,s_month,s_year))
 			    addTodifferentType(type, e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
 			   }
-			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){
-			    if (function.isValidDate(e_date-1,e_month,e_year)&&function.isValidDate(s_date,s_month,s_year))
+			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){
+			    if (parse.isValidDate(e_date-1,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year))
 			    addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			   }
 			    else if((e_date==31||e_date==30||s_date==31||s_date==30)&&(e_month==2||s_month==2)){                       //special case for Feburary
 				if((s_date==31||s_date==30)&&s_month==2){
-				if(function.isleapyear(s_year)){
-				 if(function.isValidDate(29,s_month,s_year)&&function.isValidDate(e_date,e_month,e_year))
+				if(parse.isleapyear(s_year)){
+				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
 			      addTodifferentType(type, e_date, e_month, e_year,29, s_month,s_year,  toDoList);
 				}
 				else{   
-				if(function.isValidDate(28,s_month,s_year)&&function.isValidDate(e_date,e_month,e_year))
+				if(parse.isValidDate(28,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
 			     addTodifferentType(type, e_date, e_month, e_year,28, s_month,s_year,  toDoList);
 				}
 				}
 
 
 				if((e_date==31||e_date==30)&&e_month==2){
-				if(function.isleapyear(e_year)){
-				 if(function.isValidDate(s_date,s_month,s_year)&&function.isValidDate(29,e_month,e_year))
+				if(parse.isleapyear(e_year)){
+				 if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
 			      addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				else{   
-				if(function.isValidDate(s_date,s_month,s_year)&&function.isValidDate(28,e_month,e_year))
+				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
 			     addTodifferentType(type, 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				}
 
 				if((e_month==2)&&s_month==2){
-				if(function.isleapyear(e_year)){
-				 if(function.isValidDate(29,s_month,s_year)&&function.isValidDate(29,e_month,e_year))
+				if(parse.isleapyear(e_year)){
+				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
 			      addTodifferentType(type, 29, e_month, e_year,29, s_month,s_year,  toDoList);
 				}
 				else{   
-				if(function.isValidDate(s_date,s_month,s_year)&&function.isValidDate(28,e_month,e_year))
+				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
 			     addTodifferentType(type, 28, e_month, e_year,28, s_month,s_year,  toDoList);
 				}
 				}
@@ -253,13 +256,14 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 void recurringTask::YearlyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
    
 	logic function;
+	parser parse;
 
 	 if(n==0){
 		  n=5;
    }
 
 	for(int i=1;i<=n;i++){
-		if (function.isValidDate(e_date,e_month,e_year)){
+		if (parse.isValidDate(e_date,e_month,e_year)){
            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 
 		  e_year=e_year+1;
@@ -280,6 +284,8 @@ bool recurringTask::isValidforMoreDays(int month){
 
 int recurringTask::getNumDays(int month,int year){
 	logic function;
+	parser parse;
+
 	int LMonth[7]={1,3,5,7,8,10,12};
 	int SMonth[]={4,6,9,11};
 	for(int i=0;i<7;i++){
@@ -289,7 +295,7 @@ int recurringTask::getNumDays(int month,int year){
 			return 30;
 	}
 	
-	if(month==2&&function.isleapyear(year))
+	if(month==2&&parse.isleapyear(year))
 		return 29;
 	else
 		return 28;
@@ -333,14 +339,15 @@ void recurringTask::moveToNextYear(int &date, int &month, int &year){
 
 void recurringTask::ChangeWeekDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 	logic function;
+	parser parse;
 	       moveToNextMonth(e_date, e_month, e_year);                                        
-			if(function.isValidDate(e_date,e_month,e_year)){
+			if(parse.isValidDate(e_date,e_month,e_year)){
 			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 
 			}
 			else{
 			    moveToNextYear(e_date, e_month, e_year); 
-				if(function.isValidDate(e_date,e_month,e_year)){
+				if(parse.isValidDate(e_date,e_month,e_year)){
 				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);      
 				}
 			}
@@ -351,12 +358,13 @@ void recurringTask::ChangeWeekDeadline(int &e_date,int &e_month,int &e_year,int 
 void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
 
 	logic function;
+	parser parse;
 	if(!isValidforMoreDays(e_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
-			if(e_date==31&&function.isValidDate(e_date-1,e_month,e_year)){
+			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)){
 		        addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			}
 			else if((e_date==31||e_date==30)&&e_month==2){                       //special case for Feburary
-				if(function.isleapyear(e_year)){
+				if(parse.isleapyear(e_year)){
 				  addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				else{
@@ -367,7 +375,7 @@ void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int
 	
 		    moveToNextYear(e_date, e_month, e_year); 
 			
-			if(function.isValidDate(e_date,e_month,e_year)){
+			if(parse.isValidDate(e_date,e_month,e_year)){
 		     addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			}
 	
@@ -404,6 +412,7 @@ bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,i
 
 int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int smonth, int syear){
 	logic function;
+	parser parse;
    if(syear == eyear && smonth == emonth)
      {
           return  eday - sday;
@@ -416,7 +425,7 @@ int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int s
          return endday-startday;
 		}else{
           int d1,d2,d3;
-         if(function.isleapyear(syear))
+         if(parse.isleapyear(syear))
              d1 = 366 - DayInYear(syear,smonth, sday);  //remaining days in that year
          else
              d1 = 365 - DayInYear(syear,smonth, sday);
@@ -425,7 +434,7 @@ int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int s
 		  d3 = 0;
          for(int year = syear + 1; year < eyear; year++)
          {
-             if(function.isleapyear(year))
+             if(parse.isleapyear(year))
                  d3 += 366;
              else
                  d3 += 365;
@@ -437,8 +446,9 @@ int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int s
 
 int recurringTask::DayInYear(int year, int month, int day){
     logic function;
+	parser parse;
     int DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
-    if(function.isleapyear(year))
+    if(parse.isleapyear(year))
         DAY[1] = 29;
     for(int i=0; i<month - 1; ++i)
     {

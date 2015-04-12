@@ -325,66 +325,7 @@ namespace LibraryTest
 			Assert::AreEqual(2, (int)tempVec.size());
 		}
 
-		TEST_METHOD(testchecksearchstringdigit){
-			string testone = "meeting", testtwo = "25", testthree = "14haha";
-			logic function;
-			bool result;
-
-			result = function.isCheckSearchStringDigit(testone);
-			Assert::AreEqual(false, result);
-
-			result = function.isCheckSearchStringDigit(testtwo);
-			Assert::AreEqual(true, result);
-
-			result = function.isCheckSearchStringDigit(testthree);
-			Assert::AreEqual(false, result);
-		}
-
-		TEST_METHOD(testCovertNumtoString){
-			string testone = "14", testtwo = "100";
-			int result;
-			logic function;
-
-			result = function.convertNumStringToInt(testone);
-			Assert::AreEqual(14, result);
-
-			result = function.convertNumStringToInt(testtwo);
-			Assert::AreEqual(100, result);
-		}
-
-		TEST_METHOD(testLeapYear){
-			int testone = 2016, testtwo = 2014;
-			bool result;
-			logic function;
-
-			result = function.isleapyear(testone);
-			Assert::AreEqual(true, result);
-			
-			result = function.isleapyear(testtwo);
-			Assert::AreEqual(false, result);
-		}
-
-		TEST_METHOD(testValidDate){
-			logic function;
-			bool result;
-
-			result = function.isValidDate(5, 11, 2014);
-			Assert::AreEqual(true, result);
-
-			result = function.isValidDate(32, 13, 2014);
-			Assert::AreEqual(false, result);
-		}
-
-		TEST_METHOD(testCheckIsDateOverdue){
-			logic function;
-			bool result;
-
-			result = function.checkIsDateOverdue(19, 12, 2016, 1400);
-			Assert::AreEqual(true, result);
-
-			result = function.checkIsDateOverdue(1, 4, 2015, 1400);
-			Assert::AreEqual(false, result);
-		}
+		
 
 		TEST_METHOD(testCheckSameDay){
 			logic function;

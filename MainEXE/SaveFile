@@ -4,15 +4,15 @@ End: 0/ 0/ 0	 0
 Type: float
 Completed: 0
 
-2. task
+2. hahaha
 Start: 12/ 4/ 2015	1000
 End: 13/ 4/ 2015	 1800
 Type: timed
 Completed: 0
 
 3. gowg
-Start: 12/ 4/ 2015	1100
-End: 12/ 4/ 2015	 1200
+Start: 13/ 4/ 2015	1900
+End: 13/ 4/ 2015	 2100
 Type: timed
 Completed: 0
 
@@ -22,13 +22,37 @@ End: 12/ 4/ 2015	 1300
 Type: timed
 Completed: 0
 
-5. hello
+5. sheares
 Start: 0/ 0/ 0	0
 End: 0/ 0/ 0	 0
 Type: float
 Completed: 0
 
 6. hogwg
+Start: 0/ 0/ 0	0
+End: 0/ 0/ 0	 0
+Type: float
+Completed: 0
+
+7. blablabla
+Start: 0/ 0/ 0	0
+End: 13/ 4/ 2015	 2200
+Type: deadline
+Completed: 0
+
+8. hahaha
+Start: 0/ 0/ 0	0
+End: 0/ 0/ 0	 0
+Type: float
+Completed: 0
+
+9. mark
+Start: 0/ 0/ 0	0
+End: 12/ 4/ 2015	 1900
+Type: deadline
+Completed: 0
+
+10. mother
 Start: 0/ 0/ 0	0
 End: 0/ 0/ 0	 0
 Type: float

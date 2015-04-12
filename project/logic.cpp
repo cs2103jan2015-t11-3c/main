@@ -1,6 +1,9 @@
 #include "logic.h"
 #include <iostream>
 
+//display temporary vector
+//precondition: temporary vector
+//postcondition: list of tasks
 string logic::displayAll(vector<task> &tempVec) {
 	vector<task> temp, other;
 	vector<vector<task>> temps;
@@ -34,7 +37,7 @@ void logic::separateFloatAndOthers(vector<task> & tempVec, vector<task> & floatt
 				other.push_back(tempVec[j]);
 		}
 }
-
+//@author A0116006X
 string logic::printFloatTasks(vector<task> & floattemp, int i){
 	ostringstream oss;
 	for(unsigned j = 0; j < floattemp.size(); j++){
@@ -44,6 +47,7 @@ string logic::printFloatTasks(vector<task> & floattemp, int i){
 	return oss.str();
 }
 
+//@author A0114933X
 void logic::sortOthers(vector<task> & other, vector<task> & temp){
 	vector<task> temporary;
 	temporary.push_back(other[0]);
@@ -67,7 +71,6 @@ void logic::sortOthers(vector<task> & other, vector<task> & temp){
 
 string logic::printOthers(vector<task> & temp, int i){
 	ostringstream oss;
-	i++;
 	oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
 	if(temp[i].returntype() == "deadline")
 		oss << temp[i].displayDefaultTasks(i) << endl;
@@ -75,7 +78,7 @@ string logic::printOthers(vector<task> & temp, int i){
 		if((temp[i].returnenddate() != temp[i].returnenddate())||(temp[i].returnendmonth() != temp[i].returnstartmonth()))
 			oss << temp[i].displayDefaultTasksOver2days(i) << endl;
 		else
-			oss <<  temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
+			oss << temp[i].displayDefaultTasksWithTwoTimes(i) << endl;
 	}
 
 	while(i != temp.size() - 1){
@@ -95,16 +98,17 @@ string logic::printOthers(vector<task> & temp, int i){
 	return oss.str();
 }
 
+//edit existing task, name, dates, times
+//Precondition: index of task, string that include command and changes to be made, vector
+//postcondition: none
 void logic::editTask(int index, string description, vector<task> &toDoList) {
 
-	if(toDoList[index].returntype() == "float") {
+	if(toDoList[index].returntype() == "float")
 		editFloatClass(toDoList, description, index);
-	} else if(toDoList[index].returntype() == "deadline"){
+	else if(toDoList[index].returntype() == "deadline")
 		editDeadlineClass(toDoList, description, index);
-	}
-	else if(toDoList[index].returntype() == "timed"){
+	else if(toDoList[index].returntype() == "timed")
 		editTimedClass(toDoList, description, index);
-	}
 }
 
 void logic::editFloatClass(vector<task> & toDoList, string description, int index){
@@ -195,25 +199,27 @@ void logic::editTimedClass(vector<task> & toDoList, string description, int inde
 	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 }
 
+//delete task from toDoList
+//Precondition: take in index and vector
+//postcondition: none
 void logic::deleteItem(const int index, vector<task> &toDoList) {
 		if (system("CLS")) system("clear");
 		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
 		toDoList.erase(toDoList.begin()+index);
 }
 
+//clear all the task from toDolist
+//Precondition: take in vector
+//postcondition: none
 void logic::clearAll(vector<task> &toDoList) {
 	toDoList.clear();
 	if (system("CLS")) system("clear");
 	printMessage(MESSAGE_ITEMS_CLEARED_SUCCESSFULLY);
 }
 
-void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
-	task task_;
-	task_ = toDoList[index];
-	task_.inserttempnum(index);
-	tempVec.push_back(task_);
-}
-
+//mark task as completed
+//Precondition: index of task, vector
+//Postcondition: none
 void logic::markcompleted(int index, vector<task> &toDoList){
 	task temp;
 	int size = toDoList.size();
@@ -223,6 +229,9 @@ void logic::markcompleted(int index, vector<task> &toDoList){
 	printMessage(toDoList[index].returntext(), "completed");
 }
 
+//sort vector alphabetically
+//precondition: vector
+//postcondition: none
 void logic::sorttext(vector<task> &toDoList){
 	int size = toDoList.size();
 	task temp;
@@ -238,7 +247,9 @@ void logic::sorttext(vector<task> &toDoList){
 	}
 }
 
-
+//sort vector by dates
+//Precondition: vector
+//Postcondition: none
 void logic::sortdates(vector<task> &toDoList){
 	unsigned int i, j;
 	task temp;
@@ -256,7 +267,10 @@ void logic::sortdates(vector<task> &toDoList){
 		}
 	}
 }
-
+	
+//Sort vector by endtime
+//Precondition: vector
+//Postcondition: none
 void logic::sortEndTime(vector<task> &toDoList){
 	task temp;
 	unsigned int i , j;
@@ -272,12 +286,14 @@ void logic::sortEndTime(vector<task> &toDoList){
 	}
 }
 
-
-
+//search for keyword or number within the vector
+//Precondition: main vector, temporary vector, keyword
+//Postcondition: none
 void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string description) {
 	tempVec.clear();
+	parser parse;
 
-	if(!isCheckSearchStringDigit(description)) {
+	if(!parse.isCheckSearchStringDigit(description)) {
 		searchWord(toDoList,description,tempVec);
 	} else {
 		searchDigit(toDoList,description,tempVec);
@@ -290,6 +306,9 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string des
 	}
 }
 
+//search for tasks with keyword
+//precondition: main vector, keyword, temporary vector
+//postcondition: none
 void logic::searchWord(vector<task> &toDoList, string description, vector<task> &tempVec) {
 	for(int i = 0; i < toDoList.size(); ++i) {
 		//searched word is not a digit-->can only be found in task name
@@ -301,14 +320,18 @@ void logic::searchWord(vector<task> &toDoList, string description, vector<task> 
 	}
 }
 
+//search for tasks with name, dates, time with the particular digit
+//precondition: main vector, keyword, temporary vector
+//postcondition: none
 void logic::searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec) {
+	parser parse;
 	for(int i = 0; i < toDoList.size(); ++i) { // searched word is a pure digit-->can only be found in time/date/month/year
 			unsigned int t = -1;
 			t = (toDoList[i].returntext()).find(description);
 			if(t != -1) {
 				pushback(toDoList, tempVec, i);
 			}
-			int convertedInt = convertNumStringToInt(description);
+			int convertedInt = parse.convertNumStringToInt(description);
 			if(toDoList[i].returnstarttime() == convertedInt) {
 				pushback(toDoList, tempVec, i);
 			} else if (toDoList[i].returnendtime() == convertedInt) {
@@ -329,23 +352,9 @@ void logic::searchDigit(vector<task> &toDoList, string description, vector<task>
 	}
 }
 
-bool logic::isCheckSearchStringDigit(string description) {
-	unsigned int i;
-	bool result = true;
-	for(i = 0; i < description.size(); ++i) {
-		if(!isdigit(description[i])) {
-			result = false;
-		}
-	}
-	return result;
-}
-
-int logic::convertNumStringToInt(string description) {
-	int convertedNum;
-	convertedNum = atoi(description.c_str());
-    return convertedNum;
-}
-
+//to display tasks that are due today/tomorrow, not done, three different types of tasks, all
+//precondition: main vector, temporary vector, vector size
+//postcondition: none
 void logic::displayToday(vector<task> &tempVec, vector<task> &toDoList,int size) {
 	int day, month, year;
 	parser parse;
@@ -423,6 +432,9 @@ void logic::displayEverything(int size,vector<task> &toDoList,vector<task> &temp
 	}
 }
 
+//function to work on the display, 
+//precondition: main vector, temporary vector, filename, command
+//postcondition: none
 void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileName, string description){
 	int size, day, month, year;
 	int count = 0;
@@ -468,55 +480,15 @@ void logic::display(vector<task> &toDoList, vector<task> &tempVec, string fileNa
 	}
 }
 
-//check whether input date is valid function starts here
-bool logic::isleapyear(unsigned short year){
-	return (!(year%4) && (year%100) || !(year%400));
+//pushback task to a temporary vector that includes it's index on the main vector
+//precondition: main vector, temporary vector, index
+//postcondition: none
+void logic::pushback(vector<task>& toDoList, vector<task>& tempVec, int index){
+	task task_;
+	task_ = toDoList[index];
+	task_.inserttempnum(index);
+	tempVec.push_back(task_);
 }
-
-bool logic::isValidDate(unsigned short day,unsigned short month,unsigned short year){
-	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
-	if (!year || !month || !day || month>12 || year > 2030)
-		return 0;
-	if (isleapyear(year) && month==2)
-		monthlen[1]++;
-	if (day>monthlen[month-1])
-		return 0;
-	return 1;
-}
-
-bool logic::isValidTime(int time) {
-	if((time>=0)&&(time<=2400)) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-bool logic::checkIsDateOverdue(int day, int month, int year,int timing) {
-	bool result = true;
-	parser p;
-	int sysDay, sysMonth, sysYear, sysHr, sysMin, sysTime;
-	
-	sysDay = p.getSystemDay();
-	sysMonth = p.getSystemMonth();
-	sysYear = p.getSystemYear();
-	sysHr = p.getSystemHour();
-	sysMin = p.getSystemMinute();
-	sysTime = sysHr * 100 + sysMin;
-
-	if(year < sysYear) {
-		return false;
-	} else if(year == sysYear && month < sysMonth) {
-		return  false;
-	} else if(year == sysYear && month == sysMonth && day < sysDay) {
-		return false;
-	} else if(year == sysYear && month == sysMonth && day == sysDay && timing < sysTime) {
-		return false;
-	}
-	return result;
-}
-//check whether input date is valid ends here
-
 
 void logic::printMessage(const string message) {
 	cout << endl << message << endl;
