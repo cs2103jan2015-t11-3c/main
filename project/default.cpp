@@ -408,51 +408,105 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	cout <<endl;
 }
 
-//Display all floating task in the default page
+//Display floating task in the default page
+//If there exits more than 10 float tasks, only the sorted first 10 tasks will be displayed in default page
 //precondition : none
 //postcondition : floating task displayed in alphabetical order
 void defaultclass::defaultFloatDisplay(defaultclass &defaultmemory) {
-	for(int index = 0; index != defaultmemory.floatVec.size(); ++index) {
-		cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
+	if(defaultmemory.floatVec.size() > 10) {
+		displayTenFloatTask(defaultmemory);
+	} else {
+		displayAllFloatTasks(defaultmemory);
 	}
 }
 
-//Display all task to be finished by today in the default page
+void defaultclass::displayTenFloatTask(defaultclass &defaultmemory) {
+	for(int index = 0; index < 10; ++index) {
+			cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
+		}
+}
+
+void defaultclass::displayAllFloatTasks(defaultclass &defaultmemory) {
+	for(int index = 0; index != defaultmemory.floatVec.size(); ++index) {
+			cout << defaultmemory.floatVec[index].displayFloat(index) << endl;
+		}
+}
+
+//Display task to be finished by today in the default page
+//If there exits more than 10 tasks due today, only the sorted first 10 tasks will be displayed in default page
 //precondition : none
 //postcondition : today's tasks are displayed according to the end timing
 void defaultclass::DisplayTaskFinishByToday(defaultclass &defaultmemory) {
-	for(int i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
-
-		if(defaultmemory.todayTaskVec[i].returntype() == "deadline")
-			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i) << endl;
-		else if(defaultmemory.todayTaskVec[i].returntype() == "timed"){
-			if((defaultmemory.todayTaskVec[i].returnenddate() != defaultmemory.todayTaskVec[i].returnstartdate())||(defaultmemory.todayTaskVec[i].returnendmonth() != defaultmemory.todayTaskVec[i].returnstartmonth()))
-				cout << defaultmemory.todayTaskVec[i].displayDefaultTasksOver2days(i) << endl;
-			else
-				cout <<  defaultmemory.todayTaskVec[i].displayDefaultTasksWithTwoTimes(i) << endl;
-		}
+	if(defaultmemory.todayTaskVec.size() > 10) {
+		displayTenTasksDueToday(defaultmemory);
+	} else {
+		displayAllTasksDueToday(defaultmemory);
 	}
 }
 
-//Display all task to be finished by tomorow in the default page
+void defaultclass::displayTenTasksDueToday(defaultclass &defaultmemory) {
+	for(int i = 0; i < 10; ++i){
+		checkTypeOfTasksDueToday(defaultmemory,i);
+	}
+}
+
+void defaultclass::displayAllTasksDueToday(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.todayTaskVec.size(); ++i){
+		checkTypeOfTasksDueToday(defaultmemory,i);
+	}
+}
+
+void defaultclass::checkTypeOfTasksDueToday(defaultclass &defaultmemory, int i) {
+	if(defaultmemory.todayTaskVec[i].returntype() == "deadline") {
+			cout << defaultmemory.todayTaskVec[i].displayDefaultTasks(i) << endl;
+		} else if(defaultmemory.todayTaskVec[i].returntype() == "timed") {
+			if((defaultmemory.todayTaskVec[i].returnenddate() != defaultmemory.todayTaskVec[i].returnstartdate())||
+				(defaultmemory.todayTaskVec[i].returnendmonth() != defaultmemory.todayTaskVec[i].returnstartmonth())) {
+				cout << defaultmemory.todayTaskVec[i].displayDefaultTasksOver2days(i) << endl;
+			} else {
+				cout <<  defaultmemory.todayTaskVec[i].displayDefaultTasksWithTwoTimes(i) << endl;
+			}
+		}
+}
+
+
+//Display task to be finished by tomorow in the default page
+//If there exits more than 10 tasks due tomorrow, only the sorted first 10 tasks will be displayed in default page
 //precondition : none
 //postcondition : tomorrow's tasks are displayed according to the end timing
 void defaultclass::DisplayTaskFinishByTmr(defaultclass &defaultmemory) {
-	for(int i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
-		if(defaultmemory.tomorTaskVec[i].returntype() == "deadline")
-			cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i) << endl;
-		else if(defaultmemory.tomorTaskVec[i].returntype() == "timed"){
-			if((defaultmemory.tomorTaskVec[i].returnenddate() != defaultmemory.tomorTaskVec[i].returnstartdate())||(defaultmemory.tomorTaskVec[i].returnendmonth() != defaultmemory.tomorTaskVec[i].returnstartmonth()))
-				cout << defaultmemory.tomorTaskVec[i].displayDefaultTasksOver2days(i) << endl;
-			else
-				cout <<  defaultmemory.tomorTaskVec[i].displayDefaultTasksWithTwoTimes(i) << endl;
-		}
+	if(defaultmemory.tomorTaskVec.size() > 10) {
+		displayTenTasksDueTmr(defaultmemory);
+	} else {
+		displayAllTasksDueTmr(defaultmemory);
 	}
 }
 
-//Check if the day, month, year correspond to today's system timing
-//precondition : take in the day, month and year parameters
-//postcondition : return true if the date mathces today's system date, else return falase
+void defaultclass::displayTenTasksDueTmr(defaultclass &defaultmemory) {
+	for(int i = 0; i < 10; ++i) {
+		checkTypeOfTasksDueTmr(defaultmemory,i);
+	}
+}
+
+void defaultclass::displayAllTasksDueTmr(defaultclass &defaultmemory) {
+	for(int i = 0; i != defaultmemory.tomorTaskVec.size(); ++i) {
+		checkTypeOfTasksDueTmr(defaultmemory,i);
+	}
+}
+
+void defaultclass::checkTypeOfTasksDueTmr(defaultclass &defaultmemory,int i) {
+	if(defaultmemory.tomorTaskVec[i].returntype() == "deadline") {
+			cout << defaultmemory.tomorTaskVec[i].displayDefaultTasks(i) << endl;
+	} else if(defaultmemory.tomorTaskVec[i].returntype() == "timed") {
+			if((defaultmemory.tomorTaskVec[i].returnenddate() != defaultmemory.tomorTaskVec[i].returnstartdate())||
+				(defaultmemory.tomorTaskVec[i].returnendmonth() != defaultmemory.tomorTaskVec[i].returnstartmonth())) {
+				cout << defaultmemory.tomorTaskVec[i].displayDefaultTasksOver2days(i) << endl;
+			} else {
+				cout <<  defaultmemory.tomorTaskVec[i].displayDefaultTasksWithTwoTimes(i) << endl;
+			}
+	}
+}
+
 bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	parser parse;
 	if(e_day == parse.getSystemDay() && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
@@ -462,9 +516,6 @@ bool defaultclass::checkIfIsToday(int e_day,int e_month,int e_year) {
 	}
 }
 
-//Check if the day, month, year correspond to tomorrow's system timing
-//precondition : take in the day, month and year parameters
-//postcondition : return true if the date mathces tomorrow's system date, else return falase
 bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 	parser parse;
 	if(e_day == (parse.getSystemDay()+1) && e_month == parse.getSystemMonth() && e_year == parse.getSystemYear()) {
