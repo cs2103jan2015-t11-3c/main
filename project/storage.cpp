@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdlib.h> 
 
+//@author: A0119322N
 storage::storage(void)
 {
 	_filePath="";
@@ -137,11 +138,9 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		return false;
 	}
 	 setFilePath(newFilePath);
-	// string URL=newFilePath +  fileName;
 	fstream outFile;
 	outFile.open(getFileNameAndDirectory(newFilePath,fileName), fstream::out | fstream::app);
 	
-	//outFile.open(URL.c_str(),fstream::out);
 	outFile<< toString(toDoList);
 	outFile.close();
 

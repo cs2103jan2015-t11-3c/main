@@ -3,6 +3,7 @@
 #include "logic.h"
 
 
+//@author: A0119322N
 
 //Check if the command entered by the user is valid 
 //precondition : user input a command
@@ -54,8 +55,6 @@ bool parser::isValidCommand(const string command, const string description){
 
 
 //Remove leading and following whitespaces of a string
-//precondition : user input a description
-//postcondition : input string description is updated
 void parser::trimString(string &description) {
 	size_t lineStart=0, lineEnd=0;
 	
@@ -87,11 +86,7 @@ int parser::convertStringToIntegerIndex(const string description) {
 	return output-1;
 }
 
-//Converts a number in string format to integer format
-//Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
-//String must not contain leading or following whitespaces, or function will fail
-//precondition : pass in the description entered by user
-//postcondition : converted index is returned
+
 int parser::convertStringToInteger(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
@@ -106,8 +101,6 @@ int parser::convertStringToInteger(const string description) {
 }
 
 //check the type of the task input by the user
-//precondition : user input a new task
-//postcondition : type of the task is returned
 string parser::checktype(string description){
 	size_t foundtypeDeadline = description.find("/by");
 	size_t foundtypeTimed = description.find("/from");
@@ -218,64 +211,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	}
 }
 
-//Determine the recurring period the user want to do a recurring task
-//precondition : user enter a recurring task
-//postcondition : return the recurring period, if not specified by user, default period is zero
-int parser::getRecurPeriod(string description) {
-	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
 
-	string recurPeriod = description.substr(start, end - start);
-
-	for(int i = 0; i < recurPeriod.size(); ++i) {
-		if(!isdigit(recurPeriod[i])) {
-			return 0;
-		} else {
-			int convertedNum;
-			convertedNum = atoi(recurPeriod.c_str());
-			return convertedNum;
-		}
-	}
-}
-
-//Determine if the user want to do a task daily/weekly/monthly/yearly
-//precondition : user input a recurring tas
-//postcondition : return the recurring command word
-string parser::getRecurruingCommandWord(string description) {
-	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
-
-	string recurringCommandWord = description.substr(start, end - start);	
-
-	return recurringCommandWord;
-}
-
-
-//Determine the position of the start of the description
-//precondition : take in the description entered by user
-//postcondition : return the start position
-int parser::getStartPosition(string description) {
-	assert(description.length() != 0);
-	int start;
-	
-	start = description.find_first_not_of(" ");
-	
-	return start;
-}
-
-//Determine the position of the end of the first word
-//precondition : take in the description entered by user
-//postcondition : return the end position
-int parser::getEndPosition(string description) {
-	assert(description.length() != 0);
-	int end;
-
-	end = description.find_first_of(" ");
-
-	return end;
-}
 
 //Convert alphabet month into corresponding integer. 
 //i.e: Jan - Dec correspons to 1 - 12
@@ -387,6 +323,56 @@ string parser::shortForm(string description){
 
 }
 
+//Get the current local day on the system the program is running
+//precondition : none
+//postcondition : system day is returned
+int parser::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+//Get the current local month on the system the program is running
+//precondition : none
+//postcondition : system month is returned
+int parser::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+//Get the current local year on the system the program is running
+//precondition : none
+//postcondition : system year is returned
+int parser::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
+}
+
+//Get the current local hour on the system the program is running
+//precondition : none
+//postcondition : system hour is returned
+int parser::getSystemHour() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int hour = timePtr->tm_hour;
+	return hour;
+}
+
+//Get the current local minute on the system the program is running
+//precondition : none
+//postcondition : system minute is returned
+int parser::getSystemMinute() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int minute = timePtr->tm_min;
+	return minute;
+}
+
 //Get the corresponding numeric day, month and year if the date entered by user is "today" or "tomorrow"
 //precondition : user input date is "today" or "tomorrow" instead of numerical date
 //postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
@@ -442,6 +428,9 @@ bool parser::canFindPartoChange(string description){
 	}
    return false;
 }
+
+
+//@author A0113745
 
 //Check whether there is any integer in the keyword
 //Precondition: keyword
@@ -526,52 +515,64 @@ bool parser::checkIsDateOverdue(int day, int month, int year,int timing) {
 	return result;
 }
 
-//Get the current local day on the system the program is running
-//precondition : none
-//postcondition : system day is returned
-int parser::getSystemDay() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int day = timePtr->tm_mday;
-	return day;
+
+
+
+//Determine the recurring period the user want to do a recurring task
+//precondition : user enter a recurring task
+//postcondition : return the recurring period, if not specified by user, default period is zero
+int parser::getRecurPeriod(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurPeriod = description.substr(start, end - start);
+
+	for(int i = 0; i < recurPeriod.size(); ++i) {
+		if(!isdigit(recurPeriod[i])) {
+			return 0;
+		} else {
+			int convertedNum;
+			convertedNum = atoi(recurPeriod.c_str());
+			return convertedNum;
+		}
+	}
 }
 
-//Get the current local month on the system the program is running
-//precondition : none
-//postcondition : system month is returned
-int parser::getSystemMonth() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int month = timePtr->tm_mon + 1;
-	return month;
+//Determine if the user want to do a task daily/weekly/monthly/yearly
+//precondition : user input a recurring tas
+//postcondition : return the recurring command word
+string parser::getRecurruingCommandWord(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurringCommandWord = description.substr(start, end - start);	
+
+	return recurringCommandWord;
 }
 
-//Get the current local year on the system the program is running
-//precondition : none
-//postcondition : system year is returned
-int parser::getSystemYear() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int year = timePtr->tm_year+1900;
-	return year;
+
+//Determine the position of the start of the description
+//precondition : take in the description entered by user
+//postcondition : return the start position
+int parser::getStartPosition(string description) {
+	assert(description.length() != 0);
+	int start;
+	
+	start = description.find_first_not_of(" ");
+	
+	return start;
 }
 
-//Get the current local hour on the system the program is running
-//precondition : none
-//postcondition : system hour is returned
-int parser::getSystemHour() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int hour = timePtr->tm_hour;
-	return hour;
-}
+//Determine the position of the end of the first word
+//precondition : take in the description entered by user
+//postcondition : return the end position
+int parser::getEndPosition(string description) {
+	assert(description.length() != 0);
+	int end;
 
-//Get the current local minute on the system the program is running
-//precondition : none
-//postcondition : system minute is returned
-int parser::getSystemMinute() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int minute = timePtr->tm_min;
-	return minute;
+	end = description.find_first_of(" ");
+
+	return end;
 }
