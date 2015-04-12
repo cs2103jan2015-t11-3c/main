@@ -14,6 +14,7 @@
 //success message will be shown to user if user input is successfully processed
 //precondition : user enter the command and its relating description
 //postcondition : command of different types is processed
+//@author A0113745J
 void defaultclass::defaultexecuteCommand(string fileName,storage *store, string &command,string &description, vector<task> &toDoList, vector<undo> &undomemory) {
 	string text;
 	parser parse;
@@ -175,11 +176,6 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 	return true;
 }
 
-//function updates the defaultmemory 
-//The task will be pushed back into today's task vector, tomorrow's task vector and float task vector respectively if task
-//is due today, tomorrow or has a floating type
-//precondition : toDoList is read in
-//postcondition : tasks are being categorised and pushed into respective vectors
 void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 	vector<task> floatVec_;
 	task temp;
@@ -202,7 +198,6 @@ void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 	}
 	floatVec = floatVec_;
 }
-
 
 //Add the recurring task entered by the user to the vector toDoList by categorise them into deadline and timed tasks
 //precondition : user key in a recurring task of type deadline or timed task
@@ -244,12 +239,6 @@ void defaultclass::addRecurringTask(int recurPeriod,string recurringCommandWord,
 	}
 }
 
-
-//Add the task to the toDoList if it has a floating type
-//Successful added message is shown to user if the task is added successfully
-//Failure added message is shown to user if the task already existed
-//precondition : user added a floating type
-//postcondition : add float task to toDoList if the task is not duplicated
 void defaultclass::addFloatTask(string description,vector<task> &toDoList,storage *store , vector<undo> &undomemory) {
 	storage *stor = store;
 	logic function;
@@ -268,11 +257,6 @@ void defaultclass::addFloatTask(string description,vector<task> &toDoList,storag
 	}
 }
 
-//Add the task to the toDoList if it has a deadline type
-//Successful added message is shown to user if the task is added successfully
-//Failure added message is shown to user if the task already existed or there are errors in the user inputs
-//precondition : user added a deadline type
-//postcondition : add deadline task to toDoList if the task entered has no errors
 void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,storage *store, vector<undo> &undomemory) {
 	string text;
 	parser parse;
@@ -294,11 +278,6 @@ void defaultclass::addDeadlineTask(string description,vector<task> &toDoList,sto
 	}
 }
 
-//Add the task to the toDoList if it has a timed type
-//Successful added message is shown to user if the task is added successfully
-//Failure added message is shown to user if the task already existed or there are errors in the user inputs
-//precondition : user added a timed type
-//postcondition : add timed task to toDoList if the task entered has no errors
 void defaultclass::addTimedTask(string description,vector<task> &toDoList,storage *store, vector<undo> &undomemory) {
 	string text;
 	parser parse;
@@ -319,10 +298,6 @@ void defaultclass::addTimedTask(string description,vector<task> &toDoList,storag
 	}
 }
 
-//User can delete an unwanted task by key in delete <index>
-//This can be done in the default page or after the user has operate the search or display command
-//precondition : the index of the unwanted task is read in
-//postcondition : delete the unwanted task according to its index shown on the console
 void defaultclass::deleteTask(string fileName,string description, vector<task> &toDoList, storage *store, vector<undo> &undomemory, vector<task> &tempVec, defaultclass &defaultmemory) {
 	int originindex;
     logic function;
@@ -346,9 +321,6 @@ void defaultclass::displayTask(string fileName,string description, vector<task> 
     function.display(toDoList, tempVec, fileName, description);
 }
 
-//clear all content in the toDoList
-//precondition : clear command is entered
-//postcondition : vector toDoList is cleared
 void defaultclass::clearTasks(string fileName,storage *store,vector<task> &toDoList, vector<undo> &undomemory) {
 	logic function;
 	undo undofunction;
