@@ -41,7 +41,14 @@ public:
 	bool checkIfIsToday(int,int,int);
 	bool checkIfIsTomorrow(int,int,int);
 	void defaultFloatDisplay(defaultclass &);
+	void displayTenFloatTask(defaultclass &);
+	void displayAllFloatTasks(defaultclass &);
 	void DisplayTaskFinishByToday(defaultclass &);
+	void displayTenTasksDueToday(defaultclass &);
+	void displayAllTasksDueToday(defaultclass &);
+	void checkTypeOfTasksDueToday(defaultclass &,int);
 	void DisplayTaskFinishByTmr(defaultclass &);
-
+	void displayTenTasksDueTmr(defaultclass &);
+	void displayAllTasksDueTmr(defaultclass &);
+	void checkTypeOfTasksDueTmr(defaultclass &,int);
 };
