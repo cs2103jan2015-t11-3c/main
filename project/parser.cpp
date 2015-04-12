@@ -11,40 +11,40 @@
 bool parser::isValidCommand(const string command, const string description){
 	logic function;
 	try{
-	if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
-		if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_DESCRIPTION);
-			return false;
+		if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
+			if(description.size()==0) {
+				function.printMessage(ERROR_MISSING_DESCRIPTION);
+				return false;
+			}
+			return true;
 		}
-		return true;
-	}
 
-	 else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||
-		    command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
-		return true;
+		else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||
+			command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
+			return true;
 
-	 else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
-		if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_INDEX);
-			return false;
-	}  
-		return true;
-	}
-	 else if(command=="edit"||command=="modify"||command=="change"){
-		 if(description.size()==0) {
-			function.printMessage(ERROR_MISSING_INDEX);
-			return false;
-	}    
-		 if(!canFindPartoChange(description)){
-			function.printMessage(ERROR_MISSING_CHANGINGPART);
-			return false;
-	}    
-		return true;
-	}
+		else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
+			if(description.size()==0) {
+				function.printMessage(ERROR_MISSING_INDEX);
+				return false;
+			}  
+			return true;
+		}
+		else if(command=="edit"||command=="modify"||command=="change"){
+			if(description.size()==0) {
+				function.printMessage(ERROR_MISSING_INDEX);
+				return false;
+			}    
+			if(!canFindPartoChange(description)){
+				function.printMessage(ERROR_MISSING_CHANGINGPART);
+				return false;
+			}    
+			return true;
+		}
 
-	function.printMessage(ERROR_INVALID_COMMAND);
+		function.printMessage(ERROR_INVALID_COMMAND);
 
-	return false;
+		return false;
 	}
 
 	catch(const string ERROR_MESSAGE){
@@ -168,7 +168,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	string date;
 	string smonth,emonth;
 	string syear,eyear;
-	
+
 	size_t bypos = description.find("/from");
 	text = description.substr(0 , bypos-1);
 	description = description.substr(bypos+6);
@@ -177,35 +177,35 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 
 	int spos=description.find("/to ");
 	if(containShortForm(description.substr(0,spos))){
-		    in>>temp;
-		
-			getInfo(description, s_date, s_month, s_year);
+		in>>temp;
+
+		getInfo(description, s_date, s_month, s_year);
 	}
 	else{
-	     in>>temp;//on
-	     in>>s_date;//28
-	     in>>c;//"/"
-	     in>>date;
-		 int tend=date.find_first_of("/");
-		 smonth=date.substr(0,tend);
-		 trimString(smonth);
-         s_month=convertMonth(smonth);
-        
-		 int pos=date.find("to");
-		 syear=date.substr(tend+1,pos-tend);
-		 trimString(syear);
-		 s_year=convertStringToInteger(syear);
-   }
-		
-	     in>>temp;//to
-	     in>>e_time;//2000
-		 in>>temp;//on
-		 if(containShortForm(temp)){		
-		 getInfo(temp, e_date, e_month, e_year);
-	    }
-		else{	   
-	    in>>e_date;//29
-	    in>>c;//"/"
+		in>>temp;//on
+		in>>s_date;//28
+		in>>c;//"/"
+		in>>date;
+		int tend=date.find_first_of("/");
+		smonth=date.substr(0,tend);
+		trimString(smonth);
+		s_month=convertMonth(smonth);
+
+		int pos=date.find("to");
+		syear=date.substr(tend+1,pos-tend);
+		trimString(syear);
+		s_year=convertStringToInteger(syear);
+	}
+
+	in>>temp;//to
+	in>>e_time;//2000
+	in>>temp;//on
+	if(containShortForm(temp)){		
+		getInfo(temp, e_date, e_month, e_year);
+	}
+	else{	   
+		in>>e_date;//29
+		in>>c;//"/"
 		in>>date;
 		int post=date.find("/");
 		emonth=date.substr(0,post);
@@ -215,7 +215,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 
 		e_month=convertMonth(emonth);
 		e_year=convertStringToInteger(eyear);
-		}
+	}
 }
 
 //Determine the recurring period the user want to do a recurring task

@@ -190,10 +190,9 @@ void readinput(vector<task> &toDoList, storage *store){
 //postcondition : the command is processed
 void defaultExecution(string command,storage *store,string description,vector<task> &toDoList,vector<undo> undomemory) {
 	defaultclass defaultfunction;
-	undo currentundomemory;
 	while(command!="exit"){
 		assert(command.length() != 0);
 		assert(description.length() != 0);
-		defaultfunction.defaultexecuteCommand(fileName,store,command, description, toDoList, undomemory, currentundomemory);
+		defaultfunction.defaultexecuteCommand(fileName,store,command, description, toDoList, undomemory);
 	};
 }

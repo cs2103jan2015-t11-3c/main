@@ -101,27 +101,27 @@ string logic::printOthers(vector<task> & temp, int i){
 //edit existing task, name, dates, times
 //Precondition: index of task, string that include command and changes to be made, vector
 //postcondition: none
-void logic::editTask(int index, string description, vector<task> &toDoList) {
+bool logic::editTask(int index, string description, vector<task> &toDoList) {
 
 	if(toDoList[index].returntype() == "float")
-		editFloatClass(toDoList, description, index);
+		return editFloatClass(toDoList, description, index);
 	else if(toDoList[index].returntype() == "deadline")
-		editDeadlineClass(toDoList, description, index);
+		return editDeadlineClass(toDoList, description, index);
 	else if(toDoList[index].returntype() == "timed")
-		editTimedClass(toDoList, description, index);
+		return editTimedClass(toDoList, description, index);
 }
 
-void logic::editFloatClass(vector<task> & toDoList, string description, int index){
+bool logic::editFloatClass(vector<task> & toDoList, string description, int index){
 	string PartToChange;
 	size_t pos = description.find("-name");
 	PartToChange = description.substr(pos+6);
 	toDoList[index].edittext(PartToChange);
-	if (system("CLS")) system("clear");
-	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+	return true;
 }
 
-void logic::editDeadlineClass(vector<task> & toDoList, string description, int index){
+bool logic::editDeadlineClass(vector<task> & toDoList, string description, int index){
 	string PartTochange, temp;
+	parser parse;
 	char c;
 	int e_date, e_month, e_year, e_time;
 
@@ -130,73 +130,172 @@ void logic::editDeadlineClass(vector<task> & toDoList, string description, int i
 	if(foundname!=std::string::npos){
 		PartTochange = description.substr(foundname+6);
 		toDoList[index].edittext(PartTochange);
+		if (system("CLS")) system("clear");
+	    printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	} else if(founddue!=std::string::npos){
-		PartTochange = description.substr(founddue+5);
-		istringstream in(PartTochange);
-		in>>e_time;;
-		in>>temp;
-		in>>e_date;
-		in>>c;
-		in>>e_month;
-		in>>c;
-		in>>e_year;
+		description = description.substr(founddue + 5);
+		istringstream in(description);// -due 1800 on 31/06/2016
+		in>>e_time;//1800
 
-		toDoList[index].edite_time(e_time);
-		toDoList[index].edite_date(e_date);
-		toDoList[index].edite_month(e_month);
-		toDoList[index].edite_year(e_year);
-	}
-	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
-}
-
-void logic::editTimedClass(vector<task> & toDoList, string description, int index){
-	string PartTochange, temp;
-	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
-	char c;
-
-	size_t foundname = description.find("-name");
-	size_t foundstart = description.find("-start");
-	size_t foundend = description.find("-end");
-	if(foundname!=std::string::npos){
-		PartTochange = description.substr(foundname+6);
-		toDoList[index].edittext(PartTochange);
-	}
-	else{ 
-		if(foundstart!=std::string::npos){
-			PartTochange = description.substr(foundstart+7);
-			istringstream in(PartTochange);
-			in>>s_time;
-			in>>temp;
-			in>>s_date;
-			in>>c;
-			in>>s_month;
-			in>>c;
-			in>>s_year;
-
-			toDoList[index].edits_time(s_time);
-			toDoList[index].edits_date(s_date);
-			toDoList[index].edits_month(s_month);
-			toDoList[index].edits_year(s_year);
-		}
-		if(foundend!=std::string::npos){
-			PartTochange = description.substr(foundend+5);
-			istringstream in(PartTochange);
-			in>>e_time;
-			in>>temp;
-			in>>e_date;
-			in>>c;
+		if(parse.containShortForm(description))
+			parse.getInfo(description, e_date, e_month, e_year);
+		else{
+			in>>temp;//on
+			in>>e_date;//31
+			in>>c;//"/"
 			in>>e_month;
 			in>>c;
 			in>>e_year;
 
+			if(printErrorMsgForEditDeadlineTask(e_date, e_month, e_year, e_time))
+			return false;
+			else {
+				toDoList[index].edite_time(e_time);
+				toDoList[index].edite_date(e_date);
+				toDoList[index].edite_month(e_month);
+				toDoList[index].edite_year(e_year);
+				return true;
+			}
+		}
+	}else{
+		printMessage(ERROR_INVALID_COMMAND);
+		return false;
+	}
+}
+
+bool logic::editTimedClass(vector<task> & toDoList, string description, int index){
+	string PartTochange, temp;
+	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+	char c;
+	parser parse;
+
+	size_t foundname = description.find("-name");
+	size_t foundstart = description.find("-start");
+	if(foundname!=std::string::npos){
+		PartTochange = description.substr(foundname+6);
+		toDoList[index].edittext(PartTochange);
+	}
+	else if(foundstart!=std::string::npos){
+		description = description.substr(foundstart+6);
+		istringstream inStart(description);
+		inStart>>s_time;//1900
+
+		size_t foundend = description.find("-end");
+		temp = description.substr(0,foundend);
+		if(parse.containShortForm(temp)){
+			parse.getInfo(temp, s_date, s_month, s_year);
+		}
+		else{
+			inStart>>temp;//on
+			inStart>>s_date;//28
+			inStart>>c;//"/"
+			inStart>>s_month;
+			inStart>>c;
+			inStart>>s_year;
+		}
+
+		description = description.substr(foundend+5);
+		istringstream inEnd(description);
+		inEnd>>e_time;//2000
+		if(parse.containShortForm(description)){		
+			parse.getInfo(description, e_date, e_month, e_year);
+		}
+		else{	
+			inEnd>>temp;//on
+			inEnd>>e_date;//29
+			inEnd>>c;//"/"
+			inEnd>>e_month;
+			inEnd>>c;
+			inEnd>>e_year;
+		}
+
+		if(printErrorMsgForEditTimedTask(e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time))
+			return false;
+		else {
+			toDoList[index].edits_time(s_time);
+			toDoList[index].edits_date(s_date);
+			toDoList[index].edits_month(s_month);
+			toDoList[index].edits_year(s_year);
 			toDoList[index].edite_time(e_time);
 			toDoList[index].edite_date(e_date);
 			toDoList[index].edite_month(e_month);
 			toDoList[index].edite_year(e_year);
+			return true;
 		}
+	}else{
+		printMessage(ERROR_INVALID_COMMAND);
+		return false;
 	}
-	if (system("CLS")) system("clear");
-	printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+}
+
+bool logic::printErrorMsgForEditDeadlineTask(int e_date, int e_month, int e_year, int e_time){
+	logic function;
+	parser parse;
+
+	if(!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !parse.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_DATE_OVERDUE);
+		cout << "and";
+		function.printMessage(MESSAGE_TIME_INVALID);
+	} else if(!parse.isValidDate(e_date,e_month,e_year) && !parse.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_DATE_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_TIME_INVALID);
+	} else if (!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+			function.printMessage(MESSAGE_DATE_OVERDUE);
+	} else if(!parse.isValidDate(e_date,e_month,e_year)) {
+			function.printMessage(MESSAGE_DATE_INVALID);
+	} else if (!parse.isValidTime(e_time)) {
+			function.printMessage(MESSAGE_TIME_INVALID);
+	} else{
+		return false;
+	}
+}
+
+bool logic::printErrorMsgForEditTimedTask(int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time){
+	parser parse;
+	logic function;
+
+	if(!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !parse.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+	} else if(!parse.isValidTime(s_time) && !parse.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_START_DATE_INVALID);
+	} else if(!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time) && !parse.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if(!parse.isValidTime(e_time) && !parse.isValidDate(e_date,e_month,e_year)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_INVALID);
+	} else if(!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_BOTH_DATE_INVALID);
+	} else if(!parse.isValidTime(e_time) && !parse.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+		cout << "and";
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+	} else if(!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time) && !parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+		cout << "and";
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if(!parse.isValidTime(s_time)) {
+		function.printMessage(MESSAGE_START_TIME_INVALID);
+	} else if(!parse.isValidTime(e_time)) {
+		function.printMessage(MESSAGE_END_TIME_INVALID);
+	} else if (!parse.checkIsDateOverdue(s_date,s_month,s_year,s_time)) {
+		function.printMessage(MESSAGE_START_DATE_OVERDUE);
+	} else if (!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
+		function.printMessage(MESSAGE_END_DATE_OVERDUE);
+	} else if (!parse.isValidDate(s_date,s_month,s_year)) {
+		function.printMessage(MESSAGE_START_DATE_INVALID);
+	} else if(!parse.isValidDate(e_date,e_month,e_year)) {
+		function.printMessage(MESSAGE_END_DATE_INVALID);
+	} else{
+		return false;
+	}
 }
 
 //delete task from toDoList

@@ -42,6 +42,7 @@ const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
 const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
 const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than the end time";
 const string MESSAGE_INVALID_COMMAND = "Command entered is invalid, please try again";
+const string UNDO_FAIL = "Undo has reached it's end";
 
 
 //Global Variables
@@ -58,10 +59,12 @@ public:
 	void sortOthers(vector<task> &, vector<task> &);
 	string printOthers(vector<task> &, int);
 
-	void editTask(int , string , vector<task> &);
-	void editFloatClass(vector<task> &, string, int);
-	void editDeadlineClass(vector<task> &, string, int);
-	void editTimedClass(vector<task> &, string, int);
+	bool editTask(int , string , vector<task> &);
+	bool editFloatClass(vector<task> &, string, int);
+	bool editDeadlineClass(vector<task> &, string, int);
+	bool editTimedClass(vector<task> &, string, int);
+	bool printErrorMsgForEditDeadlineTask(int e_date, int e_month, int e_year, int e_time);
+	bool printErrorMsgForEditTimedTask(int e_date, int e_month, int e_year, int e_time, int s_date,int s_month, int s_year, int s_time);
 
 	void deleteItem(const int , vector<task> &);
 	void clearAll(vector<task> &);
