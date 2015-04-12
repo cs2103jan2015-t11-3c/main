@@ -17,7 +17,7 @@
 
 string fileName = "";
 
-//These are function prototypes in ui.cpp
+
 string getTextFileName(const int , char *[]);
 void printWelcomeMessage();
 void readinput(vector<task> &,storage * );
@@ -33,6 +33,7 @@ void printHappyFaces();
 void printWelcomeLine();
 void defaultExecution(string ,storage *,string ,vector<task> &,vector<undo> );
 
+//@author A0113745J
 int main(int argc, char *argv[]) {
 	vector<task> toDoList;
 	logic function;
@@ -82,55 +83,34 @@ void printWelcomeMessage() {
 	colorCodingWhite();
 }
 
-//print the welcome message
-//precondition : none
-//postcondition : welcome message is printed for one time
 void printWelcomeLine() {
 	cout <<  "Welcome to Happy Calendar! " << fileName << " is ready for use";
 }
 
-//print the happy faces
-//precondition : none
-//postcondition : happy faces printed for one time
 void printHappyFaces() {
 	cout << ">>(^_^)>>                                                         << (^_^)<<";
 }
 
-//print the cut-off line to make the display looks neater
-//precondition : none
-//postcondition : cut-off line is printed for one time
 void printCutOffLine() {
 	cout << "*******************************************************************************";
 }
 
-//print a new line
-//precondition : none
-//postcondition : new line is printed once
 void printNewLine() {
 	cout << endl;
 }
 
-//change the outputs below to the desired color
-//precondition : none
-//postcondition : change the outputs below color to blue
 void colorCodingBlue() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 }
 
-//change the outputs below to the desired color
-//precondition : none
-//postcondition : change the outputs below color to default white
 void colorCodingWhite() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-//change the outputs below to the desired color
-//precondition : none
-//postcondition : change the outputs below color to green
 void colorCodingGreen() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
@@ -155,9 +135,6 @@ void showLocalTime() {
 	printNewLine();
 }
 
-//print the amount of white spaces required
-//precondition : get the number of white spaces needed
-//postcondition : print the required white spaces
 void printSpace(int pos) {
 	for(int i = 0; i < pos; i++) {
 			cout<<" ";
