@@ -14,8 +14,7 @@ bool parser::isValidCommand(const string command, const string description){
 	try{
 		if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
 			if(description.size()==0) {
-				function.printMessage(ERROR_MISSING_DESCRIPTION);
-				return false;
+				throw ERROR_MISSING_DESCRIPTION;
 			}
 			return true;
 		}
@@ -26,20 +25,18 @@ bool parser::isValidCommand(const string command, const string description){
 
 		else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
 			if(description.size()==0) {
-				function.printMessage(ERROR_MISSING_INDEX);
-				return false;
+				throw ERROR_MISSING_INDEX;		
 			}  
 			return true;
 		}
 		else if(command=="edit"||command=="modify"||command=="change"){
 			if(description.size()==0) {
-				function.printMessage(ERROR_MISSING_INDEX);
-				return false;
+				throw ERROR_MISSING_INDEX;
 			}    
-			if(!canFindPartoChange(description)){
-				function.printMessage(ERROR_MISSING_CHANGINGPART);
-				return false;
-			}    
+			else if(!canFindPartoChange(description)){
+				throw ERROR_MISSING_CHANGINGPART;			
+			}  
+
 			return true;
 		}
 
@@ -50,6 +47,7 @@ bool parser::isValidCommand(const string command, const string description){
 
 	catch(const string ERROR_MESSAGE){
 		function.printMessage(ERROR_MESSAGE);
+		return false;
 	}
 }
 
