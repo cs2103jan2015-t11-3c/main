@@ -104,7 +104,7 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
              addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
 		}
 		else{
-			if (!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)){
+			if (!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)){    //if both start and end date are not valid
 			 moveToNextMonth(e_date, e_month, e_year);  //move to next month                             
 			 moveToNextMonth(s_date, s_month, s_year);
 
@@ -122,7 +122,7 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 			}
 			}
 			else{
-			if(!parse.isValidDate(e_date,e_month,e_year)){
+			if(!parse.isValidDate(e_date,e_month,e_year)){                 //if only end date is not valid
 			     moveToNextMonth(e_date, e_month, e_year); 
 			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
 			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
@@ -152,9 +152,11 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 			}
 		}
 
-			}
-		}  }     e_date=e_date+7;
-		        s_date=s_date+7;
+		}
+	}
+	}   
+		e_date=e_date+7;
+		s_date=s_date+7;
 	
 }        return;
 }
@@ -189,13 +191,12 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 		
 		else if(!isValidforMoreDays(e_month)||!isValidforMoreDays(s_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
 			 if(s_date==31&&parse.isValidDate(s_date-1,s_month,s_year)){
-				if(s_date==e_date&&s_month==e_month)
+				if(s_date==e_date&&s_month==e_month)                                                        
 		        addTodifferentType(type, e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
-				else
-			    if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date-1,s_month,s_year))
+				else if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date-1,s_month,s_year))
 			    addTodifferentType(type, e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
 			   }
-			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){
+			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){                               
 			    if (parse.isValidDate(e_date-1,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year))
 			    addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
 			   }
@@ -212,13 +213,13 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 				}
 
 
-				if((e_date==31||e_date==30)&&e_month==2){
-				if(parse.isleapyear(e_year)){
+				if((e_date==31||e_date==30)&&e_month==2){                                              
+				if(parse.isleapyear(e_year)){                                                          //if it is feb of a leap year, marke the end date for the task to be 29
 				 if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
 			      addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				else{   
-				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
+				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))     //if it is feb of a normal year, marke the end date for the task to be 28  
 			     addTodifferentType(type, 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				}
@@ -232,11 +233,7 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
 			     addTodifferentType(type, 28, e_month, e_year,28, s_month,s_year,  toDoList);
 				}
-				}
-
-
-				}
-			}
+			}}}
 		
 			if(e_month+1>12){
 			e_month=e_month%12;
@@ -246,10 +243,7 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 			if(s_month+1>12){
 			s_month=s_month%12;
 			s_year++;
-			}
-		
-		
-			
+			}		
 		    e_month++;
 		    s_month++;
 		}}
@@ -257,10 +251,8 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 }
 	
 void recurringTask::YearlyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
-   
 	logic function;
 	parser parse;
-
 	 if(n==0){
 		  n=5;
    }
