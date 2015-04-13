@@ -301,7 +301,6 @@ bool parser::containShortForm(string description){
 }
 
 
-//@author A0113745J
 
 //Determine if today/tomorrow/tmr exists in user input
 //precondition : user input a new task 
@@ -376,8 +375,7 @@ bool parser::canFindPartoChange(string description){
    return false;
 }
 
-
-//@author A0113745
+//@author A0113745J
 
 //Get the current local day on the system the program is running
 //precondition : none

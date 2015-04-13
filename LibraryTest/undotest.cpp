@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 
-
+//@author A0116006X
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace LibraryTest

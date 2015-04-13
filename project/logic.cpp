@@ -38,7 +38,7 @@ void logic::separateFloatAndOthers(vector<task> & tempVec, vector<task> & floatt
 			other.push_back(tempVec[j]);
 	}
 }
-//@author A0116006X
+
 string logic::printFloatTasks(vector<task> & floattemp, int & i){
 	ostringstream oss;
 	for(unsigned j = 0; j < floattemp.size(); j++){
@@ -48,7 +48,7 @@ string logic::printFloatTasks(vector<task> & floattemp, int & i){
 	return oss.str();
 }
 
-//@author A0114933X
+
 void logic::sortOthers(vector<task> & other, vector<task> & temp){
 	vector<task> temporary;
 	temporary.push_back(other[0]);
