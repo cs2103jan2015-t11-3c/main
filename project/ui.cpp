@@ -24,8 +24,8 @@ void readinput(vector<task> &,storage * );
 void showDefaultTaskList(vector<task> &, vector<task> &, vector<task> &, vector<task> &);
 void printSpace(int);
 void showLocalTime();
+void colorCodingRed();
 void colorCodingBlue();
-void colorCodingWhite();
 void colorCodingGreen();
 void printNewLine();
 void printCutOffLine();
@@ -46,29 +46,24 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-//get the text file name for the *.txt file which contains the updated tasks
-//precondition : *.txt file is created by user
-//postcondition : show user the desired file is loaded succesfully and is ready to use
 string getTextFileName(const int argc, char *argv[]) {
 	argc < 2 ? fileName=DEFAULT_SAVE_FILENAME : fileName=argv[FILE_NAME_ARG_NUMBER];
 	std::cout << fileName << "loaded succesfully" << endl;
 	return fileName;
 }
 
-//print the welcome message to user, which includes the local singapore time. 
-//This is only shown once every time the user runs the software
-//precondition : none
-//postcondition : show welcome message to user
 void printWelcomeMessage() {
+	system("color F1");
 	int pos=(int)((80-53)/2);
 	colorCodingBlue();
 	printCutOffLine();
 	printNewLine();
+	colorCodingRed();
 	printHappyFaces();
-	colorCodingWhite();
+	colorCodingBlue();
 	printNewLine();
 	printSpace(pos);
-	colorCodingGreen();
+	colorCodingRed();
 	printWelcomeLine();
 	printNewLine();
 	colorCodingBlue();
@@ -80,7 +75,7 @@ void printWelcomeMessage() {
 	printNewLine();
 	printCutOffLine();
 	printNewLine();
-	colorCodingWhite();
+	colorCodingBlue();
 }
 
 void printWelcomeLine() {
@@ -99,22 +94,22 @@ void printNewLine() {
 	cout << endl;
 }
 
+void colorCodingRed() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_RED| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
+}
+
 void colorCodingBlue() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-}
-
-void colorCodingWhite() {
-	HANDLE hConsole;
-    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_BLUE| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
 void colorCodingGreen() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_GREEN| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
 //print the local singapore time in the formate of year-month-date
@@ -124,7 +119,7 @@ void showLocalTime() {
 	time_t t = time(0);
     struct tm * now = localtime( & t );
 
-	colorCodingWhite();
+	colorCodingRed();
 
 	int pos=(int)((80-39)/2);
 	printSpace(pos);
@@ -154,7 +149,9 @@ void readinput(vector<task> &toDoList, storage *store){
 	undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 	defaultfunction.showDefaultTaskList(toDoList, defaultmemory);
 
+	colorCodingGreen();
 	function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
+	colorCodingBlue();
 	cout << "command: ";
 	cin >> command;
 	getline(cin,description);

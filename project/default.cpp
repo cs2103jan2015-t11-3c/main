@@ -104,7 +104,9 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				function.printMessage(MESSAGE_INVALID_COMMAND);
 			}
 		}
+		colorCodingGreen();
 		function.printMessage(MESSAGE_AVAILABLE_COMMANDS);
+		colorCodingBlue();
 		cout <<  "command: ";
 		cin >> command;
 		getline(cin,description);
@@ -385,6 +387,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 
 //Display floating task in the default page
 //If there exits more than 10 float tasks, only the sorted first 10 tasks will be displayed in default page
+//Display tasks due today/tomorrow in the default page work in the similar way
 //precondition : none
 //postcondition : floating task displayed in alphabetical order
 void defaultclass::defaultFloatDisplay(defaultclass &defaultmemory) {
@@ -407,10 +410,6 @@ void defaultclass::displayAllFloatTasks(defaultclass &defaultmemory) {
 		}
 }
 
-//Display task to be finished by today in the default page
-//If there exits more than 10 tasks due today, only the sorted first 10 tasks will be displayed in default page
-//precondition : none
-//postcondition : today's tasks are displayed according to the end timing
 void defaultclass::DisplayTaskFinishByToday(defaultclass &defaultmemory) {
 	if(defaultmemory.todayTaskVec.size() > 10) {
 		displayTenTasksDueToday(defaultmemory);
@@ -444,11 +443,6 @@ void defaultclass::checkTypeOfTasksDueToday(defaultclass &defaultmemory, int i) 
 		}
 }
 
-
-//Display task to be finished by tomorow in the default page
-//If there exits more than 10 tasks due tomorrow, only the sorted first 10 tasks will be displayed in default page
-//precondition : none
-//postcondition : tomorrow's tasks are displayed according to the end timing
 void defaultclass::DisplayTaskFinishByTmr(defaultclass &defaultmemory) {
 	if(defaultmemory.tomorTaskVec.size() > 10) {
 		displayTenTasksDueTmr(defaultmemory);
@@ -499,7 +493,6 @@ bool defaultclass::checkIfIsTomorrow(int e_day,int e_month,int e_year) {
 		return false;
 	}
 }
-
 
 //If the deadline task entered by the user has errors, false will be returned
 //The errors include: task inputed is already existed; date entered is already overdued;
@@ -592,37 +585,35 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 	}
 }
 
-
-
 void defaultclass::showHelpManual() {
 	logic function;
 
 	if (system("CLS")) system("clear");
-	colorCodingBlue();
+	colorCodingGreen();
 	showHelpManualWelcomeMessage();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_ADD);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForAdd();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForEdit();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT_DEFAULT);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForDefaultEdit();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForDelete();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE_DEFAULT);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForDefaultDelete();
-	colorCodingGreen();
+	colorCodingRed();
 	function.printMessage(HLEPER_MESSAGE_TITLE_DISPLAY);
-	colorCodingWhite();
+	colorCodingBlue();
 	showHelpManualForDisplay();
 }
 
@@ -673,20 +664,20 @@ void defaultclass::showHelpManualForDisplay(){
 	function.printMessage(HELPER_MESSAGE_DISPLAY_TYPES);
 }
 
+void defaultclass::colorCodingRed() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_RED| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
+}
+
 void defaultclass::colorCodingBlue() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-}
-
-void defaultclass::colorCodingWhite() {
-	HANDLE hConsole;
-    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_BLUE| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
 void defaultclass::colorCodingGreen() {
 	HANDLE hConsole;
     hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+	SetConsoleTextAttribute (hConsole,FOREGROUND_GREEN| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }

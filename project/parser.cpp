@@ -437,26 +437,16 @@ bool parser::isCheckSearchStringDigit(string description) {
 	return result;
 }
 
-//covert string digit to integer digit
-//precondition: string digit
-//postcondition: int digit
 int parser::convertNumStringToInt(string description) {
 	int convertedNum;
 	convertedNum = atoi(description.c_str());
     return convertedNum;
 }
 
-//check if it's leap year
-//precondition: input year
-//postcondition: return true if it's leap year
 bool parser::isleapyear(unsigned short year){
 	return (!(year%4) && (year%100) || !(year%400));
 }
 
-
-//check whether date is valid
-//precondition: input date, month, year
-//post: return true if date is valid
 bool parser::isValidDate(unsigned short day,unsigned short month,unsigned short year){
 	unsigned short monthlen[]={31,28,31,30,31,30,31,31,30,31,30,31};
 	if (!year || !month || !day || month>12 || year > 2030)
@@ -468,9 +458,6 @@ bool parser::isValidDate(unsigned short day,unsigned short month,unsigned short 
 	return 1;
 }
 
-//check whether input time is valid
-//precondition: input time
-//postcondition: return true if time is valid
 bool parser::isValidTime(int time) {
 	int minute = time%10;
 	if((time>=100)&&(time<=2400) && minute <=59) {
@@ -480,9 +467,6 @@ bool parser::isValidTime(int time) {
 	}
 }
 
-//check whether input date is overdue
-//precondition: input date, month, year, time
-//postcondition: return true if date is not overdue
 bool parser::checkIsDateOverdue(int day, int month, int year,int timing) {
 	bool result = true;
 	parser p;
@@ -506,9 +490,6 @@ bool parser::checkIsDateOverdue(int day, int month, int year,int timing) {
 	}
 	return result;
 }
-
-
-
 
 //Determine the recurring period the user want to do a recurring task
 //precondition : user enter a recurring task

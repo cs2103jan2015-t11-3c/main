@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <assert.h>
+#include <windows.h>
 #include "Task.h"
 #include "logic.h"
 #include "parser.h"
@@ -60,6 +61,6 @@ public:
 	void showHelpManualForDefaultDelete();
 	void showHelpManualForDisplay();
 	void colorCodingBlue();
-	void colorCodingWhite();
+	void colorCodingRed();
 	void colorCodingGreen();
 };
