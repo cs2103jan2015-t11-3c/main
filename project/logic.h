@@ -47,23 +47,23 @@ const string UNDO_FAIL = "Undo has reached it's end";
 
 //message for helper manual-add
 const string HLEPER_MESSAGE_TITLE_ADD = ">>>>>>>>>> add <<<<<<<<<<";
-const string HELPER_MESSAGE_ADD_FLOAT_TASK = "FLOAT : add [task name]";
-const string HELPER_MESSAGE_ADD_DEADLINE_TASK = "DEADLINE : add [task name] /by [end time] on [specific date]";
-const string HELPER_MESSAGE_ADD_TIMED_TASK = "DEADLINE : add [task name] /from [start time] on [start date] to [end time] on [end date]";
-const string HELPER_MESSAGE_ADD_RECUR_DEADLINE_TASK = "RECUR DEADLINE : add [recur period] [daily/weekly/monthly/yearly] /by [end time] on [specific date]";
-const string HELPER_MESSAGE_ADD_RECUR_TIMED_TASK = "RECUR TIMED : add [recur period] [daily/weekly/monthly/yearly] /from [start time] on [start date] to [end time] on [end date]";
+const string HELPER_MESSAGE_ADD_FLOAT_TASK = "add [task]";
+const string HELPER_MESSAGE_ADD_DEADLINE_TASK = "add [task] /by [time] on [date]";
+const string HELPER_MESSAGE_ADD_TIMED_TASK = "add [task] /from [time] on [date] to [time] on [date]";
+const string HELPER_MESSAGE_ADD_RECUR_DEADLINE_TASK = "add [period] [daily] /by [time] on [date]";
+const string HELPER_MESSAGE_ADD_RECUR_TIMED_TASK = "add [period] [daily] /from [time] on [date] to [time] on [date]";
 
 //message for helper manual-edit after display/search
 const string HLEPER_MESSAGE_TITLE_EDIT = ">>>>>>>>>> edit after search/display <<<<<<<<<<";
-const string HELPER_MESSAGE_EDIT_TASK_NAME = "edit [index] -name [new task name]";
+const string HELPER_MESSAGE_EDIT_TASK_NAME = "edit [index] -name [new task]";
 const string HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [index] -due [new time]";
 const string HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [index] -start/end [new time]";
 
 //messsage for helper manual-edit in default page
 const string HLEPER_MESSAGE_TITLE_EDIT_DEFAULT = ">>>>>>>>>> edit in default page<<<<<<<<<<";
-const string DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME = "edit [float/today/tomorrow] [index] -name [new task name]";
-const string DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [float/today/tomorrow] [index] -due [new time]";
-const string DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [float/today/tomorrow] [index] -start/end [new time]";
+const string DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME = "edit [float/today/tomorrow] [index] -name [new task]";
+const string DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [float/today/tomorrow] [index] -due [new]";
+const string DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [float/today/tomorrow] [index] -start/end [new]";
 
 //message for helper manual-display
 const string HLEPER_MESSAGE_TITLE_DISPLAY = ">>>>>>>>>> display task <<<<<<<<<<";

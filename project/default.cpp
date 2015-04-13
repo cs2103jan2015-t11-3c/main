@@ -595,20 +595,35 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 
 
 void defaultclass::showHelpManual() {
+	logic function;
+
 	if (system("CLS")) system("clear");
+	colorCodingBlue();
 	showHelpManualWelcomeMessage();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_ADD);
+	colorCodingWhite();
 	showHelpManualForAdd();
-	showHelpManualForAdd();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT);
+	colorCodingWhite();
 	showHelpManualForEdit();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT_DEFAULT);
+	colorCodingWhite();
 	showHelpManualForDefaultEdit();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE);
+	colorCodingWhite();
 	showHelpManualForDelete();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE_DEFAULT);
+	colorCodingWhite();
 	showHelpManualForDefaultDelete();
+	colorCodingGreen();
+	function.printMessage(HLEPER_MESSAGE_TITLE_DISPLAY);
+	colorCodingWhite();
 	showHelpManualForDisplay();
-	showHelpManualForClear();
-	showHelpManualForUndo();
-	showHelpManualForSearch();
-	showHelpManualForDefault();
-	showHelpManualForExit();
 }
 
 void defaultclass::showHelpManualWelcomeMessage(){
@@ -618,7 +633,7 @@ void defaultclass::showHelpManualWelcomeMessage(){
 
 void defaultclass::showHelpManualForAdd(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_ADD);
+	
 	function.printMessage(HELPER_MESSAGE_ADD_FLOAT_TASK);
 	function.printMessage(HELPER_MESSAGE_ADD_DEADLINE_TASK);
 	function.printMessage(HELPER_MESSAGE_ADD_TIMED_TASK);
@@ -628,7 +643,7 @@ void defaultclass::showHelpManualForAdd(){
 
 void defaultclass::showHelpManualForEdit(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT);
+	
 	function.printMessage(HELPER_MESSAGE_EDIT_TASK_NAME);
     function.printMessage(HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME);
     function.printMessage(HELPER_MESSAGE_EDIT_TIMED_TASK_TIME);
@@ -636,7 +651,7 @@ void defaultclass::showHelpManualForEdit(){
 
 void defaultclass::showHelpManualForDefaultEdit(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT_DEFAULT);
+	
 	function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME);
     function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME);
     function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME);
@@ -644,42 +659,34 @@ void defaultclass::showHelpManualForDefaultEdit(){
 
 void defaultclass::showHelpManualForDelete(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE);
+	
 	function.printMessage(HELPER_MESSAGE_DELETE);
 }
 void defaultclass::showHelpManualForDefaultDelete(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE_DEFAULT);
+	
 	function.printMessage(DEFAULT_HELPER_MESSAGE_DELETE);
 }
 void defaultclass::showHelpManualForDisplay(){
 	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_DISPLAY);
+	
 	function.printMessage(HELPER_MESSAGE_DISPLAY_TYPES);
 }
-void defaultclass::showHelpManualForClear(){
-	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_CLEAR);
-	function.printMessage(HELPER_MESSAGE_CLEAR);
+
+void defaultclass::colorCodingBlue() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 }
 
-void defaultclass::showHelpManualForUndo(){
-	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_UNDO);
-	function.printMessage(HELPER_MESSAGE_UNDO);
+void defaultclass::colorCodingWhite() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
-void defaultclass::showHelpManualForSearch(){
-	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_SEARCH);
-	function.printMessage(HELPER_MESSAGE_SEARCH);
-}
-void defaultclass::showHelpManualForDefault(){
-	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_DEFAULT);
-	function.printMessage(HELPER_MESSAGE_DEFAULT);
-}
-void defaultclass::showHelpManualForExit(){
-	logic function;
-	function.printMessage(HLEPER_MESSAGE_TITLE_EXIT);
-	function.printMessage(HELPER_MESSAGE_EXIT);
+
+void defaultclass::colorCodingGreen() {
+	HANDLE hConsole;
+    hConsole = GetStdHandle (STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 }

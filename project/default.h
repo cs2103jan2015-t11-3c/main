@@ -59,9 +59,7 @@ public:
 	void showHelpManualForDelete();
 	void showHelpManualForDefaultDelete();
 	void showHelpManualForDisplay();
-	void showHelpManualForClear();
-	void showHelpManualForUndo();
-	void showHelpManualForSearch();
-	void showHelpManualForDefault();
-	void showHelpManualForExit();
+	void colorCodingBlue();
+	void colorCodingWhite();
+	void colorCodingGreen();
 };
