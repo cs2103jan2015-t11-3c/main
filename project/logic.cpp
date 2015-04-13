@@ -31,20 +31,20 @@ string logic::displayAll(vector<task> &tempVec) {
 
 void logic::separateFloatAndOthers(vector<task> & tempVec, vector<task> & floattemp, vector<task> & other){
 	for(unsigned j = 0; j < tempVec.size(); j++){
-			if(tempVec[j].returntype() == "float"){
-				floattemp.push_back(tempVec[j]);
-			}
-			else
-				other.push_back(tempVec[j]);
+		if(tempVec[j].returntype() == "float"){
+			floattemp.push_back(tempVec[j]);
 		}
+		else
+			other.push_back(tempVec[j]);
+	}
 }
 //@author A0116006X
 string logic::printFloatTasks(vector<task> & floattemp, int & i){
 	ostringstream oss;
 	for(unsigned j = 0; j < floattemp.size(); j++){
-			oss << floattemp[j].displayFloat(i) << endl;
-			i++;
-		}
+		oss << floattemp[j].displayFloat(i) << endl;
+		i++;
+	}
 	return oss.str();
 }
 
@@ -72,7 +72,6 @@ void logic::sortOthers(vector<task> & other, vector<task> & temp){
 
 string logic::printOthers(vector<task> & temp, int & i){
 	ostringstream oss;
-	i++;
 	oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
 	if(temp[i].returntype() == "deadline")
 		oss << temp[i].displayDefaultTasks(i) << endl;
@@ -263,11 +262,11 @@ bool logic::printErrorMsgForEditDeadlineTask(int e_date, int e_month, int e_year
 		cout << "and";
 		function.printMessage(MESSAGE_TIME_INVALID);
 	} else if (!parse.checkIsDateOverdue(e_date,e_month,e_year,e_time)) {
-			function.printMessage(MESSAGE_DATE_OVERDUE);
+		function.printMessage(MESSAGE_DATE_OVERDUE);
 	} else if(!parse.isValidDate(e_date,e_month,e_year)) {
-			function.printMessage(MESSAGE_DATE_INVALID);
+		function.printMessage(MESSAGE_DATE_INVALID);
 	} else if (!parse.isValidTime(e_time)) {
-			function.printMessage(MESSAGE_TIME_INVALID);
+		function.printMessage(MESSAGE_TIME_INVALID);
 	} else{
 		return false;
 	}
@@ -324,9 +323,9 @@ bool logic::printErrorMsgForEditTimedTask(int e_date, int e_month, int e_year, i
 //Precondition: take in index and vector
 //postcondition: none
 void logic::deleteItem(const int index, vector<task> &toDoList) {
-		if (system("CLS")) system("clear");
-		printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
-		toDoList.erase(toDoList.begin()+index);
+	if (system("CLS")) system("clear");
+	printMessage(MESSAGE_ITEM_DELETED_SUCCESSFULLY);
+	toDoList.erase(toDoList.begin()+index);
 }
 
 //clear all the task from toDolist
@@ -362,7 +361,7 @@ void logic::markNotCompleted(int index, vector<task> &toDoList){
 void logic::sortText(vector<task> &toDoList){
 	int size = toDoList.size();
 	task temp;
-	
+
 	for(int i=0; i<size-1; ++i){
 		for(int j=1; j<size-i; ++j){
 			if(toDoList[j-1].returntext().compare(toDoList[j].returntext())>0){
@@ -384,7 +383,7 @@ void logic::sortDates(vector<task> &toDoList){
 	for(i = 0; i<toDoList.size(); ++i)
 		toDoList[i].edittemp((toDoList[i].returnendyear()*10000)+(toDoList[i].returnendmonth()*100)+(toDoList[i].returnenddate()));
 
-    for(i = 0; i < toDoList.size(); ++i) {
+	for(i = 0; i < toDoList.size(); ++i) {
 		for(j = 1; j < toDoList.size()-i; ++j) {
 			if(toDoList[j-1].returntemp() > toDoList[j].returntemp()){
 				temp = toDoList[j-1];
@@ -394,7 +393,7 @@ void logic::sortDates(vector<task> &toDoList){
 		}
 	}
 }
-	
+
 //Sort vector by endtime
 //Precondition: vector
 //Postcondition: none
@@ -402,7 +401,7 @@ void logic::sortEndTime(vector<task> &toDoList){
 	task temp;
 	unsigned int i , j;
 
-    for(i = 0; i < toDoList.size(); ++i) {
+	for(i = 0; i < toDoList.size(); ++i) {
 		for(j = 1; j < toDoList.size()-i; ++j) {
 			if(toDoList[j-1].returnendtime() > toDoList[j].returnendtime()){
 				temp = toDoList[j-1];
@@ -429,7 +428,7 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string des
 	if( tempVec.size() == 0) {
 		printMessage(MESSAGE_SEARCH_FAILED);
 	} else {
-	    cout << displayAll(tempVec);
+		cout << displayAll(tempVec);
 	}
 }
 
@@ -439,11 +438,11 @@ void logic::searchTask(vector<task> &toDoList, vector<task> &tempVec, string des
 void logic::searchWord(vector<task> &toDoList, string description, vector<task> &tempVec) {
 	for(int i = 0; i < toDoList.size(); ++i) {
 		//searched word is not a digit-->can only be found in task name
-			unsigned int t = -1;
-			t = (toDoList[i].returntext()).find(description);
-			if(t != -1) {
-				pushback(toDoList, tempVec, i);
-			}
+		unsigned int t = -1;
+		t = (toDoList[i].returntext()).find(description);
+		if(t != -1) {
+			pushback(toDoList, tempVec, i);
+		}
 	}
 }
 
@@ -453,29 +452,29 @@ void logic::searchWord(vector<task> &toDoList, string description, vector<task> 
 void logic::searchDigit(vector<task> &toDoList, string description, vector<task> &tempVec) {
 	parser parse;
 	for(int i = 0; i < toDoList.size(); ++i) { // searched word is a pure digit-->can only be found in time/date/month/year
-			unsigned int t = -1;
-			t = (toDoList[i].returntext()).find(description);
-			if(t != -1) {
-				pushback(toDoList, tempVec, i);
-			}
-			int convertedInt = parse.convertNumStringToInt(description);
-			if(toDoList[i].returnstarttime() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnendtime() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if(toDoList[i].returnstartdate() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnenddate() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnstartmonth() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnendmonth() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnstartyear() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else if (toDoList[i].returnendyear() == convertedInt) {
-				pushback(toDoList, tempVec, i);
-			} else {}
+		unsigned int t = -1;
+		t = (toDoList[i].returntext()).find(description);
+		if(t != -1) {
+			pushback(toDoList, tempVec, i);
+		}
+		int convertedInt = parse.convertNumStringToInt(description);
+		if(toDoList[i].returnstarttime() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendtime() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if(toDoList[i].returnstartdate() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnenddate() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnstartmonth() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendmonth() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnstartyear() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else if (toDoList[i].returnendyear() == convertedInt) {
+			pushback(toDoList, tempVec, i);
+		} else {}
 	}
 }
 
@@ -486,76 +485,76 @@ void logic::displayToday(vector<task> &tempVec, vector<task> &toDoList,int size)
 	int day, month, year;
 	parser parse;
 	for(int i=0; i<size; i++) {
-			day = toDoList[i].returnenddate();
-			month = toDoList[i].returnendmonth();
-			year = toDoList[i].returnendyear();
-			if(day == parse.getSystemDay() && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
-				pushback(toDoList, tempVec, i);
-			}
+		day = toDoList[i].returnenddate();
+		month = toDoList[i].returnendmonth();
+		year = toDoList[i].returnendyear();
+		if(day == parse.getSystemDay() && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayTomorrow(vector<task> &tempVec, vector<task> &toDoList,int size) {
 	int day, month, year;
 	parser parse;
 	for(int i=0; i<size; i++){
-			day = toDoList[i].returnenddate();
-			month = toDoList[i].returnendmonth();
-			year = toDoList[i].returnendyear();
-			if((day == (parse.getSystemDay())+1) && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
-				pushback(toDoList, tempVec, i);
-			}
+		day = toDoList[i].returnenddate();
+		month = toDoList[i].returnendmonth();
+		year = toDoList[i].returnendyear();
+		if((day == (parse.getSystemDay())+1) && (month == parse.getSystemMonth())&& (year == parse.getSystemYear())){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayNotDone(int size,vector<task> &toDoList,vector<task> &tempVec) {
-		for(int i=0; i<size; i++){
-			bool status = toDoList[i].returnstatus();
-			if(status == false){
-				pushback(toDoList, tempVec, i);
-			}
+	for(int i=0; i<size; i++){
+		bool status = toDoList[i].returnstatus();
+		if(status == false){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayDone(int size,vector<task> &toDoList,vector<task> &tempVec) {
 	for(int i=0; i<size; i++){
-			bool status = toDoList[i].returnstatus();
-			if(status == true){
-				pushback(toDoList, tempVec, i);
-			}
+		bool status = toDoList[i].returnstatus();
+		if(status == true){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayFloat(int size,vector<task> &toDoList,vector<task> &tempVec) {
 	for(int i=0; i<size; i++){
-			string type = toDoList[i].returntype();
-			if(type == "float"){
-				pushback(toDoList, tempVec, i);
-			}
+		string type = toDoList[i].returntype();
+		if(type == "float"){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayDeadline(int size,vector<task> &toDoList,vector<task> &tempVec) {
 	for(int i=0; i<size; i++){
-			string type = toDoList[i].returntype();
-			if(type =="deadline"){
-				pushback(toDoList, tempVec, i);
-			}
+		string type = toDoList[i].returntype();
+		if(type =="deadline"){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayTimed(int size,vector<task> &toDoList,vector<task> &tempVec) {
 	for(int i=0; i<size; i++){
-			string type = toDoList[i].returntype();
-			if(type =="timed"){
-				pushback(toDoList, tempVec, i);
-			}
+		string type = toDoList[i].returntype();
+		if(type =="timed"){
+			pushback(toDoList, tempVec, i);
 		}
+	}
 }
 
 void logic::displayEverything(int size,vector<task> &toDoList,vector<task> &tempVec) {
 	for(int i=0; i<size; i++) {
-			pushback(toDoList, tempVec, i);
+		pushback(toDoList, tempVec, i);
 	}
 }
 
@@ -627,7 +626,7 @@ void logic::printMessage( string message1, const string message2) {
 
 bool logic::checkIfStartTimeIsEarlierThanEndTime (int s_day,int s_month,int s_year,int s_time,int e_day,int e_month,int e_year,int e_time) {
 	bool result = true;
-	
+
 	if(checkIsSameDate(e_day,s_day) && checkIsSameMonth(e_month,s_month) && checkIsSameYear(e_year,s_year)) {
 		if(s_time >= e_time) {
 			return result;

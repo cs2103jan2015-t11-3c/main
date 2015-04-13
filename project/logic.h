@@ -146,14 +146,6 @@ public:
 
 	void printMessage(const string);
 	void printMessage( string, const string);
-
-	//check whether start time is earlier than end time
-	//precondition: input s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time
-	//postcondition: return false if end time is earlier than start time
-	bool checkIfStartTimeIsEarlierThanEndTime(int,int,int,int,int,int,int,int);
-	bool checkIsSameDate(int,int);
-	bool checkIsSameMonth(int,int);
-	bool checkIsSameYear(int,int);
 	
 	void displayToday(vector<task> &, vector<task> &,int);
 	void displayTomorrow(vector<task> &, vector<task> &,int);
@@ -164,5 +156,13 @@ public:
 	void displayTimed(int ,vector<task> &,vector<task> &);
 	void displayEverything(int ,vector<task> &,vector<task> &);
 	void display(vector<task> &, vector<task> &, string, string);
+
+	//check whether start time is earlier than end time
+	//precondition: input s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time
+	//postcondition: return false if end time is earlier than start time
+	bool checkIfStartTimeIsEarlierThanEndTime(int,int,int,int,int,int,int,int);
+	bool checkIsSameDate(int,int);
+	bool checkIsSameMonth(int,int);
+	bool checkIsSameYear(int,int);
 };
 
