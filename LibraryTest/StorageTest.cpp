@@ -3,6 +3,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+//@author: A0119322N
 namespace UnitTest
 {
 	TEST_CLASS(StorageTestcpp)
@@ -16,25 +17,7 @@ namespace UnitTest
 			string expected="C:\\SaveFile";
 			Assert::AreEqual (expected,testString);
 		}
-		/*
-		TEST_METHOD(TestgetFileName)
-		{
-			storage *s=storage::getInstance();
-			string testString=s->getCurrentFileName();
-			
-			string expected="SaveFile";
-			Assert::AreEqual (expected,testString);
-		}
-		
-		TEST_METHOD(TestchangeFileName)
-		{
-			storage *s=storage::getInstance();
-			s->setFileName("Save");
-			string testString=s->getCurrentFileName();
-			string expected="Save";
-			Assert::AreEqual (expected,testString);
-		}
-        */
+
 		TEST_METHOD(TestFloatDuplicated)
 		{
 			storage *s=storage::getInstance();

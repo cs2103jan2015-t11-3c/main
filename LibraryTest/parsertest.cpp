@@ -3,7 +3,7 @@
 
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
-
+//@author: A0119322N
 namespace LibraryTest
 {		
 	TEST_CLASS(parsertest)
@@ -17,6 +17,7 @@ namespace LibraryTest
 			int testResult = parse.getRecurPeriod(testStr);
 			Assert::AreEqual(expected,testResult);
 		}
+
 		TEST_METHOD(Test_default_getRecurPeriod)
 		{
 			parser parse;
@@ -25,6 +26,7 @@ namespace LibraryTest
 			int testResult = parse.getRecurPeriod(testStr);
 			Assert::AreEqual(expected,testResult);
 		}
+
 		TEST_METHOD(Test_getStartPos)
 		{
 			parser parse;
@@ -33,6 +35,7 @@ namespace LibraryTest
 			int expected = 0;
 			Assert::AreEqual(expected,result);
 		}
+
 		TEST_METHOD(Test_getEndPos)
 		{
 			parser parse;
@@ -41,6 +44,7 @@ namespace LibraryTest
 			int expected = 6;
 			Assert::AreEqual(expected,result);
 		}
+
 		TEST_METHOD(Test_getRecurWord)
 		{
 			parser parse;
