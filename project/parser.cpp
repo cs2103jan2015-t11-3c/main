@@ -472,7 +472,8 @@ bool parser::isValidDate(unsigned short day,unsigned short month,unsigned short 
 //precondition: input time
 //postcondition: return true if time is valid
 bool parser::isValidTime(int time) {
-	if((time>=0)&&(time<=2400)) {
+	int minute = time%10;
+	if((time>=100)&&(time<=2400) && minute <=59) {
 		return 1;
 	} else {
 		return 0;
