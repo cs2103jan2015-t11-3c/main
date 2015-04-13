@@ -23,7 +23,8 @@ public:
 	void defaultexecuteCommand(string, storage *, string &, string &, vector<task> &, vector<undo> &);
 	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
 	void updatedefaultmemory(vector<task> &);
-
+	
+        void showHelpManual();
 	void addRecurringTask(int,string,string,vector<task> &,storage *, vector<undo> &);
 	void addFloatTask(string,vector<task> &,storage *, vector<undo> &);
 	void addDeadlineTask(string,vector<task> &,storage *, vector<undo> &);
@@ -40,7 +41,14 @@ public:
 	bool checkIfIsToday(int,int,int);
 	bool checkIfIsTomorrow(int,int,int);
 	void defaultFloatDisplay(defaultclass &);
+	void displayTenFloatTask(defaultclass &);
+	void displayAllFloatTasks(defaultclass &);
 	void DisplayTaskFinishByToday(defaultclass &);
+	void displayTenTasksDueToday(defaultclass &);
+	void displayAllTasksDueToday(defaultclass &);
+	void checkTypeOfTasksDueToday(defaultclass &,int);
 	void DisplayTaskFinishByTmr(defaultclass &);
-
+	void displayTenTasksDueTmr(defaultclass &);
+	void displayAllTasksDueTmr(defaultclass &);
+	void checkTypeOfTasksDueTmr(defaultclass &,int);
 };

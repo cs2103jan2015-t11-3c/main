@@ -39,7 +39,7 @@ const string MESSAGE_TIME_SLOT_CLASH = "Time slots clash";
 const string MESSAGE_SEARCH_FAILED = "There is no result found";
 const string MESSAGE_INVALID_DISPLAY_COMMAND = "This is an invalid display command";
 const string MESSAGE_DUPLICATE_FLOAT_TASK = "This task had been added before";
-const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
+const string MESSAGE_AVAILABLE_COMMANDS = ">>>>>> help/add/edit/display/delete/clear/undo/search/default/exit <<<<<<";
 const string MESSAGE_START_AND_END_TIME_ERROR = "Start time cannot be later than the end time";
 const string MESSAGE_INVALID_COMMAND = "Command entered is invalid, please try again";
 const string UNDO_FAIL = "Undo has reached it's end";
@@ -55,9 +55,9 @@ class logic {
 public:
 	string displayAll(vector<task> &);
 	void separateFloatAndOthers(vector<task> &, vector<task> &, vector<task> &);
-	string printFloatTasks(vector<task> &, int);
+	string printFloatTasks(vector<task> &, int &);
 	void sortOthers(vector<task> &, vector<task> &);
-	string printOthers(vector<task> &, int);
+	string printOthers(vector<task> &, int &);
 
 	bool editTask(int , string , vector<task> &);
 	bool editFloatClass(vector<task> &, string, int);
@@ -68,9 +68,10 @@ public:
 
 	void deleteItem(const int , vector<task> &);
 	void clearAll(vector<task> &);
-	void markcompleted(int , vector<task> &);
-	void sorttext(vector<task> &);
-	void sortdates(vector<task> &);
+	void markCompleted(int , vector<task> &);
+	void markNotCompleted(int, vector<task> &);
+	void sortText(vector<task> &);
+	void sortDates(vector<task> &);
 	void sortEndTime(vector<task> &);
 
 	void searchTask(vector<task> &, vector<task> &, string);

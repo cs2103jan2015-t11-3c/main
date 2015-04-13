@@ -6,6 +6,7 @@
 #include <assert.h>
 
 using namespace std;
+//@author: A0119322N
 //Constants
 const string DELIMITERS = " \n\t\v";
 const string ERROR_MISSING_DESCRIPTION = "no description entered";

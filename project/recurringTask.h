@@ -1,6 +1,8 @@
 #pragma once
 #include "Task.h"
 #include "logic.h"
+
+//@author: A0119322N
 class recurringTask
 {
 private:

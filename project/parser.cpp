@@ -3,6 +3,7 @@
 #include "logic.h"
 
 
+//@author: A0119322N
 
 //Check if the command entered by the user is valid 
 //precondition : user input a command
@@ -19,7 +20,7 @@ bool parser::isValidCommand(const string command, const string description){
 			return true;
 		}
 
-		else if(command=="display"||command=="show"||command=="clear"||command=="clear all"||
+		else if(command == "help" || command=="display"||command=="show"||command=="clear"||command=="clear all"||
 			command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
 			return true;
 
@@ -54,8 +55,6 @@ bool parser::isValidCommand(const string command, const string description){
 
 
 //Remove leading and following whitespaces of a string
-//precondition : user input a description
-//postcondition : input string description is updated
 void parser::trimString(string &description) {
 	size_t lineStart=0, lineEnd=0;
 	
@@ -87,11 +86,7 @@ int parser::convertStringToIntegerIndex(const string description) {
 	return output-1;
 }
 
-//Converts a number in string format to integer format
-//Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
-//String must not contain leading or following whitespaces, or function will fail
-//precondition : pass in the description entered by user
-//postcondition : converted index is returned
+
 int parser::convertStringToInteger(const string description) {
 	unsigned int t_start = 0, t_end=description.size();
 	int output=0;
@@ -106,8 +101,6 @@ int parser::convertStringToInteger(const string description) {
 }
 
 //check the type of the task input by the user
-//precondition : user input a new task
-//postcondition : type of the task is returned
 string parser::checktype(string description){
 	size_t foundtypeDeadline = description.find("/by");
 	size_t foundtypeTimed = description.find("/from");
@@ -218,64 +211,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	}
 }
 
-//Determine the recurring period the user want to do a recurring task
-//precondition : user enter a recurring task
-//postcondition : return the recurring period, if not specified by user, default period is zero
-int parser::getRecurPeriod(string description) {
-	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
 
-	string recurPeriod = description.substr(start, end - start);
-
-	for(int i = 0; i < recurPeriod.size(); ++i) {
-		if(!isdigit(recurPeriod[i])) {
-			return 0;
-		} else {
-			int convertedNum;
-			convertedNum = atoi(recurPeriod.c_str());
-			return convertedNum;
-		}
-	}
-}
-
-//Determine if the user want to do a task daily/weekly/monthly/yearly
-//precondition : user input a recurring tas
-//postcondition : return the recurring command word
-string parser::getRecurruingCommandWord(string description) {
-	assert(description.length() != 0);
-	int start = getStartPosition(description);
-	int end = getEndPosition(description);
-
-	string recurringCommandWord = description.substr(start, end - start);	
-
-	return recurringCommandWord;
-}
-
-
-//Determine the position of the start of the description
-//precondition : take in the description entered by user
-//postcondition : return the start position
-int parser::getStartPosition(string description) {
-	assert(description.length() != 0);
-	int start;
-	
-	start = description.find_first_not_of(" ");
-	
-	return start;
-}
-
-//Determine the position of the end of the first word
-//precondition : take in the description entered by user
-//postcondition : return the end position
-int parser::getEndPosition(string description) {
-	assert(description.length() != 0);
-	int end;
-
-	end = description.find_first_of(" ");
-
-	return end;
-}
 
 //Convert alphabet month into corresponding integer. 
 //i.e: Jan - Dec correspons to 1 - 12
@@ -283,40 +219,40 @@ int parser::getEndPosition(string description) {
 //postcondition : converted integer month is returned
 int parser::convertAlphabetMonthToInteger (string month) {
 	int monthInt=0;
-	if (month == "Jan" || month == "jan") {
+	if (month == "january" || month == "jan") {
 		monthInt = 1;
 	}
-	else if (month == "Feb" || month == "feb") {
+	else if (month == "february" || month == "feb") {
 		monthInt = 2;
 	}
-	else if (month == "Mar" || month == "mar") {
+	else if (month == "march" || month == "mar") {
 		monthInt = 3;
 	}
-	else if (month == "Apr" || month == "apr") {
+	else if (month == "april" || month == "apr") {
 		monthInt = 4;
 	}
-	else if (month == "May" || month == "may") {
+	else if (month == "may" || month == "may") {
 		monthInt = 5;
 	}
-	else if (month == "Jun" || month == "jun") {
+	else if (month == "june" || month == "jun") {
 		monthInt = 6;
 	}
-	else if (month == "Jul" || month == "jul") {
+	else if (month == "july" || month == "jul") {
 		monthInt = 7;
 	}
-	else if (month == "Aug" || month == "aug") {
+	else if (month == "august" || month == "aug") {
 		monthInt = 8;
 	}
-	else if (month == "Sep" || month == "sep") {
+	else if (month == "september" || month == "sep") {
 		monthInt = 9;
 	}
-	else if (month == "Oct" || month == "oct") {
+	else if (month == "october" || month == "oct") {
 		monthInt = 10;
 	}
-	else if (month == "Nov" || month == "nov") {
+	else if (month == "november" || month == "nov") {
 		monthInt = 11;
 	}
-	else if (month == "Dec" || month == "dec") {
+	else if (month == "december" || month == "dec") {
 		monthInt = 12;
 	}
 	else{
@@ -369,6 +305,9 @@ bool parser::containShortForm(string description){
 
 	return false;
 }
+
+
+//@author A0113745J
 
 //Determine if today/tomorrow/tmr exists in user input
 //precondition : user input a new task 
@@ -441,6 +380,47 @@ bool parser::canFindPartoChange(string description){
 		throw ERROR_MESSAGE_INVALIDEDITFORMAT;
 	}
    return false;
+}
+
+
+//@author A0113745
+
+//Get the current local day on the system the program is running
+//precondition : none
+//postcondition : system day is returned
+int parser::getSystemDay() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int day = timePtr->tm_mday;
+	return day;
+}
+
+int parser::getSystemMonth() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int month = timePtr->tm_mon + 1;
+	return month;
+}
+
+int parser::getSystemYear() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int year = timePtr->tm_year+1900;
+	return year;
+}
+
+int parser::getSystemHour() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int hour = timePtr->tm_hour;
+	return hour;
+}
+
+int parser::getSystemMinute() {
+	time_t t = time(NULL);
+	tm* timePtr = localtime(&t);
+	int minute = timePtr->tm_min;
+	return minute;
 }
 
 //Check whether there is any integer in the keyword
@@ -526,52 +506,64 @@ bool parser::checkIsDateOverdue(int day, int month, int year,int timing) {
 	return result;
 }
 
-//Get the current local day on the system the program is running
-//precondition : none
-//postcondition : system day is returned
-int parser::getSystemDay() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int day = timePtr->tm_mday;
-	return day;
+
+
+
+//Determine the recurring period the user want to do a recurring task
+//precondition : user enter a recurring task
+//postcondition : return the recurring period, if not specified by user, default period is zero
+int parser::getRecurPeriod(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurPeriod = description.substr(start, end - start);
+
+	for(int i = 0; i < recurPeriod.size(); ++i) {
+		if(!isdigit(recurPeriod[i])) {
+			return 0;
+		} else {
+			int convertedNum;
+			convertedNum = atoi(recurPeriod.c_str());
+			return convertedNum;
+		}
+	}
 }
 
-//Get the current local month on the system the program is running
-//precondition : none
-//postcondition : system month is returned
-int parser::getSystemMonth() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int month = timePtr->tm_mon + 1;
-	return month;
+//Determine if the user want to do a task daily/weekly/monthly/yearly
+//precondition : user input a recurring tas
+//postcondition : return the recurring command word
+string parser::getRecurruingCommandWord(string description) {
+	assert(description.length() != 0);
+	int start = getStartPosition(description);
+	int end = getEndPosition(description);
+
+	string recurringCommandWord = description.substr(start, end - start);	
+
+	return recurringCommandWord;
 }
 
-//Get the current local year on the system the program is running
-//precondition : none
-//postcondition : system year is returned
-int parser::getSystemYear() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int year = timePtr->tm_year+1900;
-	return year;
+
+//Determine the position of the start of the description
+//precondition : take in the description entered by user
+//postcondition : return the start position
+int parser::getStartPosition(string description) {
+	assert(description.length() != 0);
+	int start;
+	
+	start = description.find_first_not_of(" ");
+	
+	return start;
 }
 
-//Get the current local hour on the system the program is running
-//precondition : none
-//postcondition : system hour is returned
-int parser::getSystemHour() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int hour = timePtr->tm_hour;
-	return hour;
-}
+//Determine the position of the end of the first word
+//precondition : take in the description entered by user
+//postcondition : return the end position
+int parser::getEndPosition(string description) {
+	assert(description.length() != 0);
+	int end;
 
-//Get the current local minute on the system the program is running
-//precondition : none
-//postcondition : system minute is returned
-int parser::getSystemMinute() {
-	time_t t = time(NULL);
-	tm* timePtr = localtime(&t);
-	int minute = timePtr->tm_min;
-	return minute;
+	end = description.find_first_of(" ");
+
+	return end;
 }
