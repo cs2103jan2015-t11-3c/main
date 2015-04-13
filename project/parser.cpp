@@ -36,13 +36,11 @@ bool parser::isValidCommand(const string command, const string description){
 			else if(!canFindPartoChange(description)){
 				throw ERROR_MISSING_CHANGINGPART;			
 			}  
-
+  
 			return true;
 		}
 
-		function.printMessage(ERROR_INVALID_COMMAND);
-
-		return false;
+		throw ERROR_INVALID_COMMAND;
 	}
 
 	catch(const string ERROR_MESSAGE){
