@@ -18,6 +18,7 @@ storage::~storage(void)
 
 storage*storage::theOne=nullptr;
 
+//gerInstance() instantiates a single copy of the storage class when it is executed for the first time
 storage* storage::getInstance() {
 	if(theOne==nullptr) {
 		theOne = new storage();
@@ -67,6 +68,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	
 }
 
+//read all the task information stored in the text file
  vector<task> storage::readToDoListFromTextFile(string fileName) {
 	fstream textFile;
 	string input;
@@ -81,8 +83,6 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		string text;
 		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 		task datainput;
-
-		task i;
 		bool status;
 		char buffer;
 	    string type;
@@ -90,7 +90,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		string extra;
 
 		
-		i.edittext(input);
+		datainput.edittext(input);
 		getline(textFile,description);
 		istringstream start(description);
 		int sdate,smonth,syear,stime,edate,emonth,eyear,etime;
@@ -100,35 +100,36 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 		istringstream end(description);
 		end>>extra>>edate>>buffer>>emonth>>buffer>>eyear>>etime;
 		
-		i.edits_date(sdate);
-		i.edits_month(smonth);
-		i.edits_year(syear);
-		i.edits_time(stime);
-		i.edite_date(edate);
-		i.edite_month(emonth);
-		i.edite_year(eyear);
-		i.edite_time(etime);
+		datainput.edits_date(sdate);
+		datainput.edits_month(smonth);
+		datainput.edits_year(syear);
+		datainput.edits_time(stime);
+		datainput.edite_date(edate);
+		datainput.edite_month(emonth);
+		datainput.edite_year(eyear);
+		datainput.edite_time(etime);
     
 		
 		getline(textFile,description);
 		istringstream Type(description);
 		Type>>extra>>type;
-		i.editType(type);
+		datainput.editType(type);
 
 		getline(textFile,description);
 		istringstream in(description);
 		in>>extra>>status;
-		i.editDone(status);
+		datainput.editDone(status);
 		
 
 	    getline(textFile,description);
-		_toDoList.push_back(i);
+		_toDoList.push_back(datainput);
 
 	}
 	textFile.close();
 	return _toDoList;
 }
 
+ //change the storage directory of the save file and delete the file in the current directory
  bool storage::changeDirectory(string newFilePath, string fileName,vector<task> &toDoList){
 	 
 	string newFileNameAndDirectory = newFilePath + "\\" + fileName;
@@ -149,6 +150,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	return true;
 }
 
+ //change the name of the current save file
  bool storage::changeFileName(string newfileName,vector<task> &toDoList){
 	 
     string newFileNameAndDirectory = _filePath + "\\" + newfileName;
@@ -158,8 +160,7 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	}
 	 setFileName(newFileNameAndDirectory);
 	fstream outFile;
-	outFile.open(getFileNameAndDirectory(_filePath,newfileName), fstream::out | fstream::app);
-	
+	outFile.open(getFileNameAndDirectory(_filePath,newfileName), fstream::out | fstream::app);	
 	outFile<< toString(toDoList);
 	outFile.close();
 
@@ -179,7 +180,8 @@ void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
 	}
 }
 
-
+ 
+//to check if the float task to be added is duplicated, returns true if a float task with the same task name exist already
 bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
 	try{
 		for (int i=1;i<=toDoList.size();i++) {
@@ -194,6 +196,7 @@ bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
 }
 
 
+//to check if the deadline task to be added is duplicated, returns true if a deadline task with the same task name and same date and time exist already
 bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
 	for (int i=1;i<=toDoList.size();i++) {
 		if(toDoList[i-1].returntype() == "deadline"){
@@ -209,7 +212,7 @@ bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
 
 }
 
-
+//to check if the timed task to be added clashes with existing timed tasks in the toDoList, returns true if time clashes
 bool storage:: isTimeClashed(task newTask, vector<task> &toDoList){
 	for (int i=1;i<=toDoList.size();i++) {
 		if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
