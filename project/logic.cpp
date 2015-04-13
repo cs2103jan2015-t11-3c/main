@@ -114,10 +114,12 @@ bool logic::editTask(int index, string description, vector<task> &toDoList) {
 
 bool logic::editFloatClass(vector<task> & toDoList, string description, int index){
 	string PartToChange;
+	
 	size_t pos = description.find("-name");
 	PartToChange = description.substr(pos+6);
 	toDoList[index].edittext(PartToChange);
 	return true;
+	
 }
 
 bool logic::editDeadlineClass(vector<task> & toDoList, string description, int index){

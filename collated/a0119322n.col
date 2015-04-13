@@ -1,0 +1,1538 @@
+//@author: a0119322n
+
+
+
+	/**
+	 * origin: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+	 */
+
+
+//Check if the command entered by the user is valid 
+//precondition : user input a command
+//postcondition : return true if command is valid; error message is shown to user if command entered is invalid
+//and false is returned
+bool parser::isValidCommand(const string command, const string description){
+	logic function;
+	try{
+		if(command=="add"||command=="+"||command== "changeDirectory"||command== "changeFilename") {
+			if(description.size()==0) {
+				throw ERROR_MISSING_DESCRIPTION;
+			}
+			return true;
+		}
+
+		else if(command == "help" || command=="display"||command=="show"||command=="clear"||command=="clear all"||
+			command=="exit"||command=="undo"||command=="search"||command=="default"||command== "changeDirectory"||command== "changeFilename")
+			return true;
+
+		else if (command=="delete"||command=="-"||command=="remove"||command=="done"){
+			if(description.size()==0) {
+				throw ERROR_MISSING_INDEX;		
+			}  
+			return true;
+		}
+		else if(command=="edit"||command=="modify"||command=="change"){
+			if(description.size()==0) {
+				throw ERROR_MISSING_INDEX;
+			}    
+			else if(!canFindPartoChange(description)){
+				throw ERROR_MISSING_CHANGINGPART;			
+			}  
+  
+			return true;
+		}
+
+		throw ERROR_INVALID_COMMAND;
+	}
+
+	catch(const string ERROR_MESSAGE){
+		function.printMessage(ERROR_MESSAGE);
+		return false;
+	}
+}
+
+
+//Remove leading and following whitespaces of a string
+void parser::trimString(string &description) {
+	size_t lineStart=0, lineEnd=0;
+	
+	lineStart=description.find_first_not_of(DELIMITERS);
+	lineEnd=description.find_last_not_of(DELIMITERS);
+	
+	if(lineStart==string::npos||lineEnd==string::npos)
+		description="";
+	else{
+		description=description.substr(lineStart,lineEnd-lineStart+1);
+	}
+}
+
+//Converts a number in string format to integer format
+//Then converts the integer from base 1 to base 0, ie: 1,2,3,4,5... -> 0,1,2,3,4...
+//String must not contain leading or following whitespaces, or function will fail
+//precondition : pass in the description entered by user
+//postcondition : converted index is returned
+int parser::convertStringToIntegerIndex(const string description) {
+	unsigned int t_start = 0, t_end=description.size();
+	int output=0;
+
+	while(t_start!=t_end) {
+		output*=10;
+		output+=description[t_start]-'0';
+		t_start++;
+	}
+	
+	return output-1;
+}
+
+
+int parser::convertStringToInteger(const string description) {
+	unsigned int t_start = 0, t_end=description.size();
+	int output=0;
+
+	while(t_start!=t_end) {
+		output*=10;
+		output+=description[t_start]-'0';
+		t_start++;
+	}
+	
+	return output;
+}
+
+//check the type of the task input by the user
+string parser::checktype(string description){
+	size_t foundtypeDeadline = description.find("/by");
+	size_t foundtypeTimed = description.find("/from");
+	if(foundtypeDeadline!=std::string::npos){
+		return "deadline";
+	}
+	else if(foundtypeTimed!=std::string::npos){
+		return "timed";
+	}
+	else{
+		return "float";
+	}
+	
+}
+
+//split the input task string into its ending date, month, year, timing and task name(text)
+//precondition : task entered is a deadline task
+//postcondition : string is splited into different portions using istringstream
+void parser::splitinputDeadline(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time){
+	string temp;
+	char c;
+	string date;
+	string month;
+	string year;
+
+
+	size_t bypos = description.find("/by");
+	text = description.substr(0 , bypos-1);  //"meeting"
+	description = description.substr(bypos + 4);
+	istringstream in(description);    // meeting by 1800 31 06 2016
+	in>>e_time;         //1800
+
+	if(containShortForm(description)){                        // to check whether the description contain words such as "today", "tomorrow","tmr"
+	getInfo(description, e_date, e_month, e_year);
+	}
+	else{
+		in>>temp;  //on
+		in>>e_date;  //31
+		in>>c;  //"/"
+		int s=description.find("/",bypos);
+		int pos=description.find("/",s+1);
+
+		month=description.substr(s+1,pos-s-1);
+    	trimString(month);
+	
+		year=description.substr(pos+1);
+     	trimString(year);
+		e_month=convertMonth(month);
+		e_year=convertStringToInteger(year);
+
+       }
+}
+
+//split the input task string into its starting date, month, year, timing
+//and into ending date, month, year, timing and task name(text)
+//precondition : task entered is a timed task
+//postcondition : string is splited into different portions using istringstream
+void parser::splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time){
+	string temp;
+	char c;
+	string date;
+	string smonth,emonth;
+	string syear,eyear;
+
+	size_t bypos = description.find("/from");
+	text = description.substr(0 , bypos-1);
+	description = description.substr(bypos+6);
+	istringstream in(description);
+	in>>s_time;//1900
+
+	int spos=description.find("/to ");
+	if(containShortForm(description.substr(0,spos))){
+		in>>temp;
+		getInfo(description, s_date, s_month, s_year);
+	}
+	else{
+		in>>temp;//on
+		in>>s_date;//28
+		in>>c;//"/"
+		in>>date;
+		int tend=date.find_first_of("/");
+		smonth=date.substr(0,tend);
+		trimString(smonth);
+		s_month=convertMonth(smonth);
+
+		int pos=date.find("to");
+		syear=date.substr(tend+1,pos-tend);
+		trimString(syear);
+		s_year=convertStringToInteger(syear);
+	}
+
+	in>>temp;//to
+	in>>e_time;//2000
+	in>>temp;//on
+	if(containShortForm(temp)){		
+		getInfo(temp, e_date, e_month, e_year);
+	}
+	else{	   
+		in>>e_date;//29
+		in>>c;//"/"
+		in>>date;
+		int post=date.find("/");
+		emonth=date.substr(0,post);
+		trimString(emonth);
+		eyear=date.substr(post+1);
+		trimString(eyear);
+
+		e_month=convertMonth(emonth);
+		e_year=convertStringToInteger(eyear);
+	}
+}
+
+
+
+//Convert alphabet month into corresponding integer. 
+//i.e: Jan - Dec correspons to 1 - 12
+//precondition : month input by user is in alphabetic form
+//postcondition : converted integer month is returned
+int parser::convertAlphabetMonthToInteger (string month) {
+	int monthInt=0;
+	if (month == "january" || month == "jan"||month == "JAN") {
+		monthInt = 1;
+	}
+	else if (month == "february" || month == "feb"||month == "FEB") {
+		monthInt = 2;
+	}
+	else if (month == "march" || month == "mar"||month == "MAR") {
+		monthInt = 3;
+	}
+	else if (month == "april" || month == "apr"||month == "APR") {
+		monthInt = 4;
+	}
+	else if (month == "may" || month == "may"||month == "MAY") {
+		monthInt = 5;
+	}
+	else if (month == "june" || month == "jun"||month == "JUN") {
+		monthInt = 6;
+	}
+	else if (month == "july" || month == "jul"||month == "JUL") {
+		monthInt = 7;
+	}
+	else if (month == "august" || month == "aug"||month == "AUG") {
+		monthInt = 8;
+	}
+	else if (month == "september" || month == "sep"||month == "SEP") {
+		monthInt = 9;
+	}
+	else if (month == "october" || month == "oct"||month == "OCT") {
+		monthInt = 10;
+	}
+	else if (month == "november" || month == "nov"||month == "NOV") {
+		monthInt = 11;
+	}
+	else if (month == "december" || month == "dec"||month == "DEC") {
+		monthInt = 12;
+	}
+	else{
+		throw ERROR_MESSAGE_INVALIDMONTH;
+	}
+	return monthInt;
+}
+
+//Determine if month is in numerical form or not
+bool parser::isNumerical(string month){
+    for(int i=0;i<month.length();i++)
+    {
+     char a=month[i];
+     if(a<'0'||a>'9') {
+      return false;
+     }
+    }
+    return true;
+
+}
+
+//Convert alphabetic month into integer
+//precondition : month entered by user is a alphabet
+//postcondition : return the corresponding integer month
+int parser::convertMonth(string month){
+	if(isNumerical(month)){
+			return convertStringToInteger(month);
+		}
+		else{
+			return convertAlphabetMonthToInteger(month);
+		}
+}
+
+
+//Determine if today/tomorrow/tmr exists in user input
+bool parser::containShortForm(string description){
+	int n=description.find("today");
+	if(n!=-1)
+		return true;
+	int m=description.find("tomorrow");
+	if(m!=-1)
+		return true;
+	int p=description.find("tmr");
+	if(p!=-1)
+		return true;
+
+	return false;
+}
+
+
+
+//Determine if today/tomorrow/tmr exists in user input
+//precondition : user input a new task 
+//postcondition : return today if "today" is found,
+//return tomorrow if "tomorrow" or "tmr" is found
+string parser::shortForm(string description){
+	int n=description.find("today");
+	if(n!=-1)
+		return "today";
+	int m=description.find("tomorrow");
+	if(m!=-1)
+		return "tomorrow";
+	int p=description.find("tmr");
+	if(p!=-1)
+		return "tomorrow";
+
+}
+
+//Get the corresponding numeric day, month and year if the date entered by user is "today" or "tomorrow"
+//precondition : user input date is "today" or "tomorrow" instead of numerical date
+//postcondition : numerical day, month, year corresponding to "today" and "tomorrow" is get
+void parser::getInfo(string description, int &e_date, int &e_month, int &e_year){
+		if(shortForm(description)=="today"){
+		e_date=getSystemDay();		
+		}
+		if(shortForm(description)=="tomorrow"){
+		e_date=getSystemDay()+1;
+		}
+		e_month=getSystemMonth();
+		e_year=getSystemYear();
+}
+
+
+bool parser::canFindPartoChange(string description){
+	if(description.find("-name")!=-1){
+		int n=description.find("-name");
+		description=description.substr(n+5);
+		cout<<description;
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	else if(description.find("-due")!=-1){
+		int n=description.find("-due");
+		description=description.substr(n+4);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+		
+	else if(description.find("-start")!=-1){
+		int n=description.find("-start");
+		description=description.substr(n+6);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	
+	else if(description.find("-end")!=-1){
+		int n=description.find("-end");
+		description=description.substr(n+5);
+	    if(description.size()==0){
+			return false;
+		}
+		return true;
+	}
+	else{
+		throw ERROR_MESSAGE_INVALIDEDITFORMAT;
+	}
+   return false;
+}
+
+	// End of segment: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+
+
+
+
+
+	/**
+	 * origin: \\psf\Home\Desktop\CS2103\main\project\recurringTask.cpp
+	 */
+
+
+recurringTask::recurringTask(void )
+{
+}
+
+recurringTask::recurringTask(string text, int stime ,int etime )
+{    description=text;
+	 s_time=stime;
+	 e_time=etime;
+}
+
+recurringTask::~recurringTask(void)
+{
+}
+
+void recurringTask::AddRecurring(int n,string recurType,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	try{
+	if(recurType=="daily")
+		DailyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
+	if(recurType=="weekly")
+	    WeeklyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
+	if(recurType=="monthly")
+		MonthlyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
+	if(recurType=="yearly")
+		YearlyRec(n,e_date,e_month, e_year, s_date,s_month, s_year, type,toDoList);
+	}
+	catch(const string ERROR_MESSAGE){
+		logic function;
+		function.printMessage(ERROR_MESSAGE);
+	}
+	return;
+}
+
+
+void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+                                                         
+	logic function;
+	parser parse;
+
+	if(n==0){
+		n=30;   //the default recurring period for daily task is set to be 30 days
+	}
+
+	for(int i=1;i<=n;i++){
+		if(type=="timed"){
+			if(!DayRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){    //to check wether the recurring period is within 1 day
+				return;
+			}
+		}
+		if (parse.isValidDate(e_date,e_month,e_year)){
+          addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+		  e_date++;
+		  s_date++;
+		}
+		else{                                                                //move to next month
+			e_date=1;
+			e_month++;
+		    s_date=e_date;
+			s_month=e_month;
+		 if (parse.isValidDate(e_date,e_month,e_year)){
+              addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	    
+		}
+		 else{
+			 e_year++;                                                         //move to next year
+			 e_date=1;
+			 e_month=1;
+			 s_date=e_date;
+			 s_month=e_month;
+		     s_year=e_year;
+			 if(parse.isValidDate(e_date,e_month,e_year))
+			  addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+		 }
+		     e_date=e_date+1;
+			 s_date=e_date;		 
+		}   }
+	return;
+}
+
+void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	logic function;                         
+	parser parse;
+
+	if(n==0){
+		n=52;                      //default recurring period for weekly task is half year(26)weeks;
+	}
+	for(int i=1;i<=n;i++){
+		if(type=="deadline"){
+		if (parse.isValidDate(e_date,e_month,e_year)){
+           addRecDeadline( e_date,  e_month,  e_year, toDoList);		 
+		}
+		else{
+			ChangeWeekDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
+		}
+		}
+		if(type=="timed"){
+		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){                   //to check wether the recurring period is within 1 week
+				return;
+		 }
+		 if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+             addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
+		}
+		else{
+			if (!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)){    //if both start and end date are not valid
+			 moveToNextMonth(e_date, e_month, e_year);  //move to next month                             
+			 moveToNextMonth(s_date, s_month, s_year);
+
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+			  addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+			   
+			}
+			else{
+				moveToNextYear(e_date, e_month, e_year);         //move to the next year
+				moveToNextYear(s_date, s_month, s_year); 		
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+				}
+			
+			}
+			}
+			else{
+			if(!parse.isValidDate(e_date,e_month,e_year)){                 //if only end date is not valid
+			     moveToNextMonth(e_date, e_month, e_year); 
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+			    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+			   
+			}
+			else{
+		     	moveToNextYear(e_date, e_month, e_year);   
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+		
+				}
+			}
+			}
+
+			if(!parse.isValidDate(s_date,s_month,s_year)){
+			 moveToNextMonth(s_date, s_month, s_year);
+			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+			   addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+			    
+			}
+			else{
+				moveToNextYear(s_date, s_month, s_year); 	
+				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(e_date,e_month,e_year)){
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+		
+				}
+			}
+		}
+
+		}
+	}
+	}   
+		e_date=e_date+7;
+		s_date=s_date+7;
+	
+}        return;
+}
+
+void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){	
+	logic function;
+	parser parse;
+    if(n==0){
+      n=12;                          //default recurring period is 12 month if user do not specify
+    }
+	
+	for(int i=1;i<=n;i++){
+		if(type=="deadline"){
+		if (parse.isValidDate(e_date,e_month,e_year)){
+             addRecDeadline( e_date,  e_month,  e_year, toDoList);			
+		}
+		else{
+			ChangeMonthDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
+		}
+		 e_month++;
+		}
+
+		if(type=="timed"){                                                          //to check wether the recurring period is within 1 Month
+			if(!MonthRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+				return;
+			}
+
+		   if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
+            addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		 
+	    	}
+		
+		else if(!isValidforMoreDays(e_month)||!isValidforMoreDays(s_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
+			 if(s_date==31&&parse.isValidDate(s_date-1,s_month,s_year)){
+				if(s_date==e_date&&s_month==e_month)                                                        
+		         addRecTimed( e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);	
+				else if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date-1,s_month,s_year))
+			     addRecTimed( e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);	
+			   }
+			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){                               
+			    if (parse.isValidDate(e_date-1,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year))
+			     addRecTimed( e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);	
+			   }
+			    else if((e_date==31||e_date==30||s_date==31||s_date==30)&&(e_month==2||s_month==2)){                       //special case for Feburary
+				if((s_date==31||s_date==30)&&s_month==2){
+				if(parse.isleapyear(s_year)){
+				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
+			       addRecTimed(e_date, e_month, e_year,29, s_month,s_year,  toDoList);
+				}
+				else{   
+				if(parse.isValidDate(28,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
+			     addRecTimed( e_date, e_month, e_year,28, s_month,s_year,  toDoList);
+				}
+				}
+
+
+				if((e_date==31||e_date==30)&&e_month==2){                                              
+				if(parse.isleapyear(e_year)){                                                          //if it is feb of a leap year, marke the end date for the task to be 29
+				 if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
+			       addRecTimed(29, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+				else{   
+				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))     //if it is feb of a normal year, marke the end date for the task to be 28  
+			      addRecTimed( 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+				}
+
+				if((e_month==2)&&s_month==2){
+				if(parse.isleapyear(e_year)){
+				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
+			       addRecTimed( 29, e_month, e_year,29, s_month,s_year,  toDoList);
+				}
+				else{   
+				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
+			      addRecTimed( 28, e_month, e_year,28, s_month,s_year,  toDoList);
+				}
+			}}}
+		
+			if(e_month+1>12){
+			e_month=e_month%12;
+			e_year++;
+			}
+			
+			if(s_month+1>12){
+			s_month=s_month%12;
+			s_year++;
+			}		
+		    e_month++;
+		    s_month++;
+		}}
+			return;
+}
+	
+void recurringTask::YearlyRec(int n,int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	logic function;
+	parser parse;
+	 if(n==0){
+		  n=5;
+   }
+
+	for(int i=1;i<=n;i++){
+		if (parse.isValidDate(e_date,e_month,e_year)){
+           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+		  e_year=e_year+1;
+		  s_year++;
+		}
+	}
+		return;
+}
+
+//to check wethere the month contain 31 days, reutrns true if it has 31 days
+bool recurringTask::isValidforMoreDays(int month){
+	if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
+//get number of days in each month
+int recurringTask::getNumDays(int month,int year){
+	logic function;
+	parser parse;
+
+	int LMonth[7]={1,3,5,7,8,10,12};
+	int SMonth[]={4,6,9,11};
+	for(int i=0;i<7;i++){
+		if(LMonth[i]==month)
+			return 31;
+		else if(SMonth[i]==month)
+			return 30;
+	}
+	
+	if(month==2&&parse.isleapyear(year))
+		return 29;
+	else
+		return 28;
+}
+
+void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<task> &toDoList){
+	 task datainput(description);
+	 datainput.addDeadlineItem(e_date, e_month, e_year, e_time);
+	 toDoList.push_back(datainput);
+	 return;
+}
+
+void recurringTask::addRecTimed(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList){
+	 task datainput(description);
+	 datainput.addTimedItem( s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time);
+	 toDoList.push_back(datainput);
+	 return;
+}
+
+void recurringTask::addTodifferentType(string type, int e_date,int e_month,int e_year,int s_date,int s_month,int s_year,vector<task> &toDoList){
+	if(type=="deadline")
+			addRecDeadline( e_date, e_month, e_year, toDoList);
+	if(type=="timed")
+			addRecTimed(e_date,e_month, e_year, s_date, s_month, s_year, toDoList);
+	return;
+}
+
+
+void recurringTask::moveToNextMonth(int &date, int &month, int &year){
+	date=date%getNumDays(month,year);                      
+	month++;             
+}
+
+void recurringTask::moveToNextYear(int &date, int &month, int &year){
+	   year++;                                           //move to the next year
+	   month=1;
+	   date%=getNumDays(month,year); 
+}
+
+
+void recurringTask::ChangeWeekDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+	logic function;
+	parser parse;
+	       moveToNextMonth(e_date, e_month, e_year);                                        
+			if(parse.isValidDate(e_date,e_month,e_year)){
+			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+
+			}
+			else{
+			    moveToNextYear(e_date, e_month, e_year); 
+				if(parse.isValidDate(e_date,e_month,e_year)){
+				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);      
+				}
+			}
+			
+}
+
+
+void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int s_date,int s_month,int s_year,string type,vector<task> &toDoList){
+
+	logic function;
+	parser parse;
+	if(!isValidforMoreDays(e_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
+			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)){
+		        addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			}
+			else if((e_date==31||e_date==30)&&e_month==2){                       //special case for Feburary
+				if(parse.isleapyear(e_year)){
+				  addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+				else{
+			     addTodifferentType(type, 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				}
+			}
+		}
+	
+		    moveToNextYear(e_date, e_month, e_year); 
+			
+			if(parse.isValidDate(e_date,e_month,e_year)){
+		     addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			}
+	
+		
+}
+
+//to check wether the recurring period for daily recurring task is within 1 day
+bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>=1){
+		cout<<"Please enter the recurring task with time interval within 1 day"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+
+//to check wether the recurring period for weekly recurring task is within 1 week
+bool recurringTask::WeekRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>7){
+		cout<<"Please enter the recurring task with time interval within 1 week"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+//to check wether the recurring period for monthly recurring task is within 1 month
+bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
+	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>31){
+		cout<<"Please enter the recurring task with time interval within 1 month"<<endl;
+		return false;
+	}
+
+	return true;
+}
+
+//get the number of interval days between any 2 date
+//precondition: the start date is before the end date
+//postcondition: number of days interval is returned
+int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int smonth, int syear){
+	logic function;
+	parser parse;
+   if(syear == eyear && smonth == emonth)
+     {
+          return  eday - sday;
+    }else if(syear == eyear)
+     {
+         int startday,  endday;
+		 
+         startday = DayInYear(syear, smonth, sday);
+         endday = DayInYear(eyear, emonth, eday);
+         return endday-startday;
+		}else{
+          int d1,d2,d3;
+         if(parse.isleapyear(syear))
+             d1 = 366 - DayInYear(syear,smonth, sday);     //remaining days in that year
+         else
+             d1 = 365 - DayInYear(syear,smonth, sday);
+         d2 = DayInYear(eyear,emonth,eday); 
+		 
+		  d3 = 0;
+         for(int year = syear + 1; year < eyear; year++)
+         {
+             if(parse.isleapyear(year))
+                 d3 += 366;
+             else
+                 d3 += 365;
+         }
+         return d1 + d2 + d3;
+
+}
+}
+
+
+int recurringTask::DayInYear(int year, int month, int day){
+    logic function;
+	parser parse;
+    int DAY[12]={31,28,31,30,31,30,31,31,30,31,30,31};
+    if(parse.isleapyear(year))
+        DAY[1] = 29;
+    for(int i=0; i<month - 1; ++i)
+    {
+        day += DAY[i];
+    }
+    return day;
+}
+
+
+	// End of segment: \\psf\Home\Desktop\CS2103\main\project\recurringTask.cpp
+
+
+
+
+
+	/**
+	 * origin: \\psf\Home\Desktop\CS2103\main\project\storage.cpp
+	 */
+
+storage::storage(void)
+{
+	_filePath="";
+	_fileName="SaveFile";
+}
+
+storage::~storage(void)
+{
+}
+
+storage*storage::theOne=nullptr;
+
+//gerInstance() instantiates a single copy of the storage class when it is executed for the first time
+storage* storage::getInstance() {
+	if(theOne==nullptr) {
+		theOne = new storage();
+		return theOne;
+	}
+}
+
+void storage::setFileName(string newFileName) {
+	_fileName = newFileName;
+}
+
+void storage::setFilePath(string newFilePath) {
+	_filePath = newFilePath;
+}
+
+string storage::getCurrentFileName() {
+	return _fileName;
+}
+
+string storage::getCurrentFilePath() {
+	return _filePath;
+}
+
+string storage::toString(vector<task> &toDoList) {
+	ostringstream oss;
+	
+	if(toDoList.size()>0) {
+		for(int i=0;i<toDoList.size();i++)
+			oss << i+1 << ". " <<toDoList[i].returntext() <<endl
+			<< "Start: "<<toDoList[i]. returnstartdate()<<"/"<<" "<<toDoList[i].returnstartmonth()<<"/"<<" "<<toDoList[i].returnstartyear()<<"\t"<<toDoList[i].returnstarttime()<<endl
+			<< "End: "<< toDoList[i].returnenddate()<<"/"<<" "<<toDoList[i].returnendmonth()<<"/"<<" "<<toDoList[i].returnendyear()<<"\t "<<toDoList[i].returnendtime()<<endl
+			<< "Type: "<<toDoList[i].returntype()<<endl
+			<<"Completed: "<<toDoList[i].returnstatus()<<endl<<endl;
+	}
+
+	return oss.str();
+}
+
+
+void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
+	fstream textFile;	
+	textFile.open(getFileNameAndDirectory(_filePath,fileName), fstream::out);
+	textFile << toString(toDoList);
+	textFile.close();
+	
+}
+
+//read all the task information stored in the text file
+ vector<task> storage::readToDoListFromTextFile(string fileName) {
+	fstream textFile;
+	string input;
+	textFile.open(fileName.c_str());
+	
+	//Remove the index of each line, eg: remove "1)" from "1) Some List Entry"
+	//Adds the rest of the line to the to-do list after removing leading and following whitespaces
+	 while(getline(textFile,input)) {
+		size_t pos = input.find('.');
+		input = input.substr(pos+2);
+		
+		string text;
+		int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
+		task datainput;
+		bool status;
+		char buffer;
+	    string type;
+		string description;
+		string extra;
+
+		
+		datainput.edittext(input);
+		getline(textFile,description);
+		istringstream start(description);
+		int sdate,smonth,syear,stime,edate,emonth,eyear,etime;
+		start>>extra>>sdate>>buffer>>smonth>>buffer>>syear>>stime;
+
+		getline(textFile,description);
+		istringstream end(description);
+		end>>extra>>edate>>buffer>>emonth>>buffer>>eyear>>etime;
+		
+		datainput.edits_date(sdate);
+		datainput.edits_month(smonth);
+		datainput.edits_year(syear);
+		datainput.edits_time(stime);
+		datainput.edite_date(edate);
+		datainput.edite_month(emonth);
+		datainput.edite_year(eyear);
+		datainput.edite_time(etime);
+    
+		
+		getline(textFile,description);
+		istringstream Type(description);
+		Type>>extra>>type;
+		datainput.editType(type);
+
+		getline(textFile,description);
+		istringstream in(description);
+		in>>extra>>status;
+		datainput.editDone(status);
+		
+
+	    getline(textFile,description);
+		_toDoList.push_back(datainput);
+
+	}
+	textFile.close();
+	return _toDoList;
+}
+
+ //change the storage directory of the save file and delete the file in the current directory
+ bool storage::changeDirectory(string newFilePath, string fileName,vector<task> &toDoList){
+	 
+	string newFileNameAndDirectory = newFilePath + "\\" + fileName;
+
+	if(fileExists(newFileNameAndDirectory)) {
+		cout<<"File exists already!"<<endl;
+		return false;
+	}
+	 setFilePath(newFilePath);
+	fstream outFile;
+	outFile.open(getFileNameAndDirectory(newFilePath,fileName), fstream::out | fstream::app);
+	
+	outFile<< toString(toDoList);
+	outFile.close();
+
+	system("del SaveFile");
+	
+	return true;
+}
+
+ //change the name of the current save file
+ bool storage::changeFileName(string newfileName,vector<task> &toDoList){
+	 
+    string newFileNameAndDirectory = _filePath + "\\" + newfileName;
+	if(fileExists(newFileNameAndDirectory)) {
+		cout<<"FileName exist already!"<<endl;
+		return false;
+	}
+	 setFileName(newFileNameAndDirectory);
+	fstream outFile;
+	outFile.open(getFileNameAndDirectory(_filePath,newfileName), fstream::out | fstream::app);	
+	outFile<< toString(toDoList);
+	outFile.close();
+
+	system("del SaveFile");
+	
+	return true;
+}
+ bool storage::fileExists(const string& fileName) {
+	return (ifstream(fileName.c_str()));
+}
+
+ string storage::getFileNameAndDirectory(string filePath, string fileName) {
+	if(filePath == "") {
+		return fileName;
+	} else {
+		return (filePath + "\\" + fileName);
+	}
+}
+
+ 
+//to check if the float task to be added is duplicated, returns true if a float task with the same task name exist already
+bool storage::isFloatDuplicated(task newTask, vector<task> &toDoList) {
+	try{
+		for (int i=1;i<=toDoList.size();i++) {
+		if(( toDoList[i-1].returntype() == "float")&&(newTask.returntext()==toDoList[i-1].returntext()))
+				return true;
+		}
+	}
+	catch(const string ERROR_MESSAGE){
+	   throw ERROR_MESSAGE_DUPLICATED;	 
+	}
+	 return false;
+}
+
+
+//to check if the deadline task to be added is duplicated, returns true if a deadline task with the same task name and same date and time exist already
+bool storage::isDeadlineDuplicated(task newTask, vector<task> &toDoList) {
+	for (int i=1;i<=toDoList.size();i++) {
+		if(toDoList[i-1].returntype() == "deadline"){
+		if ((newTask.returntext())==(toDoList[i-1].returntext())) {
+			if ((newTask.returnendyear()==toDoList[i-1].returnendyear())&&(newTask.returnendmonth()== toDoList[i-1].returnendmonth())
+				&&(newTask.returnenddate()==toDoList[i-1].returnenddate())&&(newTask.returnendtime()==toDoList[i-1].returnendtime()))
+				return true;
+		}
+		}
+	}
+	
+	return false;
+
+}
+
+//to check if the timed task to be added clashes with existing timed tasks in the toDoList, returns true if time clashes
+bool storage:: isTimeClashed(task newTask, vector<task> &toDoList){
+	for (int i=1;i<=toDoList.size();i++) {
+		if ((newTask.returnendyear())==(toDoList[i-1].returnendyear())&&(newTask.returnendmonth())==(toDoList[i-1].returnendmonth())
+				&&(newTask.returnenddate())==(toDoList[i-1].returnenddate())
+				&&(newTask.returnstartyear())==(toDoList[i-1].returnstartyear())&&(newTask.returnstartmonth())==(toDoList[i-1].returnstartmonth())
+				&&(newTask.returnstartdate())==(toDoList[i-1].returnstartdate()))
+			if ((newTask.returnendtime())>(toDoList[i-1].returnstarttime())
+				&& (newTask.returnstarttime())<(toDoList[i-1].returnendtime())) 
+				return true;
+			}
+		
+	
+	return false;
+}
+	// End of segment: \\psf\Home\Desktop\CS2103\main\project\storage.cpp
+
+
+
+
+
+	/**
+	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\parsertest.cpp
+	 */
+
+namespace LibraryTest
+{		
+	TEST_CLASS(parsertest)
+	{
+	public:
+		TEST_METHOD(Test_getRecurPeriod)
+		{
+			parser parse;
+			int expected = 3;
+			string testStr = "3 daily swimming /by 1000 today";
+			int testResult = parse.getRecurPeriod(testStr);
+			Assert::AreEqual(expected,testResult);
+		}
+
+		TEST_METHOD(Test_default_getRecurPeriod)
+		{
+			parser parse;
+			int expected = 0;
+			string testStr = "daily swimming /by 1000 tmr";
+			int testResult = parse.getRecurPeriod(testStr);
+			Assert::AreEqual(expected,testResult);
+		}
+
+		TEST_METHOD(Test_getStartPos)
+		{
+			parser parse;
+			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
+			int result = parse.getStartPosition(testStr);
+			int expected = 0;
+			Assert::AreEqual(expected,result);
+		}
+
+		TEST_METHOD(Test_getEndPos)
+		{
+			parser parse;
+			string testStr = "weekly 2 shopping /by 1000 on 1/1/2016";
+			int result = parse.getEndPosition(testStr);
+			int expected = 6;
+			Assert::AreEqual(expected,result);
+		}
+
+		TEST_METHOD(Test_getRecurWord)
+		{
+			parser parse;
+			string expectedStr = "yearly";
+			string str = "5 yearly swimming /by 1000 tmr";
+			int endPos = parse.getEndPosition(str);
+			string testStr = str.substr(endPos+1);
+			string testResult = parse.getRecurruingCommandWord(testStr);
+			Assert::AreEqual(expectedStr,testResult);
+		}
+
+		TEST_METHOD(TestNoDescription)
+		{
+		    parser p;
+			string testCommand = "add";
+			string testDescription="";
+			int expected = 0;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestValidCommand)
+		{
+		    parser p;
+			string testCommand = "add";
+			string testDescription="shopping";
+			int expected = 1;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+			int testDone=p.isValidCommand("clear",testDescription);
+			Assert::AreEqual (expected,testDone);
+		
+		}
+
+		TEST_METHOD(TestClearCommand)
+		{
+		    parser p;
+			string testCommand = "clear";
+			string testDescription="";
+			int expected = 1;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestEditCommand)
+		{
+		    parser p;
+			string testCommand = "edit";
+			string testDescription="1 -name new";
+			int expected = 1;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestDoneCommand)
+		{
+		    parser p;
+			string testCommand = "done";
+			string testDescription="";
+			int expected = 0;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestInValidCommand)
+		{
+		    parser p;
+			string testCommand = "do";
+			string testDescription="shopping";
+			int expected = 0;
+			int test=p.isValidCommand(testCommand,testDescription);
+			Assert::AreEqual (expected,test);
+		}
+
+		TEST_METHOD(TestconvertAlphabetMonthToInteger)
+		{
+		    parser p;
+			int testString = p.convertAlphabetMonthToInteger("dec");
+			int expected = 12;
+			Assert::AreEqual (testString, expected);
+		
+		}
+		
+		TEST_METHOD(TestconvertStringToIntegerIndex)
+		{
+		    parser p;
+			int testString = p.convertStringToIntegerIndex("20");
+			int expected = 19;
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(TestconvertStringToInteger)
+		{
+		    parser p;
+			int testString = p.convertStringToInteger("20");
+			int expected = 20;
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypefloat)
+		{
+		    parser p;
+			string testString = p.checktype("add homework ");
+			string expected ="float";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypedeadline)
+		{
+		    parser p;
+			string testString = p.checktype("add homework /by 1100 tmr");
+			string expected ="deadline";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(Testchecktypetimed)
+		{
+		    parser p;
+			string testString = p.checktype("add homework /from 1100 tmr /to 1200 tmr");
+			string expected ="timed";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(TestnotNumerical)
+		{
+		    parser p;
+			bool testString = p.isNumerical("feb");
+			bool expected = false;
+			Assert::AreEqual (testString, expected);		
+		}
+
+		TEST_METHOD(TestNumerical)
+		{
+		    parser p;
+			bool testString = p.isNumerical("12");
+			bool expected = true;
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(TestshortForm)
+		{
+		    parser p;
+			string testString = p.shortForm("add meeting /by 1100 tmr");
+			string expected = "tomorrow";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(TestsplitinputDeadline)
+		{
+		    parser p;
+			string description="meeting /by 1100 on 23/04/2015";
+			string text;
+			int e_date, e_month, e_year, e_time;
+			p.splitinputDeadline(description, text, e_date, e_month, e_year, e_time);	
+			string Exptext="meeting";
+			int Expe_date=23;
+			int Expe_month=04;
+			int Expe_year=2015;
+			int Expe_time=1100;
+			Assert::AreEqual (text,Exptext );
+			Assert::AreEqual (e_date,Expe_date );
+			Assert::AreEqual (e_month,Expe_month );
+			Assert::AreEqual (e_year,Expe_year );
+			Assert::AreEqual (e_time,Expe_time );
+		
+		}
+
+		TEST_METHOD(TestsplitinputTimed)
+		{
+		    parser p;
+			string description="meeting /from 1000 on 22/04/2015 /to 1100 on 23/05/2015";
+			string text;
+			int e_date, e_month, e_year, e_time,s_date, s_month, s_year, s_time;
+			p.splitinputTimed(description, text,s_date,s_month,s_year,s_time, e_date, e_month, e_year, e_time);	
+			string Exptext="meeting";
+			int Exps_date=22;
+			int Exps_month=04;
+			int Exps_year=2015;
+			int Exps_time=1000;
+			int Expe_date=23;
+			int Expe_month=05;
+			int Expe_year=2015;
+			int Expe_time=1100;
+			Assert::AreEqual (text,Exptext );
+			Assert::AreEqual (e_date,Expe_date );
+			Assert::AreEqual (e_month,Expe_month );
+			Assert::AreEqual (e_year,Expe_year );
+			Assert::AreEqual (e_time,Expe_time );
+			Assert::AreEqual (s_date,Exps_date );
+			Assert::AreEqual (s_month,Exps_month );
+			Assert::AreEqual (s_year,Exps_year );
+			Assert::AreEqual (s_time,Exps_time );
+		
+		}
+
+		TEST_METHOD(TesttrimString)
+		{
+		    parser p;
+			string testString="   dec ";
+			p.trimString(testString);
+			string expected ="dec";
+			Assert::AreEqual (testString, expected);
+		
+		}
+
+		TEST_METHOD(testchecksearchstringdigit){
+			string testone = "meeting", testtwo = "25", testthree = "14haha";
+			parser parse;
+			bool result;
+
+			result = parse.isCheckSearchStringDigit(testone);
+			Assert::AreEqual(false, result);
+
+			result = parse.isCheckSearchStringDigit(testtwo);
+			Assert::AreEqual(true, result);
+
+			result = parse.isCheckSearchStringDigit(testthree);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testCovertNumtoString){
+			string testone = "14", testtwo = "100";
+			int result;
+			parser parse;
+
+			result = parse.convertNumStringToInt(testone);
+			Assert::AreEqual(14, result);
+
+			result = parse.convertNumStringToInt(testtwo);
+			Assert::AreEqual(100, result);
+		}
+
+		TEST_METHOD(testLeapYear){
+			int testone = 2016, testtwo = 2014;
+			bool result;
+			parser parse;
+
+			result = parse.isleapyear(testone);
+			Assert::AreEqual(true, result);
+			
+			result = parse.isleapyear(testtwo);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testValidDate){
+			parser parse;
+			bool result;
+
+			result = parse.isValidDate(5, 11, 2014);
+			Assert::AreEqual(true, result);
+
+			result = parse.isValidDate(32, 13, 2014);
+			Assert::AreEqual(false, result);
+		}
+
+		TEST_METHOD(testCheckIsDateOverdue){
+			logic function;
+			bool result;
+			parser parse;
+
+			result = parse.checkIsDateOverdue(19, 12, 2016, 1400);
+			Assert::AreEqual(true, result);
+
+			result = parse.checkIsDateOverdue(1, 4, 2015, 1400);
+			Assert::AreEqual(false, result);
+		}
+
+
+	
+	};
+}
+	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\parsertest.cpp
+
+
+
+
+
+	/**
+	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\StorageTest.cpp
+	 */
+
+namespace UnitTest
+{
+	TEST_CLASS(StorageTestcpp)
+	{
+	public:
+		
+		TEST_METHOD(TestgetFileNameAndDirectory)
+		{
+			storage *s=storage::getInstance();
+			string testString=s->getFileNameAndDirectory("C:", "SaveFile");
+			string expected="C:\\SaveFile";
+			Assert::AreEqual (expected,testString);
+		}
+
+		TEST_METHOD(TestFloatDuplicated)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			task Existing("shopping");
+			Existing.addFloatItem();
+			Itemlist.push_back(Existing);
+			bool expected=true;
+			bool duplicated=s->isFloatDuplicated(NewTask,Itemlist);
+			Assert::AreEqual (expected,duplicated);
+		}
+
+		TEST_METHOD(TestFloatnotDuplicated)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			task Existing("sh");
+			Existing.addFloatItem();
+			Itemlist.push_back(Existing);
+			bool expected=false;
+			bool duplicated=s->isFloatDuplicated(NewTask,Itemlist);
+			Assert::AreEqual (expected,duplicated);
+		}
+
+
+		TEST_METHOD(TestisDeadlineDuplicated)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			vector <undo> undomemory;
+		    NewTask.addDeadlineItem(27,04,2015,1000);
+			defaultclass default;
+			string description;
+			default.addDeadlineTask("shopping /by 1000 on 27/04/2015",Itemlist,s, undomemory);
+			bool expected=true;
+			bool duplicated=s->isDeadlineDuplicated(NewTask,Itemlist);
+			Assert::AreEqual (expected,duplicated);
+		
+		}
+
+		TEST_METHOD(TestisDeadlinenotDuplicated)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			vector <undo> undomemory;
+		    NewTask.addDeadlineItem(27,04,2015,1000);
+			defaultclass default;
+			string description;
+			default.addDeadlineTask("add meething /by 1000 on 27/04/2015",Itemlist,s,undomemory);
+			bool expected=false;
+			bool duplicated=s->isDeadlineDuplicated(NewTask,Itemlist);
+			Assert::AreEqual (expected,duplicated);
+		}
+
+		TEST_METHOD(TestIsTimeClashed)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			vector <undo> undomemory;
+		    NewTask.addTimedItem(27,04,2015,900,27,04,2015,1100);
+			defaultclass default;
+			string description;
+			default.addTimedTask("add meeting /from 1000 on 27/04/2015 /to 1300 on 27/04/2015",Itemlist,s, undomemory);
+			bool expected=true;
+			bool clashed=s->isTimeClashed(NewTask,Itemlist);
+			Assert::AreEqual (expected,clashed);
+		}
+
+
+		TEST_METHOD(TestIsTimenotClashed)
+		{
+			storage *s=storage::getInstance();
+			task NewTask("shopping");
+			vector <task> Itemlist;
+			vector <undo> undomemory;
+		    NewTask.addTimedItem(27,04,2015,900,27,04,2015,1100);
+			defaultclass default;
+			string description;
+			default.addTimedTask("add meeting /from 1100 on 27/04/2015 /to 1300 on 27/04/2015",Itemlist,s,undomemory);
+			bool expected=false;
+			bool clashed=s->isTimeClashed(NewTask,Itemlist);
+			Assert::AreEqual (expected,clashed);
+		}
+
+
+
+		TEST_METHOD(TestfileExistance)
+		{
+			storage *s=storage::getInstance();
+			bool exist=s->fileExists("hellofile");
+			bool expected=false;	
+			Assert::AreEqual (expected,exist);
+		}
+
+	
+	};
+	
+}
+	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\StorageTest.cpp
+
+
+
+
+

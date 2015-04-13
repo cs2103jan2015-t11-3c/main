@@ -340,7 +340,8 @@ void defaultclass::editTask(string fileName, string description, storage *store,
 	int originindex;
 	logic function;
 	undo undofunction;
-	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)) {
+	parser parse;
+	if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
 		if(function.editTask(originindex ,description, toDoList)){
 			undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 			store->saveToSaveFile(fileName,toDoList);

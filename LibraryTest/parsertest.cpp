@@ -93,7 +93,7 @@ namespace LibraryTest
 		{
 		    parser p;
 			string testCommand = "edit";
-			string testDescription="1";
+			string testDescription="1 -name new";
 			int expected = 1;
 			int test=p.isValidCommand(testCommand,testDescription);
 			Assert::AreEqual (expected,test);

@@ -335,16 +335,17 @@ void parser::getInfo(string description, int &e_date, int &e_month, int &e_year)
 
 
 bool parser::canFindPartoChange(string description){
-	if(description.find_first_of("-name")!=-1){
-		int n=description.find_first_of("-name");
+	if(description.find("-name")!=-1){
+		int n=description.find("-name");
 		description=description.substr(n+5);
+		cout<<description;
 	    if(description.size()==0){
 			return false;
 		}
 		return true;
 	}
-	else if(description.find_first_of("-due")!=-1){
-		int n=description.find_first_of("-due");
+	else if(description.find("-due")!=-1){
+		int n=description.find("-due");
 		description=description.substr(n+4);
 	    if(description.size()==0){
 			return false;
@@ -352,8 +353,8 @@ bool parser::canFindPartoChange(string description){
 		return true;
 	}
 		
-	else if(description.find_first_of("-start")!=-1){
-		int n=description.find_first_of("-start");
+	else if(description.find("-start")!=-1){
+		int n=description.find("-start");
 		description=description.substr(n+6);
 	    if(description.size()==0){
 			return false;
@@ -361,8 +362,8 @@ bool parser::canFindPartoChange(string description){
 		return true;
 	}
 	
-	else if(description.find_first_of("-end")!=-1){
-		int n=description.find_first_of("-end");
+	else if(description.find("-end")!=-1){
+		int n=description.find("-end");
 		description=description.substr(n+5);
 	    if(description.size()==0){
 			return false;
