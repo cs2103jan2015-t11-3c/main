@@ -369,16 +369,21 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	defaultmemory.updatedefaultmemory(toDoList);
 
 	function.sortText(defaultmemory.floatVec);
+	colorCodingRed();
 	cout << endl << "[Floating]" << "===================================================================="<< endl << endl;
+	colorCodingBlue();
 	defaultFloatDisplay(defaultmemory);
 
+	colorCodingRed();
 	cout << endl << "[Today: " <<  now->tm_mday << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" 
 		<< "============================================================" << endl << endl;
+	colorCodingBlue();
 	function.sortEndTime(defaultmemory.todayTaskVec);
 	DisplayTaskFinishByToday(defaultmemory);
 	
-
+	colorCodingRed();
     cout << endl << "[Tomorrow: " <<  now->tm_mday +1 << "/" << now->tm_mon + 1 << "/" << now->tm_year + 1900 << "]" << "===========================================================" << endl;
+	colorCodingBlue();
 	function.sortEndTime(defaultmemory.tomorTaskVec);
 	DisplayTaskFinishByTmr(defaultmemory);
 	
