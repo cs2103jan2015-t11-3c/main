@@ -90,7 +90,7 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 	for(int i=1;i<=n;i++){
 		if(type=="deadline"){
 		if (parse.isValidDate(e_date,e_month,e_year)){
-            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		 
+           addRecDeadline( e_date,  e_month,  e_year, toDoList);		 
 		}
 		else{
 			ChangeWeekDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
@@ -101,7 +101,7 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 				return;
 		 }
 		 if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-             addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
+             addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		
 		}
 		else{
 			if (!parse.isValidDate(e_date,e_month,e_year)&&!parse.isValidDate(s_date,s_month,s_year)){    //if both start and end date are not valid
@@ -109,14 +109,14 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 			 moveToNextMonth(s_date, s_month, s_year);
 
 			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-			 addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			  addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 			   
 			}
 			else{
 				moveToNextYear(e_date, e_month, e_year);         //move to the next year
 				moveToNextYear(s_date, s_month, s_year); 		
 				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 				}
 			
 			}
@@ -125,13 +125,13 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 			if(!parse.isValidDate(e_date,e_month,e_year)){                 //if only end date is not valid
 			     moveToNextMonth(e_date, e_month, e_year); 
 			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 			   
 			}
 			else{
 		     	moveToNextYear(e_date, e_month, e_year);   
 				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 		
 				}
 			}
@@ -140,13 +140,13 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 			if(!parse.isValidDate(s_date,s_month,s_year)){
 			 moveToNextMonth(s_date, s_month, s_year);
 			if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-			   addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			   addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 			    
 			}
 			else{
 				moveToNextYear(s_date, s_month, s_year); 	
 				if(parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(e_date,e_month,e_year)){
-				    addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
+				    addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 		
 				}
 			}
@@ -171,8 +171,7 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 	for(int i=1;i<=n;i++){
 		if(type=="deadline"){
 		if (parse.isValidDate(e_date,e_month,e_year)){
-            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
-			
+             addRecDeadline( e_date,  e_month,  e_year, toDoList);			
 		}
 		else{
 			ChangeMonthDeadline(e_date, e_month, e_year,s_date, s_month,s_year, type, toDoList);
@@ -186,29 +185,29 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 			}
 
 		   if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
-            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);	 
+            addRecTimed( e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);		 
 	    	}
 		
 		else if(!isValidforMoreDays(e_month)||!isValidforMoreDays(s_month)){                                    //same year, if the date is 31st of the month, make it the last day of each month 
 			 if(s_date==31&&parse.isValidDate(s_date-1,s_month,s_year)){
 				if(s_date==e_date&&s_month==e_month)                                                        
-		        addTodifferentType(type, e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
+		         addRecTimed( e_date-1, e_month, e_year,s_date-1, s_month,s_year,  toDoList);	
 				else if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date-1,s_month,s_year))
-			    addTodifferentType(type, e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);
+			     addRecTimed( e_date, e_month, e_year,s_date-1, s_month,s_year,  toDoList);	
 			   }
 			if(e_date==31&&parse.isValidDate(e_date-1,e_month,e_year)&&s_month!=2){                               
 			    if (parse.isValidDate(e_date-1,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year))
-			    addTodifferentType(type, e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			     addRecTimed( e_date-1, e_month, e_year,s_date, s_month,s_year,  toDoList);	
 			   }
 			    else if((e_date==31||e_date==30||s_date==31||s_date==30)&&(e_month==2||s_month==2)){                       //special case for Feburary
 				if((s_date==31||s_date==30)&&s_month==2){
 				if(parse.isleapyear(s_year)){
 				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
-			      addTodifferentType(type, e_date, e_month, e_year,29, s_month,s_year,  toDoList);
+			       addRecTimed(e_date, e_month, e_year,29, s_month,s_year,  toDoList);
 				}
 				else{   
 				if(parse.isValidDate(28,s_month,s_year)&&parse.isValidDate(e_date,e_month,e_year))
-			     addTodifferentType(type, e_date, e_month, e_year,28, s_month,s_year,  toDoList);
+			     addRecTimed( e_date, e_month, e_year,28, s_month,s_year,  toDoList);
 				}
 				}
 
@@ -216,22 +215,22 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 				if((e_date==31||e_date==30)&&e_month==2){                                              
 				if(parse.isleapyear(e_year)){                                                          //if it is feb of a leap year, marke the end date for the task to be 29
 				 if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
-			      addTodifferentType(type, 29, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			       addRecTimed(29, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				else{   
 				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))     //if it is feb of a normal year, marke the end date for the task to be 28  
-			     addTodifferentType(type, 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
+			      addRecTimed( 28, e_month, e_year,s_date, s_month,s_year,  toDoList);
 				}
 				}
 
 				if((e_month==2)&&s_month==2){
 				if(parse.isleapyear(e_year)){
 				 if(parse.isValidDate(29,s_month,s_year)&&parse.isValidDate(29,e_month,e_year))
-			      addTodifferentType(type, 29, e_month, e_year,29, s_month,s_year,  toDoList);
+			       addRecTimed( 29, e_month, e_year,29, s_month,s_year,  toDoList);
 				}
 				else{   
 				if(parse.isValidDate(s_date,s_month,s_year)&&parse.isValidDate(28,e_month,e_year))
-			     addTodifferentType(type, 28, e_month, e_year,28, s_month,s_year,  toDoList);
+			      addRecTimed( 28, e_month, e_year,28, s_month,s_year,  toDoList);
 				}
 			}}}
 		
