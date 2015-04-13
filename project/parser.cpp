@@ -100,12 +100,15 @@ int parser::convertStringToInteger(const string description) {
 string parser::checktype(string description){
 	size_t foundtypeDeadline = description.find("/by");
 	size_t foundtypeTimed = description.find("/from");
-	if(foundtypeDeadline!=std::string::npos)
+	if(foundtypeDeadline!=std::string::npos){
 		return "deadline";
-	else if(foundtypeTimed!=std::string::npos)
+	}
+	else if(foundtypeTimed!=std::string::npos){
 		return "timed";
-	else
+	}
+	else{
 		return "float";
+	}
 	
 }
 
@@ -121,18 +124,18 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 
 
 	size_t bypos = description.find("/by");
-	text = description.substr(0 , bypos-1);//"meeting"
+	text = description.substr(0 , bypos-1);  //"meeting"
 	description = description.substr(bypos + 4);
-	istringstream in(description);// meeting by 1800 31 06 2016
-	in>>e_time;//1800
+	istringstream in(description);    // meeting by 1800 31 06 2016
+	in>>e_time;         //1800
 
-	if(containShortForm(description)){
+	if(containShortForm(description)){                        // to check whether the description contain words such as "today", "tomorrow","tmr"
 	getInfo(description, e_date, e_month, e_year);
 	}
 	else{
-		in>>temp;//on
-		in>>e_date;//31
-		in>>c;//"/"
+		in>>temp;  //on
+		in>>e_date;  //31
+		in>>c;  //"/"
 		int s=description.find("/",bypos);
 		int pos=description.find("/",s+1);
 
@@ -167,7 +170,6 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 	int spos=description.find("/to ");
 	if(containShortForm(description.substr(0,spos))){
 		in>>temp;
-
 		getInfo(description, s_date, s_month, s_year);
 	}
 	else{
@@ -215,40 +217,40 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 //postcondition : converted integer month is returned
 int parser::convertAlphabetMonthToInteger (string month) {
 	int monthInt=0;
-	if (month == "january" || month == "jan") {
+	if (month == "january" || month == "jan"||month == "JAN") {
 		monthInt = 1;
 	}
-	else if (month == "february" || month == "feb") {
+	else if (month == "february" || month == "feb"||month == "FEB") {
 		monthInt = 2;
 	}
-	else if (month == "march" || month == "mar") {
+	else if (month == "march" || month == "mar"||month == "MAR") {
 		monthInt = 3;
 	}
-	else if (month == "april" || month == "apr") {
+	else if (month == "april" || month == "apr"||month == "APR") {
 		monthInt = 4;
 	}
-	else if (month == "may" || month == "may") {
+	else if (month == "may" || month == "may"||month == "MAY") {
 		monthInt = 5;
 	}
-	else if (month == "june" || month == "jun") {
+	else if (month == "june" || month == "jun"||month == "JUN") {
 		monthInt = 6;
 	}
-	else if (month == "july" || month == "jul") {
+	else if (month == "july" || month == "jul"||month == "JUL") {
 		monthInt = 7;
 	}
-	else if (month == "august" || month == "aug") {
+	else if (month == "august" || month == "aug"||month == "AUG") {
 		monthInt = 8;
 	}
-	else if (month == "september" || month == "sep") {
+	else if (month == "september" || month == "sep"||month == "SEP") {
 		monthInt = 9;
 	}
-	else if (month == "october" || month == "oct") {
+	else if (month == "october" || month == "oct"||month == "OCT") {
 		monthInt = 10;
 	}
-	else if (month == "november" || month == "nov") {
+	else if (month == "november" || month == "nov"||month == "NOV") {
 		monthInt = 11;
 	}
-	else if (month == "december" || month == "dec") {
+	else if (month == "december" || month == "dec"||month == "DEC") {
 		monthInt = 12;
 	}
 	else{
@@ -258,8 +260,6 @@ int parser::convertAlphabetMonthToInteger (string month) {
 }
 
 //Determine if month is in numerical form or not
-//precondition : string month is get from user input
-//postcondition : return true if month is numerical and false if not
 bool parser::isNumerical(string month){
     for(int i=0;i<month.length();i++)
     {
@@ -286,8 +286,6 @@ int parser::convertMonth(string month){
 
 
 //Determine if today/tomorrow/tmr exists in user input
-//precondition : user input a new task 
-//postcondition : return true if either today/tomorrow/tmr is found, return false otherwise
 bool parser::containShortForm(string description){
 	int n=description.find("today");
 	if(n!=-1)
