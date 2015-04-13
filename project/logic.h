@@ -55,9 +55,9 @@ class logic {
 public:
 	string displayAll(vector<task> &);
 	void separateFloatAndOthers(vector<task> &, vector<task> &, vector<task> &);
-	string printFloatTasks(vector<task> &, int);
+	string printFloatTasks(vector<task> &, int &);
 	void sortOthers(vector<task> &, vector<task> &);
-	string printOthers(vector<task> &, int);
+	string printOthers(vector<task> &, int &);
 
 	bool editTask(int , string , vector<task> &);
 	bool editFloatClass(vector<task> &, string, int);
@@ -68,9 +68,10 @@ public:
 
 	void deleteItem(const int , vector<task> &);
 	void clearAll(vector<task> &);
-	void markcompleted(int , vector<task> &);
-	void sorttext(vector<task> &);
-	void sortdates(vector<task> &);
+	void markCompleted(int , vector<task> &);
+	void markNotCompleted(int, vector<task> &);
+	void sortText(vector<task> &);
+	void sortDates(vector<task> &);
 	void sortEndTime(vector<task> &);
 
 	void searchTask(vector<task> &, vector<task> &, string);

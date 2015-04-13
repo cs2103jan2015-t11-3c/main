@@ -219,40 +219,40 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 //postcondition : converted integer month is returned
 int parser::convertAlphabetMonthToInteger (string month) {
 	int monthInt=0;
-	if (month == "Jan" || month == "jan") {
+	if (month == "january" || month == "jan") {
 		monthInt = 1;
 	}
-	else if (month == "Feb" || month == "feb") {
+	else if (month == "february" || month == "feb") {
 		monthInt = 2;
 	}
-	else if (month == "Mar" || month == "mar") {
+	else if (month == "march" || month == "mar") {
 		monthInt = 3;
 	}
-	else if (month == "Apr" || month == "apr") {
+	else if (month == "april" || month == "apr") {
 		monthInt = 4;
 	}
-	else if (month == "May" || month == "may") {
+	else if (month == "may" || month == "may") {
 		monthInt = 5;
 	}
-	else if (month == "Jun" || month == "jun") {
+	else if (month == "june" || month == "jun") {
 		monthInt = 6;
 	}
-	else if (month == "Jul" || month == "jul") {
+	else if (month == "july" || month == "jul") {
 		monthInt = 7;
 	}
-	else if (month == "Aug" || month == "aug") {
+	else if (month == "august" || month == "aug") {
 		monthInt = 8;
 	}
-	else if (month == "Sep" || month == "sep") {
+	else if (month == "september" || month == "sep") {
 		monthInt = 9;
 	}
-	else if (month == "Oct" || month == "oct") {
+	else if (month == "october" || month == "oct") {
 		monthInt = 10;
 	}
-	else if (month == "Nov" || month == "nov") {
+	else if (month == "november" || month == "nov") {
 		monthInt = 11;
 	}
-	else if (month == "Dec" || month == "dec") {
+	else if (month == "december" || month == "dec") {
 		monthInt = 12;
 	}
 	else{

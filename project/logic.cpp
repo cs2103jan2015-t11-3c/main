@@ -4,6 +4,7 @@
 //display temporary vector
 //precondition: temporary vector
 //postcondition: list of tasks
+//@author A0116006X
 string logic::displayAll(vector<task> &tempVec) {
 	vector<task> temp, other;
 	vector<vector<task>> temps;
@@ -15,11 +16,11 @@ string logic::displayAll(vector<task> &tempVec) {
 	else {
 		separateFloatAndOthers(tempVec, temp, other);
 
-		sorttext(temp);
+		sortText(temp);
 		oss <<"Float Task: " << endl << printFloatTasks(temp, i);
 
 		if(other.size() != 0){
-			sortdates(other);
+			sortDates(other);
 			sortOthers(other, temp);
 			oss << printOthers(temp, i);
 		}
@@ -38,7 +39,7 @@ void logic::separateFloatAndOthers(vector<task> & tempVec, vector<task> & floatt
 		}
 }
 //@author A0116006X
-string logic::printFloatTasks(vector<task> & floattemp, int i){
+string logic::printFloatTasks(vector<task> & floattemp, int & i){
 	ostringstream oss;
 	for(unsigned j = 0; j < floattemp.size(); j++){
 			oss << floattemp[j].displayFloat(i) << endl;
@@ -69,8 +70,9 @@ void logic::sortOthers(vector<task> & other, vector<task> & temp){
 		temp.push_back(temporary[k]);
 }
 
-string logic::printOthers(vector<task> & temp, int i){
+string logic::printOthers(vector<task> & temp, int & i){
 	ostringstream oss;
+	i++;
 	oss << endl << "Date: " << temp[i].returnenddate() << "/" << temp[i].returnendmonth() << "/" << temp[i].returnendyear() << endl;
 	if(temp[i].returntype() == "deadline")
 		oss << temp[i].displayDefaultTasks(i) << endl;
@@ -120,7 +122,7 @@ bool logic::editFloatClass(vector<task> & toDoList, string description, int inde
 }
 
 bool logic::editDeadlineClass(vector<task> & toDoList, string description, int index){
-	string PartTochange, temp;
+	string PartTochange, temp, month, year;
 	parser parse;
 	char c;
 	int e_date, e_month, e_year, e_time;
@@ -131,10 +133,10 @@ bool logic::editDeadlineClass(vector<task> & toDoList, string description, int i
 		PartTochange = description.substr(foundname+6);
 		toDoList[index].edittext(PartTochange);
 		if (system("CLS")) system("clear");
-	    printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
+		printMessage(MESSAGE_ITEM_EDITED_SUCCESSFULLY);
 	} else if(founddue!=std::string::npos){
 		description = description.substr(founddue + 5);
-		istringstream in(description);// -due 1800 on 31/06/2016
+		istringstream in(description);// 1800 on 31/06/2016
 		in>>e_time;//1800
 
 		if(parse.containShortForm(description))
@@ -143,19 +145,26 @@ bool logic::editDeadlineClass(vector<task> & toDoList, string description, int i
 			in>>temp;//on
 			in>>e_date;//31
 			in>>c;//"/"
-			in>>e_month;
-			in>>c;
-			in>>e_year;
 
-			if(printErrorMsgForEditDeadlineTask(e_date, e_month, e_year, e_time))
+			int s=description.find("/");
+			int pos=description.find("/",s+1);
+
+			month=description.substr(s+1,pos-s-1);
+			parse.trimString(month);
+
+			year=description.substr(pos+1);
+			parse.trimString(year);
+			e_month=parse.convertMonth(month);
+			e_year=parse.convertStringToInteger(year);
+		}
+		if(printErrorMsgForEditDeadlineTask(e_date, e_month, e_year, e_time))
 			return false;
-			else {
-				toDoList[index].edite_time(e_time);
-				toDoList[index].edite_date(e_date);
-				toDoList[index].edite_month(e_month);
-				toDoList[index].edite_year(e_year);
-				return true;
-			}
+		else {
+			toDoList[index].edite_time(e_time);
+			toDoList[index].edite_date(e_date);
+			toDoList[index].edite_month(e_month);
+			toDoList[index].edite_year(e_year);
+			return true;
 		}
 	}else{
 		printMessage(ERROR_INVALID_COMMAND);
@@ -164,7 +173,7 @@ bool logic::editDeadlineClass(vector<task> & toDoList, string description, int i
 }
 
 bool logic::editTimedClass(vector<task> & toDoList, string description, int index){
-	string PartTochange, temp;
+	string PartTochange, temp, date, smonth, syear, emonth, eyear;
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time;
 	char c;
 	parser parse;
@@ -189,9 +198,16 @@ bool logic::editTimedClass(vector<task> & toDoList, string description, int inde
 			inStart>>temp;//on
 			inStart>>s_date;//28
 			inStart>>c;//"/"
-			inStart>>s_month;
-			inStart>>c;
-			inStart>>s_year;
+			inStart>>date;
+			int tend=date.find_first_of("/");
+			smonth=date.substr(0,tend);
+			parse.trimString(smonth);
+			s_month=parse.convertMonth(smonth);
+
+			int pos=date.find("to");
+			syear=date.substr(tend+1,pos-tend);
+			parse.trimString(syear);
+			s_year=parse.convertStringToInteger(syear);
 		}
 
 		description = description.substr(foundend+5);
@@ -204,9 +220,15 @@ bool logic::editTimedClass(vector<task> & toDoList, string description, int inde
 			inEnd>>temp;//on
 			inEnd>>e_date;//29
 			inEnd>>c;//"/"
-			inEnd>>e_month;
-			inEnd>>c;
-			inEnd>>e_year;
+			inEnd>>date;
+			int post=date.find("/");
+			emonth=date.substr(0,post);
+			parse.trimString(emonth);
+			eyear=date.substr(post+1);
+			parse.trimString(eyear);
+
+			e_month=parse.convertMonth(emonth);
+			e_year=parse.convertStringToInteger(eyear);
 		}
 
 		if(printErrorMsgForEditTimedTask(e_date,  e_month,  e_year, e_time,  s_date, s_month, s_year,  s_time))
@@ -319,19 +341,25 @@ void logic::clearAll(vector<task> &toDoList) {
 //mark task as completed
 //Precondition: index of task, vector
 //Postcondition: none
-void logic::markcompleted(int index, vector<task> &toDoList){
-	task temp;
-	int size = toDoList.size();
-
+void logic::markCompleted(int index, vector<task> &toDoList){
 	toDoList[index].editDone(true);
 	if (system("CLS")) system("clear");
 	printMessage(toDoList[index].returntext(), "completed");
 }
 
+//mark task as not completed
+//Precondition: index of task, vector
+//Postcondition: none
+void logic::markNotCompleted(int index, vector<task> &toDoList){
+	toDoList[index].editDone(false);
+	if (system("CLS")) system("clear");
+	printMessage(toDoList[index].returntext(), "not yet completed");
+}
+
 //sort vector alphabetically
 //precondition: vector
 //postcondition: none
-void logic::sorttext(vector<task> &toDoList){
+void logic::sortText(vector<task> &toDoList){
 	int size = toDoList.size();
 	task temp;
 	
@@ -349,7 +377,7 @@ void logic::sorttext(vector<task> &toDoList){
 //sort vector by dates
 //Precondition: vector
 //Postcondition: none
-void logic::sortdates(vector<task> &toDoList){
+void logic::sortDates(vector<task> &toDoList){
 	unsigned int i, j;
 	task temp;
 

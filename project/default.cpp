@@ -30,7 +30,7 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	while(command != "exit"){
 		parse.trimString(description);
 		if(parse.isValidCommand(command, description)) {
-			if(command == "add" || command =="+") {
+			if(command == "add" || command =="+"||command == "a") {
 				string recurringCommandWord;
 				int end, recurPeriod;
 				
@@ -62,17 +62,24 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				displayTask(fileName,description,toDoList, tempVec);
 			} else if(command=="clear") {
 				clearTasks(fileName,store,toDoList,undomemory);
-			} else if(command == "edit") {
+			} else if(command == "edit"||command =="change"||command =="modify") {
 				editTask(fileName, description, store, toDoList, tempVec, undomemory, defaultmemory);
 			} else if(command=="exit") {
 				store->saveToSaveFile(fileName,toDoList);
 				return;
 			} else if(command == "done") {
 				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
-				function.markcompleted(originindex, toDoList);
+				function.markCompleted(originindex, toDoList);
+				showDefaultTaskList(toDoList, defaultmemory);
 				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
 				}
-			} else if(command == "undo") {
+			} else if(command == "notdone"){
+				if(checkfororiginalindex(description, defaultmemory, tempVec, originindex)){
+				function.markNotCompleted(originindex, toDoList);
+				showDefaultTaskList(toDoList, defaultmemory);
+				undomemory.push_back(undofunction.converttoundoclass(undomemory, toDoList));
+				}
+			}else if(command == "undo") {
 				if (system("CLS")) system("clear");
 				if(undomemory.size() - 1 == 0)
 					function.printMessage(UNDO_FAIL);
@@ -80,6 +87,7 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 				toDoList = undomemory[undomemory.size()-2].returnmemory();
 				undomemory.pop_back();
 				showDefaultTaskList(toDoList, defaultmemory);
+				store->saveToSaveFile(fileName,toDoList);
 				}
 			} else if(command == "search") {
 				if (system("CLS")) system("clear");
@@ -127,7 +135,7 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 	in>> index;
 	index = index -1;
 
-	if(temp == "float"){
+	if(temp == "float"||temp == "flt"){
 		size = defaultmemory.floatVec.size();
 
 		if(size==0){
@@ -138,7 +146,7 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 			return false;
 		}else
 		originindex = defaultmemory.floatVec[index].returntempnum();
-	} else if(temp == "today"){ 
+	} else if(temp == "today"||temp == "tdy"){ 
 		   size = defaultmemory.todayTaskVec.size();
 		if(size==0){
 			function.printMessage(ERROR_LIST_IS_EMPTY);
@@ -148,7 +156,7 @@ bool defaultclass::checkfororiginalindex(string description, defaultclass defaul
 			return false;
 		}else
 		originindex = defaultmemory.todayTaskVec[index].returntempnum();
-	} else if(temp == "tomorrow"){
+	} else if(temp == "tomorrow"|| temp =="tmrw"){
 		size = defaultmemory.tomorTaskVec.size();
 		if(size==0){
 			function.printMessage(ERROR_LIST_IS_EMPTY);
@@ -182,15 +190,15 @@ void defaultclass::updatedefaultmemory(vector<task> &toDoList){
 	int index, i = 0, j = 0, k = 0;
 
 	for(index = 0; index != toDoList.size(); ++index) {
-		if(checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())){
+		if((checkIfIsToday(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear()))&&(toDoList[index].returnstatus() == false)){
 			   todayTaskVec.push_back(toDoList[index]);
 			   todayTaskVec[i].inserttempnum(index);
 			   i++;
-		} else if(checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear())) {
+		} else if((checkIfIsTomorrow(toDoList[index].returnenddate(),toDoList[index].returnendmonth(),toDoList[index].returnendyear()))&&(toDoList[index].returnstatus() == false)) {
 			   tomorTaskVec.push_back(toDoList[index]);
 			   tomorTaskVec[j].inserttempnum(index);
 			   j++;
-		} else if(toDoList[index].returntype() =="float"){
+		} else if((toDoList[index].returntype() =="float")&&(toDoList[index].returnstatus() == false)){
 			floatVec_.push_back(toDoList[index]);
 			floatVec_[k].inserttempnum(index);
 			k++;
@@ -363,7 +371,7 @@ void defaultclass::showDefaultTaskList(vector<task> &toDoList, defaultclass &def
 	defaultmemory.tomorTaskVec.clear();
 	defaultmemory.updatedefaultmemory(toDoList);
 
-	function.sorttext(defaultmemory.floatVec);
+	function.sortText(defaultmemory.floatVec);
 	cout << endl << "[Floating]" << "===================================================================="<< endl << endl;
 	defaultFloatDisplay(defaultmemory);
 

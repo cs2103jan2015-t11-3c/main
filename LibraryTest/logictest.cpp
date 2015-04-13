@@ -82,7 +82,7 @@ namespace LibraryTest
 			datainputseven.addTimedItem(11, 4, 2015, 1800, 11, 4, 2015, 2100);
 			toDoList.push_back(datainputseven);
 
-			function.markcompleted(3, toDoList);
+			function.markCompleted(3, toDoList);
 			Assert::AreEqual (true, (bool)toDoList[3].returnstatus());
 		}
 		
@@ -114,7 +114,7 @@ namespace LibraryTest
 			datainputfive.addFloatItem();
 			temp.push_back(datainputfive);
 
-			function.sorttext(toDoList);
+			function.sortText(toDoList);
 			for(unsigned int i = 0; i < temp.size(); i++){
 				int check = toDoList[i].returntext().compare(temp[i].returntext());
 				Assert::AreEqual(0, check);
@@ -158,7 +158,7 @@ namespace LibraryTest
 			datainputseven.addDeadlineItem(17, 4, 2015, 1500);
 			temp.push_back(datainputseven);
 
-			function.sortdates(toDoList);
+			function.sortDates(toDoList);
 			for(unsigned int i = 0; i < temp.size(); i++){
 				int check = toDoList[i].returntext().compare(temp[i].returntext());
 				Assert::AreEqual(0, check);

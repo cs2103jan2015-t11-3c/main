@@ -58,9 +58,10 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> Vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			string inputStr = "TASK NAME";
-			d.addFloatTask(inputStr,Vec,store);
+			d.addFloatTask(inputStr,Vec,store, undomemory);
 			string output = Vec[0].returntext();
 			Assert::AreEqual(inputStr,output);
 		}
@@ -68,10 +69,11 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			string inputStr = "swimming /by 1000 on 10/10/2015";
 			string expected = "swimming by 1000 on 10/10/2015";
-			d.addDeadlineTask(inputStr,vec,store);
+			d.addDeadlineTask(inputStr,vec,store, undomemory);
 			int size = vec.size();
 			Assert::AreEqual(size,1);
 			string output = vec[0].displayDeadline(0);
@@ -82,10 +84,11 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			string inputStr = "attend meeting <love from heart> /from 2400 on 1/2/2016 to 0600 on 2/2/2016";
 			string expected = "attend meeting <love from heart> from 2400 on 1/2/2016 to 600 on 2/2/2016";
-			d.addTimedTask(inputStr,vec,store);
+			d.addTimedTask(inputStr,vec,store, undomemory);
 			string output = vec[0].displayTimed(0);
 			string result = output.substr(2);
 			Assert::AreEqual(expected,result);
@@ -94,11 +97,12 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> Vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			int recurPeriod = 2;
 			string recurringCommandWord = "yearly";
 			string description = "yearly TEST WEEKLY /from 2400 on 1/1/2016 to 2300 on 2/1/2016";
-			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store);
+			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store, undomemory);
 			string test1 = "1.TEST WEEKLY from 2400 on 1/1/2016 to 2300 on 2/1/2016";
 			string test2 = "2.TEST WEEKLY from 2400 on 1/1/2017 to 2300 on 2/1/2017";
 			string output1 = Vec[0].displayTimed(0);
@@ -110,11 +114,12 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> Vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			int recurPeriod = 2;
 			string recurringCommandWord = "weekly";
 			string description = "weekly TEST WEEKLY /from 2400 on 1/1/2016 to 2300 on 2/1/2016";
-			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store);
+			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store, undomemory);
 			string test1 = "1.TEST WEEKLY from 2400 on 1/1/2016 to 2300 on 2/1/2016";
 			string test2 = "2.TEST WEEKLY from 2400 on 8/1/2016 to 2300 on 9/1/2016";
 			string output1 = Vec[0].displayTimed(0);
@@ -126,11 +131,12 @@ namespace UnitTest
 		{
 			defaultclass d;
 			vector<task> Vec;
+			vector<undo> undomemory;
 			storage *store=storage::getInstance();
 			int recurPeriod = 0;
 			string recurringCommandWord = "yearly";
 			string description = "yearly birthday /by 2400 on 25/4/2016";
-			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store);
+			d.addRecurringTask(recurPeriod,recurringCommandWord,description,Vec,store, undomemory);
 			string test1 = "1.birthday by 2400 on 25/4/2016";
 			string test2 = "2.birthday by 2400 on 25/4/2017";
 			string test3 = "3.birthday by 2400 on 25/4/2018";
@@ -153,10 +159,11 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
+			vector<undo> undomemory;
 			string inputStr1 = "TASK 1";
 			string inputStr2 = "TASK 2";
-			d.addFloatTask(inputStr1,vec,store);
-			d.addFloatTask(inputStr2,vec,store);
+			d.addFloatTask(inputStr1,vec,store, undomemory);
+			d.addFloatTask(inputStr2,vec,store, undomemory);
 			d.displayTask("fileName","float",vec,tempVec);
 			string output1 = tempVec[0].displayFloat(0);
 			string output2 = tempVec[1].displayFloat(1);
@@ -171,12 +178,13 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
+			vector<undo> undomemory;
 			string inputStr1 = "TASK 1";
 			string inputStr2 = "This should not appear /by 1000 today";
 			string inputStr3 = "TASK 2";
-			d.addFloatTask(inputStr1,vec,store);
-			d.addDeadlineTask(inputStr2,vec,store);
-			d.addFloatTask(inputStr3,vec,store);
+			d.addFloatTask(inputStr1,vec,store, undomemory);
+			d.addDeadlineTask(inputStr2,vec,store, undomemory);
+			d.addFloatTask(inputStr3,vec,store, undomemory);
 			d.displayTask("fileName","float",vec,tempVec);
 			int sizeTest = tempVec.size();
 			int expect = 2;
@@ -194,8 +202,9 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
+			vector<undo> undomemory;
 			string inputStr2 = "Test Task";
-			d.addFloatTask(inputStr2,vec,store);
+			d.addFloatTask(inputStr2,vec,store, undomemory);
 			d.displayTask("fileName","float",vec,tempVec);
 			int sizeOfDisplay = tempVec.size();
 			Assert::AreEqual(1,sizeOfDisplay);
@@ -206,11 +215,12 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
+			vector<undo> undomemory;
 			string inputStr1 = "Test Task";
 			string inputStr2 = "TEST TASK /from 0600 on 1/1/2016 to 0800 on 2/1/2016";
-			d.addRecurringTask(2,"yearly","yearly RECUR TASK /from 2400 on 2/2/2016 to 2400 on 3/2/2016",vec,store);
-			d.addFloatTask(inputStr1,vec,store);
-			d.addTimedTask(inputStr2,vec,store);
+			d.addRecurringTask(2,"yearly","yearly RECUR TASK /from 2400 on 2/2/2016 to 2400 on 3/2/2016",vec,store, undomemory);
+			d.addFloatTask(inputStr1,vec,store, undomemory);
+			d.addTimedTask(inputStr2,vec,store, undomemory);
 			d.displayTask("fileName","timed",vec,tempVec);
 			int sizeOfDisplay = tempVec.size();
 			Assert::AreEqual(3,sizeOfDisplay);
@@ -233,10 +243,11 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
-			d.addRecurringTask(3,"monthly","monthly MONTHLY RECUR /from 2400 on 1/1/2016 to 2400 on 2/1/2016",vec,store);
-			d.addFloatTask("gym",vec,store);
-			d.addDeadlineTask("DEADLINE TASK /by 1000 on 1/1/2016",vec,store);
-			d.addTimedTask("cs tutorial /from 1100 on 3/3/2016 to 1200 on 3/3/2016",vec,store);
+			vector<undo> undomemory;
+			d.addRecurringTask(3,"monthly","monthly MONTHLY RECUR /from 2400 on 1/1/2016 to 2400 on 2/1/2016",vec,store, undomemory);
+			d.addFloatTask("gym",vec,store, undomemory);
+			d.addDeadlineTask("DEADLINE TASK /by 1000 on 1/1/2016",vec,store, undomemory);
+			d.addTimedTask("cs tutorial /from 1100 on 3/3/2016 to 1200 on 3/3/2016",vec,store, undomemory);
 			d.displayTask("fileName","timed",vec,tempVec);
 			int tempVecSize = tempVec.size();
 			Assert::AreEqual(4,tempVecSize);
@@ -263,8 +274,9 @@ namespace UnitTest
 			storage *store=storage::getInstance();
 			vector<task> vec;
 			vector<task> tempVec;
-			d.addFloatTask("task I",vec,store);
-			d.addDeadlineTask("task II /by 1000 on 1/1/2016",vec,store);
+			vector<undo> undomemory;
+			d.addFloatTask("task I",vec,store, undomemory);
+			d.addDeadlineTask("task II /by 1000 on 1/1/2016",vec,store, undomemory);
 			d.displayTask("fileName","all",vec,tempVec);
 			int size = tempVec.size();
 			Assert::AreEqual(2,size);
