@@ -45,7 +45,71 @@ const string MESSAGE_INVALID_COMMAND = "Command entered is invalid, please try a
 const string UNDO_FAIL = "Undo has reached it's end";
 
 
-//Global Variables
+//message for helper manual-add
+const string HLEPER_MESSAGE_TITLE_ADD = ">>>>>>>>>> add <<<<<<<<<<";
+const string HELPER_MESSAGE_ADD_FLOAT_TASK = "FLOAT : add [task name]";
+const string HELPER_MESSAGE_ADD_DEADLINE_TASK = "DEADLINE : add [task name] /by [end time] on [specific date]";
+const string HELPER_MESSAGE_ADD_TIMED_TASK = "DEADLINE : add [task name] /from [start time] on [start date] to [end time] on [end date]";
+const string HELPER_MESSAGE_ADD_RECUR_DEADLINE_TASK = "RECUR DEADLINE : add [recur period] [daily/weekly/monthly/yearly] /by [end time] on [specific date]";
+const string HELPER_MESSAGE_ADD_RECUR_TIMED_TASK = "RECUR TIMED : add [recur period] [daily/weekly/monthly/yearly] /from [start time] on [start date] to [end time] on [end date]";
+
+//message for helper manual-edit after display/search
+const string HLEPER_MESSAGE_TITLE_EDIT = ">>>>>>>>>> edit after search/display <<<<<<<<<<";
+const string HELPER_MESSAGE_EDIT_TASK_NAME = "edit [index] -name [new task name]";
+const string HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [index] -due [new time]";
+const string HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [index] -start/end [new time]";
+
+//messsage for helper manual-edit in default page
+const string HLEPER_MESSAGE_TITLE_EDIT_DEFAULT = ">>>>>>>>>> edit in default page<<<<<<<<<<";
+const string DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME = "edit [float/today/tomorrow] [index] -name [new task name]";
+const string DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [float/today/tomorrow] [index] -due [new time]";
+const string DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [float/today/tomorrow] [index] -start/end [new time]";
+
+//message for helper manual-display
+const string HLEPER_MESSAGE_TITLE_DISPLAY = ">>>>>>>>>> display task <<<<<<<<<<";
+const string HELPER_MESSAGE_DISPLAY_TYPES = "display [today/tomorrow/tmr/float/deadline/timed/not done/done/all]";
+
+//message for helper manual-delete after display/search
+const string HLEPER_MESSAGE_TITLE_DELETE = ">>>>>>>>>> delete after search/dislay <<<<<<<<<<";
+const string HELPER_MESSAGE_DELETE = "delete [index]";
+
+//message for helper manual-delete in default page
+const string HLEPER_MESSAGE_TITLE_DELETE_DEFAULT = ">>>>>>>>>> delete in default page <<<<<<<<<<";
+const string DEFAULT_HELPER_MESSAGE_DELETE = "delete [float/today/tomorrow] [index]";
+
+//message for helper manual-clear
+const string HLEPER_MESSAGE_TITLE_CLEAR = ">>>>>>>>>> clear <<<<<<<<<<";
+const string HELPER_MESSAGE_CLEAR = "This command clears all the contents";
+
+//message for helper manual-undo
+const string HLEPER_MESSAGE_TITLE_UNDO = ">>>>>>>>>> undo <<<<<<<<<<";
+const string HELPER_MESSAGE_UNDO = "This command is able to undo more than once";
+
+//message for helper manual-search
+const string HLEPER_MESSAGE_TITLE_SEARCH = ">>>>>>>>>> search <<<<<<<<<<";
+const string HELPER_MESSAGE_SEARCH = "search [key word]";
+
+//message for helper manual-default
+const string HLEPER_MESSAGE_TITLE_DEFAULT = ">>>>>>>>>> default <<<<<<<<<<";
+const string HELPER_MESSAGE_DEFAULT = "This command shows the default page";
+
+//message for helper manual-exit 
+const string HLEPER_MESSAGE_TITLE_EXIT = ">>>>>>>>>> exit <<<<<<<<<<";
+const string HELPER_MESSAGE_EXIT = "This command ends the program";
+
+//message for welcome to helper manual
+const string HLEPER_MESSAGE_WELCOME = "===============WELCOME TO THE USER MANUAL FOR HAPPY CALENDAR===============";
+
+
+
+
+
+
+
+
+
+
+
 
 
 //Class has a vector containing all the entries in the to-do list

@@ -24,7 +24,6 @@ public:
 	bool checkfororiginalindex(string, defaultclass, vector<task> &, int &);
 	void updatedefaultmemory(vector<task> &);
 	
-        void showHelpManual();
 	void addRecurringTask(int,string,string,vector<task> &,storage *, vector<undo> &);
 	void addFloatTask(string,vector<task> &,storage *, vector<undo> &);
 	void addDeadlineTask(string,vector<task> &,storage *, vector<undo> &);
@@ -51,4 +50,18 @@ public:
 	void displayTenTasksDueTmr(defaultclass &);
 	void displayAllTasksDueTmr(defaultclass &);
 	void checkTypeOfTasksDueTmr(defaultclass &,int);
+
+	void showHelpManual();
+	void showHelpManualWelcomeMessage();
+	void showHelpManualForAdd();
+	void showHelpManualForEdit();
+	void showHelpManualForDefaultEdit();
+	void showHelpManualForDelete();
+	void showHelpManualForDefaultDelete();
+	void showHelpManualForDisplay();
+	void showHelpManualForClear();
+	void showHelpManualForUndo();
+	void showHelpManualForSearch();
+	void showHelpManualForDefault();
+	void showHelpManualForExit();
 };

@@ -26,7 +26,6 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 	int s_date, s_month, s_year, s_time, e_date, e_month, e_year, e_time, originindex;
 
 	defaultmemory.updatedefaultmemory(toDoList);
-	assert(description.length() != 0);
 	while(command != "exit"){
 		parse.trimString(description);
 		if(parse.isValidCommand(command, description)) {
@@ -110,10 +109,6 @@ void defaultclass::defaultexecuteCommand(string fileName,storage *store, string 
 		cin >> command;
 		getline(cin,description);
 	}
-}
-
-void defaultclass::showHelpManual() {
-	cout << "help manual" << endl;
 }
 
 //check the original index of the task for float task, task due today and task due tomorrow in the float vector, today's task vector 
@@ -598,3 +593,93 @@ bool defaultclass::printErrorMsgForAddTimedTask(string text,task datainput, vect
 }
 
 
+
+void defaultclass::showHelpManual() {
+	if (system("CLS")) system("clear");
+	showHelpManualWelcomeMessage();
+	showHelpManualForAdd();
+	showHelpManualForAdd();
+	showHelpManualForEdit();
+	showHelpManualForDefaultEdit();
+	showHelpManualForDelete();
+	showHelpManualForDefaultDelete();
+	showHelpManualForDisplay();
+	showHelpManualForClear();
+	showHelpManualForUndo();
+	showHelpManualForSearch();
+	showHelpManualForDefault();
+	showHelpManualForExit();
+}
+
+void defaultclass::showHelpManualWelcomeMessage(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_WELCOME);
+}
+
+void defaultclass::showHelpManualForAdd(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_ADD);
+	function.printMessage(HELPER_MESSAGE_ADD_FLOAT_TASK);
+	function.printMessage(HELPER_MESSAGE_ADD_DEADLINE_TASK);
+	function.printMessage(HELPER_MESSAGE_ADD_TIMED_TASK);
+	function.printMessage(HELPER_MESSAGE_ADD_RECUR_DEADLINE_TASK);
+	function.printMessage(HELPER_MESSAGE_ADD_RECUR_TIMED_TASK);
+}
+
+void defaultclass::showHelpManualForEdit(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT);
+	function.printMessage(HELPER_MESSAGE_EDIT_TASK_NAME);
+    function.printMessage(HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME);
+    function.printMessage(HELPER_MESSAGE_EDIT_TIMED_TASK_TIME);
+}
+
+void defaultclass::showHelpManualForDefaultEdit(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_EDIT_DEFAULT);
+	function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME);
+    function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME);
+    function.printMessage(DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME);
+}
+
+void defaultclass::showHelpManualForDelete(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE);
+	function.printMessage(HELPER_MESSAGE_DELETE);
+}
+void defaultclass::showHelpManualForDefaultDelete(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_DELETE_DEFAULT);
+	function.printMessage(DEFAULT_HELPER_MESSAGE_DELETE);
+}
+void defaultclass::showHelpManualForDisplay(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_DISPLAY);
+	function.printMessage(HELPER_MESSAGE_DISPLAY_TYPES);
+}
+void defaultclass::showHelpManualForClear(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_CLEAR);
+	function.printMessage(HELPER_MESSAGE_CLEAR);
+}
+
+void defaultclass::showHelpManualForUndo(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_UNDO);
+	function.printMessage(HELPER_MESSAGE_UNDO);
+}
+void defaultclass::showHelpManualForSearch(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_SEARCH);
+	function.printMessage(HELPER_MESSAGE_SEARCH);
+}
+void defaultclass::showHelpManualForDefault(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_DEFAULT);
+	function.printMessage(HELPER_MESSAGE_DEFAULT);
+}
+void defaultclass::showHelpManualForExit(){
+	logic function;
+	function.printMessage(HLEPER_MESSAGE_TITLE_EXIT);
+	function.printMessage(HELPER_MESSAGE_EXIT);
+}

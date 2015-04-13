@@ -169,7 +169,6 @@ void defaultExecution(string command,storage *store,string description,vector<ta
 	defaultclass defaultfunction;
 	while(command!="exit"){
 		assert(command.length() != 0);
-		assert(description.length() != 0);
 		defaultfunction.defaultexecuteCommand(fileName,store,command, description, toDoList, undomemory);
 	};
 }
