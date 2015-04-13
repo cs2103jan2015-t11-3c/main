@@ -60,7 +60,7 @@ const string HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [index] -due [new ti
 const string HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [index] -start/end [new time]";
 
 //messsage for helper manual-edit in default page
-const string HLEPER_MESSAGE_TITLE_EDIT_DEFAULT = ">>>>>>>>>> edit in default page<<<<<<<<<<";
+const string HLEPER_MESSAGE_TITLE_EDIT_DEFAULT = ">>>>>>>>>> edit in default page <<<<<<<<<<";
 const string DEFAULT_HELPER_MESSAGE_EDIT_TASK_NAME = "edit [float/today/tomorrow] [index] -name [new task]";
 const string DEFAULT_HELPER_MESSAGE_EDIT_DEADLINE_TASK_TIME = "edit [float/today/tomorrow] [index] -due [new]";
 const string DEFAULT_HELPER_MESSAGE_EDIT_TIMED_TASK_TIME = "edit [float/today/tomorrow] [index] -start/end [new]";
