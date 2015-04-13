@@ -47,14 +47,14 @@ void recurringTask::DailyRec(int n, int e_date,int e_month,int e_year,int s_date
 
 	for(int i=1;i<=n;i++){
 		if(type=="timed"){
-			if(!DayRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+			if(!DayRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){    //to check wether the recurring period is within 1 day
 				return;
 			}
 		}
 		if (parse.isValidDate(e_date,e_month,e_year)){
           addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
-		  e_date=e_date+1;
-		  s_date=s_date+1;
+		  e_date++;
+		  s_date++;
 		}
 		else{                                                                //move to next month
 			e_date=1;
@@ -97,7 +97,7 @@ void recurringTask::WeeklyRec(int n,int e_date,int e_month,int e_year,int s_date
 		}
 		}
 		if(type=="timed"){
-		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
+		 if(!WeekRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){                   //to check wether the recurring period is within 1 week
 				return;
 		 }
 		 if (parse.isValidDate(e_date,e_month,e_year)&&parse.isValidDate(s_date,s_month,s_year)){
@@ -178,7 +178,7 @@ void recurringTask::MonthlyRec(int n,int e_date,int e_month,int e_year,int s_dat
 		 e_month++;
 		}
 
-		if(type=="timed"){
+		if(type=="timed"){                                                          //to check wether the recurring period is within 1 Month
 			if(!MonthRecValid(e_date,e_month,e_year,s_date,s_month,s_year)){
 				return;
 			}
@@ -268,7 +268,6 @@ void recurringTask::YearlyRec(int n,int e_date,int e_month,int e_year,int s_date
 	for(int i=1;i<=n;i++){
 		if (parse.isValidDate(e_date,e_month,e_year)){
            addTodifferentType(type, e_date, e_month, e_year,s_date, s_month,s_year,  toDoList);
-
 		  e_year=e_year+1;
 		  s_year++;
 		}
@@ -276,6 +275,7 @@ void recurringTask::YearlyRec(int n,int e_date,int e_month,int e_year,int s_date
 		return;
 }
 
+//to check wethere the month contain 31 days, reutrns true if it has 31 days
 bool recurringTask::isValidforMoreDays(int month){
 	if(month==1||month==3||month==5||month==7||month==8||month==10||month==12){
 		return true;
@@ -285,6 +285,7 @@ bool recurringTask::isValidforMoreDays(int month){
 	}
 }
 
+//get number of days in each month
 int recurringTask::getNumDays(int month,int year){
 	logic function;
 	parser parse;
@@ -307,7 +308,6 @@ int recurringTask::getNumDays(int month,int year){
 void recurringTask::addRecDeadline(int e_date, int e_month, int e_year, vector<task> &toDoList){
 	 task datainput(description);
 	 datainput.addDeadlineItem(e_date, e_month, e_year, e_time);
-	
 	 toDoList.push_back(datainput);
 	 return;
 }
@@ -385,6 +385,7 @@ void recurringTask::ChangeMonthDeadline(int &e_date,int &e_month,int &e_year,int
 		
 }
 
+//to check wether the recurring period for daily recurring task is within 1 day
 bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
 	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>=1){
 		cout<<"Please enter the recurring task with time interval within 1 day"<<endl;
@@ -394,6 +395,8 @@ bool recurringTask::DayRecValid(int e_date,int e_month,int e_year,int s_date,int
 	return true;
 }
 
+
+//to check wether the recurring period for weekly recurring task is within 1 week
 bool recurringTask::WeekRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
 	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>7){
 		cout<<"Please enter the recurring task with time interval within 1 week"<<endl;
@@ -403,7 +406,7 @@ bool recurringTask::WeekRecValid(int e_date,int e_month,int e_year,int s_date,in
 	return true;
 }
 
-
+//to check wether the recurring period for monthly recurring task is within 1 month
 bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,int s_month,int s_year){
 	if(getDaysInterval(e_date,e_month,e_year,s_date,s_month,s_year)>31){
 		cout<<"Please enter the recurring task with time interval within 1 month"<<endl;
@@ -413,6 +416,9 @@ bool recurringTask::MonthRecValid(int e_date,int e_month,int e_year,int s_date,i
 	return true;
 }
 
+//get the number of interval days between any 2 date
+//precondition: the start date is before the end date
+//postcondition: number of days interval is returned
 int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int smonth, int syear){
 	logic function;
 	parser parse;
@@ -429,7 +435,7 @@ int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int s
 		}else{
           int d1,d2,d3;
          if(parse.isleapyear(syear))
-             d1 = 366 - DayInYear(syear,smonth, sday);  //remaining days in that year
+             d1 = 366 - DayInYear(syear,smonth, sday);     //remaining days in that year
          else
              d1 = 365 - DayInYear(syear,smonth, sday);
          d2 = DayInYear(eyear,emonth,eday); 
@@ -446,6 +452,7 @@ int recurringTask::getDaysInterval(int eday,int emonth,int eyear,int sday, int s
 
 }
 }
+
 
 int recurringTask::DayInYear(int year, int month, int day){
     logic function;

@@ -46,7 +46,6 @@ string storage::toString(vector<task> &toDoList) {
 	ostringstream oss;
 	
 	if(toDoList.size()>0) {
-
 		for(int i=0;i<toDoList.size();i++)
 			oss << i+1 << ". " <<toDoList[i].returntext() <<endl
 			<< "Start: "<<toDoList[i]. returnstartdate()<<"/"<<" "<<toDoList[i].returnstartmonth()<<"/"<<" "<<toDoList[i].returnstartyear()<<"\t"<<toDoList[i].returnstarttime()<<endl
@@ -60,8 +59,7 @@ string storage::toString(vector<task> &toDoList) {
 
 
 void storage::saveToSaveFile(const string fileName,vector<task> &toDoList) {
-	fstream textFile;
-	
+	fstream textFile;	
 	textFile.open(getFileNameAndDirectory(_filePath,fileName), fstream::out);
 	textFile << toString(toDoList);
 	textFile.close();
