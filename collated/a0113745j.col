@@ -3,7 +3,7 @@
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\default.cpp
+	 * origin: C:\Users\wang\Documents\main\project\default.cpp
 	 */
 
 void defaultclass::defaultexecuteCommand(string fileName,storage *store, string &command,string &description, vector<task> &toDoList, vector<undo> &undomemory) {
@@ -679,14 +679,14 @@ void defaultclass::colorCodingGreen() {
 	SetConsoleTextAttribute (hConsole,FOREGROUND_GREEN| BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY);
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\default.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\default.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+	 * origin: C:\Users\wang\Documents\main\project\parser.cpp
 	 */
 
 
@@ -855,14 +855,14 @@ int parser::getEndPosition(string description) {
 	return end;
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\parser.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\ui.cpp
+	 * origin: C:\Users\wang\Documents\main\project\ui.cpp
 	 */
 
 int main(int argc, char *argv[]) {
@@ -1001,14 +1001,14 @@ void defaultExecution(string command,storage *store,string description,vector<ta
 	};
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\ui.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\ui.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\defaultTest.cpp
+	 * origin: C:\Users\wang\Documents\main\LibraryTest\defaultTest.cpp
 	 */
 
 		TEST_METHOD(TEST_checkIfIsToday)
@@ -1263,7 +1263,7 @@ void defaultExecution(string command,storage *store,string description,vector<ta
 	};
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\defaultTest.cpp
+	// End of segment: C:\Users\wang\Documents\main\LibraryTest\defaultTest.cpp
 
 
 

@@ -136,7 +136,7 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		in>>temp;  //on
 		in>>e_date;  //31
 		in>>c;  //"/"
-		int s=description.find("/",bypos);
+		int s=description.find("/");
 		int pos=description.find("/",s+1);
 
 		month=description.substr(s+1,pos-s-1);
@@ -215,6 +215,7 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 //i.e: Jan - Dec correspons to 1 - 12
 //precondition : month input by user is in alphabetic form
 //postcondition : converted integer month is returned
+//@author: A0119322N -reused
 int parser::convertAlphabetMonthToInteger (string month) {
 	int monthInt=0;
 	if (month == "january" || month == "jan"||month == "JAN") {
@@ -259,6 +260,7 @@ int parser::convertAlphabetMonthToInteger (string month) {
 	return monthInt;
 }
 
+//@author: A0119322N
 //Determine if month is in numerical form or not
 bool parser::isNumerical(string month){
     for(int i=0;i<month.length();i++)

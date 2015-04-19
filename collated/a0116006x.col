@@ -3,7 +3,7 @@
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\logic.cpp
+	 * origin: C:\Users\wang\Documents\main\project\logic.cpp
 	 */
 
 string logic::displayAll(vector<task> &tempVec) {
@@ -649,14 +649,14 @@ bool logic::checkIsSameYear(int e_year,int s_year) {
 	return (e_year == s_year);
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\logic.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\logic.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\Task.cpp
+	 * origin: C:\Users\wang\Documents\main\project\Task.cpp
 	 */
 
 task::task(void) {}
@@ -862,14 +862,14 @@ string task::displayDefaultTasksOver2days(int index){
 	return oss.str();
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\Task.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\Task.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\undo.cpp
+	 * origin: C:\Users\wang\Documents\main\project\undo.cpp
 	 */
 
 undo::undo(void) {}
@@ -894,14 +894,14 @@ int undo::returnnum(){
 	return num;
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\undo.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\undo.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\logictest.cpp
+	 * origin: C:\Users\wang\Documents\main\LibraryTest\logictest.cpp
 	 */
 
 
@@ -1275,14 +1275,14 @@ namespace LibraryTest
 		}
 	};
 }
-	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\logictest.cpp
+	// End of segment: C:\Users\wang\Documents\main\LibraryTest\logictest.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\undotest.cpp
+	 * origin: C:\Users\wang\Documents\main\LibraryTest\undotest.cpp
 	 */
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -1346,7 +1346,7 @@ namespace LibraryTest
 }
 
 			
-	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\undotest.cpp
+	// End of segment: C:\Users\wang\Documents\main\LibraryTest\undotest.cpp
 
 
 

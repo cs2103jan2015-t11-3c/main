@@ -3,7 +3,7 @@
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+	 * origin: C:\Users\wang\Documents\main\project\parser.cpp
 	 */
 
 
@@ -138,7 +138,7 @@ void parser::splitinputDeadline(string description, string &text, int &e_date, i
 		in>>temp;  //on
 		in>>e_date;  //31
 		in>>c;  //"/"
-		int s=description.find("/",bypos);
+		int s=description.find("/");
 		int pos=description.find("/",s+1);
 
 		month=description.substr(s+1,pos-s-1);
@@ -217,49 +217,15 @@ void parser::splitinputTimed(string description, string &text, int &s_date, int 
 //i.e: Jan - Dec correspons to 1 - 12
 //precondition : month input by user is in alphabetic form
 //postcondition : converted integer month is returned
-int parser::convertAlphabetMonthToInteger (string month) {
-	int monthInt=0;
-	if (month == "january" || month == "jan"||month == "JAN") {
-		monthInt = 1;
-	}
-	else if (month == "february" || month == "feb"||month == "FEB") {
-		monthInt = 2;
-	}
-	else if (month == "march" || month == "mar"||month == "MAR") {
-		monthInt = 3;
-	}
-	else if (month == "april" || month == "apr"||month == "APR") {
-		monthInt = 4;
-	}
-	else if (month == "may" || month == "may"||month == "MAY") {
-		monthInt = 5;
-	}
-	else if (month == "june" || month == "jun"||month == "JUN") {
-		monthInt = 6;
-	}
-	else if (month == "july" || month == "jul"||month == "JUL") {
-		monthInt = 7;
-	}
-	else if (month == "august" || month == "aug"||month == "AUG") {
-		monthInt = 8;
-	}
-	else if (month == "september" || month == "sep"||month == "SEP") {
-		monthInt = 9;
-	}
-	else if (month == "october" || month == "oct"||month == "OCT") {
-		monthInt = 10;
-	}
-	else if (month == "november" || month == "nov"||month == "NOV") {
-		monthInt = 11;
-	}
-	else if (month == "december" || month == "dec"||month == "DEC") {
-		monthInt = 12;
-	}
-	else{
-		throw ERROR_MESSAGE_INVALIDMONTH;
-	}
-	return monthInt;
-}
+	// End of segment: C:\Users\wang\Documents\main\project\parser.cpp
+
+
+
+
+
+	/**
+	 * origin: C:\Users\wang\Documents\main\project\parser.cpp
+	 */
 
 //Determine if month is in numerical form or not
 bool parser::isNumerical(string month){
@@ -378,14 +344,83 @@ bool parser::canFindPartoChange(string description){
    return false;
 }
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\parser.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\parser.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\recurringTask.cpp
+	 * origin: C:\Users\wang\Documents\main\project\parser.h
+	 */
+
+//Constants
+const string DELIMITERS = " \n\t\v";
+const string ERROR_MISSING_DESCRIPTION = "no description entered";
+const string ERROR_INVALID_COMMAND = "invalid command";
+const string ERROR_MISSING_INDEX="missing index";
+const string ERROR_MISSING_CHANGINGPART="using the correct format to change";
+const string ERROR_MESSAGE_INVALIDMONTH="Invalid Month Entered!";
+const string ERROR_MESSAGE_INVALIDEDITFORMAT="Invalid edit format entered!";
+class parser{
+public:
+	bool isValidCommand(const string command, const string description);
+	void trimString(string &description);
+	int convertStringToIntegerIndex(const string description);
+	int convertStringToInteger(const string description);
+	string checktype(string description);
+	
+	//for add function
+	void splitinputDeadline(string description, string &text, int &e_date, int &e_month, int &e_year, int &e_time);
+	void splitinputTimed(string description, string &text, int &s_date, int &s_month, int &s_year, int &s_time, int &e_date, int &e_month, int &e_year, int &e_time);
+
+	//recurreng command word
+	int getStartPosition(string);
+	int getEndPosition(string);
+	int getRecurPeriod(string);
+	string getRecurruingCommandWord(string);
+
+	//to make sure month is in integer format
+	bool isNumerical(string month);
+	int convertAlphabetMonthToInteger (string month);
+	int convertMonth(string month);
+
+	//for today, tomorrow, flexibility
+	bool containShortForm(string description);
+	string shortForm(string description);
+	void getInfo(string description, int &e_date, int &e_month, int &e_year);
+
+	bool canFindPartoChange(string description);
+	
+	//for search function
+	bool isCheckSearchStringDigit(string);
+	int convertNumStringToInt(string);
+
+	//check whether input date and time valid or not
+	bool isleapyear(unsigned short);
+	bool isValidDate(unsigned short,unsigned short,unsigned short);
+	bool isValidTime(int);
+	bool checkIsDateOverdue(int, int, int, int);
+
+	//call for present time and date
+	int getSystemDay();
+	int getSystemMonth();
+	int getSystemYear();
+	int getSystemHour();
+	int getSystemMinute();
+
+
+};
+
+
+	// End of segment: C:\Users\wang\Documents\main\project\parser.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\wang\Documents\main\project\recurringTask.cpp
 	 */
 
 
@@ -845,14 +880,64 @@ int recurringTask::DayInYear(int year, int month, int day){
 }
 
 
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\recurringTask.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\recurringTask.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\project\storage.cpp
+	 * origin: C:\Users\wang\Documents\main\project\recurringTask.h
+	 */
+
+class recurringTask
+{
+private:
+	string description;
+	int s_time;
+	int e_time;
+
+public:
+	recurringTask(void);
+	recurringTask(string , int  ,int );
+	~recurringTask(void);
+
+	void AddRecurring(int ,string ,int ,int ,int ,int ,int ,int ,string ,vector<task> &);
+
+	void DailyRec(int ,int ,int ,int ,int ,int ,int ,string ,vector<task> &);
+	void WeeklyRec(int ,int ,int ,int ,int ,int ,int ,string ,vector<task> &);
+	void MonthlyRec(int ,int ,int ,int ,int ,int ,int ,string ,vector<task> &);
+	void YearlyRec(int ,int ,int ,int ,int ,int ,int ,string ,vector<task> &);
+
+	bool isValidforMoreDays(int );
+	void addRecDeadline( int , int , int , vector<task> &);
+	void addRecTimed(int ,int ,int ,int ,int ,int ,vector<task> &);
+	int getNumDays(int ,int );
+	void addTodifferentType(string , int ,int ,int ,int ,int ,int ,vector<task> &);
+    void ChangeWeekDeadline(int &,int &,int &,int ,int ,int ,string ,vector<task> &);
+    void ChangeMonthDeadline(int &,int &,int &,int ,int ,int ,string ,vector<task> &);
+	void moveToNextMonth(int &, int &, int &);
+	void moveToNextYear(int &, int &, int &);
+	int getDaysInterval(int ,int ,int ,int , int , int );
+	int DayInYear(int , int , int );
+	bool MonthRecValid(int ,int ,int ,int ,int ,int );
+	bool WeekRecValid(int ,int ,int ,int ,int ,int );
+	bool DayRecValid(int ,int ,int ,int ,int ,int );
+
+
+
+
+};
+
+
+	// End of segment: C:\Users\wang\Documents\main\project\recurringTask.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\wang\Documents\main\project\storage.cpp
 	 */
 
 storage::storage(void)
@@ -1074,14 +1159,60 @@ bool storage:: isTimeClashed(task newTask, vector<task> &toDoList){
 	
 	return false;
 }
-	// End of segment: \\psf\Home\Desktop\CS2103\main\project\storage.cpp
+	// End of segment: C:\Users\wang\Documents\main\project\storage.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\parsertest.cpp
+	 * origin: C:\Users\wang\Documents\main\project\storage.h
+	 */
+
+class storage
+{
+private:
+	vector<task> _toDoList;
+	string _filePath;
+	string _fileName;
+	static storage* theOne;
+	storage(void);
+
+public:
+	static storage* getInstance();
+	~storage(void);
+	
+	string toString(vector<task> &toDoList);
+	
+	void saveToSaveFile(const string fileName,vector<task> &toDoList);
+	vector<task> readToDoListFromTextFile(string fileName) ;
+
+	bool changeDirectory(string newFilePath,string fileName,vector<task> &toDoList);
+    bool changeFileName(string newfileName,vector<task> &toDoList);
+    bool fileExists(const string& fileName);
+	void setFileName(string newFileName);
+	void setFilePath(string newFilePath);
+	string getCurrentFileName();
+	string getCurrentFilePath();
+
+
+    string getFileNameAndDirectory(string newFilePath, string fileName);
+
+	bool isFloatDuplicated(task newTask, vector<task> &toDoList);
+	bool isDeadlineDuplicated(task newTask, vector<task> &toDoList);
+	bool isTimeClashed(task newTas, vector<task> &toDoList);
+
+
+};
+
+	// End of segment: C:\Users\wang\Documents\main\project\storage.h
+
+
+
+
+
+	/**
+	 * origin: C:\Users\wang\Documents\main\LibraryTest\parsertest.cpp
 	 */
 
 namespace LibraryTest
@@ -1403,14 +1534,14 @@ namespace LibraryTest
 	
 	};
 }
-	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\parsertest.cpp
+	// End of segment: C:\Users\wang\Documents\main\LibraryTest\parsertest.cpp
 
 
 
 
 
 	/**
-	 * origin: \\psf\Home\Desktop\CS2103\main\LibraryTest\StorageTest.cpp
+	 * origin: C:\Users\wang\Documents\main\LibraryTest\StorageTest.cpp
 	 */
 
 namespace UnitTest
@@ -1530,7 +1661,7 @@ namespace UnitTest
 	};
 	
 }
-	// End of segment: \\psf\Home\Desktop\CS2103\main\LibraryTest\StorageTest.cpp
+	// End of segment: C:\Users\wang\Documents\main\LibraryTest\StorageTest.cpp
 
 
 
